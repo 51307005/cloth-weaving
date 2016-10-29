@@ -71,17 +71,12 @@ Route::post('/he_thong_quan_ly/kho/nhap_moc', [
     'uses' => 'KhoMocController@postNhapMoc'
     ]);
 
-Route::get('/he_thong_quan_ly/kho/cap_nhat_cay_moc', [
-    'as' => 'route_get_cap_nhat_cay_moc_khong_id',
-    'uses' => 'KhoMocController@getCapNhatCayMocKhongId'
+Route::get('/he_thong_quan_ly/kho/cap_nhat_cay_moc/{id_cay_moc?}', [
+    'as' => 'route_get_cap_nhat_cay_moc',
+    'uses' => 'KhoMocController@getCapNhatCayMoc'
     ]);
 
-Route::get('/he_thong_quan_ly/kho/cap_nhat_cay_moc/{id_cay_moc}', [
-    'as' => 'route_get_cap_nhat_cay_moc_co_id',
-    'uses' => 'KhoMocController@getCapNhatCayMocCoId'
-    ])->where('id_cay_moc', '[1-9][0-9]*');
-
-Route::post('/he_thong_quan_ly/kho/cap_nhat_cay_moc', [
+Route::post('/he_thong_quan_ly/kho/cap_nhat_cay_moc/{id_cay_moc}', [
     'as' => 'route_post_cap_nhat_cay_moc',
     'uses' => 'KhoMocController@postCapNhatCayMoc'
     ]);

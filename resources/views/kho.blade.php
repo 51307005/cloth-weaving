@@ -13,21 +13,39 @@
     <body>
         <div id="container" class="container">
             <div id="content">
-                <h2>QUẢN LÝ KHO</h2>
-                <div id="chuc_nang" style="float:left;width:30%;">
-                    <div style="font-weight:bold;text-align:center;">Chức năng</div>
-                    <ul style="list-style-type:none;">
-                        @foreach ($list_chuc_nang as $chuc_nang => $link)
-                            <li>
-                                <a href="{{ $link }}">{{ $chuc_nang }}</a>
-                            </li>
-                        @endforeach
-                    </ul>
+                <!-- HEADER -->
+                <div style="margin-top:15px;border:1px solid black;">
+                    <div style="float:left;width:90%;text-align:center;color:red;">
+                        <h2>QUẢN LÝ KHO</h2>
+                    </div>
+                    <div style="float:left;width:10%;margin-top:28px;">
+                        <a href="{{ route('route_get_logout_he_thong') }}">Đăng xuất</a>
+                    </div>
+                    <div style="clear:both;"></div>
                 </div>
-                <div id="main_content" style="float:left;width:70%;">
-                    Chọn chức năng mà bạn muốn sử dụng.
+                <!-- END HEADER -->
+                <!-- NỘI DUNG -->
+                <div style="border:1px solid black;border-top:none;height:530px;">
+                    <!-- LIST CHỨC NĂNG -->
+                    <div id="chuc_nang" style="float:left;width:19%;height:100%;border-right:1px solid black;">
+                        <div style="font-weight:bold;text-align:center;border-bottom:1px solid black;">Chức năng</div>
+                        <ul style="list-style-type:none;padding-left:0px;">
+                            @foreach ($list_chuc_nang as $chuc_nang => $link)
+                            <li style="border-bottom:1px solid black;padding-left:10px;">
+                                    <a href="{{ $link }}">{{ $chuc_nang }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <!-- END LIST CHỨC NĂNG -->
+                    <!-- MAIN CONTENT -->
+                    <div id="main_content" style="float:left;width:78%;height:100%;margin-top:20px;margin-left:28px;">
+                        Chọn chức năng mà bạn muốn sử dụng.
+                    </div>
+                    <!-- END MAIN CONTENT -->
+                    <div style="clear:both;"></div>
                 </div>
-                <div style="clear:both;"></div>
+                <!-- END NỘI DUNG -->
             </div>
         </div>
     </body>

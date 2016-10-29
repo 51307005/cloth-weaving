@@ -23,9 +23,9 @@ class LoaiVaiRepository
 
         if (count($thongTin) == 1)  // Lấy được thông tin của loại vải bằng id
         {
-            $loai_vai->ten = $thongTin[0]->ten;
-            $loai_vai->don_gia = $thongTin[0]->don_gia;
-            $loai_vai->da_xoa = $thongTin[0]->da_xoa;
+            $loai_vai->ten = $thongTin->ten;
+            $loai_vai->don_gia = $thongTin->don_gia;
+            $loai_vai->da_xoa = $thongTin->da_xoa;
 
             return $loai_vai;
         }

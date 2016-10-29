@@ -2,14 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Routing\Controller as BaseController;
+use App\Http\Controllers\Controller;
 
-class HelperController extends BaseController
+class HelperController extends Controller
 {
     const QUYEN_ADMIN = 1;
     const QUYEN_SAN_XUAT = 2;
     const QUYEN_KHO = 3;
     const QUYEN_BAN_HANG = 4;
+
+    const NAM = 1;
+    const NU = 0;
+
+    public $ma_may_det = array(
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+        );
+
+    public $tinh_trang_cay_moc_vai_thanh_pham = array('Chưa xuất', 'Đã xuất');
+
+    public $tinh_trang_don_hang_cong_ty_don_hang_khach_hang = array('Mới', 'Chưa hoàn thành', 'Hoàn thành');
+
+    public $kho = array(0.5, 1, 1.5);
+
+    public $chuc_vu = array(
+        'Quản lý', 'Nhân viên dệt', 'Nhân viên nhuộm', 'Nhân viên pha chế màu',
+        'Nhân viên kho sợi', 'Nhân viên kho mộc', 'Nhân viên kho thành phẩm', 'Nhân viên Bán hàng'
+        );
+
+    public $tinh_chat = array('Trả dần', 'Trả liền');
+
+    public $loai_thu_chi = array('Thu', 'Chi');
+
+    public $phuong_thuc = array('Chuyển khoản', 'Tiền mặt');
 
     public $list_chuc_nang_admin = array('tên chức năng 1', 'tên chức năng 2');
     public $list_chuc_nang_san_xuat = array('tên chức năng 1', 'tên chức năng 2');

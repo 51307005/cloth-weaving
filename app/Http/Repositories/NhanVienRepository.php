@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories;
 
+use DB;
 use App\Http\Entities\NhanVien;
 
 class NhanVienRepository
@@ -14,24 +15,33 @@ class NhanVienRepository
 
         if (count($thongTin) == 1)  // Lấy được thông tin của nhân viên bằng username
         {
-            $nhanVien->id = $thongTin[0]->id;
-            $nhanVien->ho_ten = $thongTin[0]->ho_ten;
-            $nhanVien->mat_khau = $thongTin[0]->mat_khau;
-            $nhanVien->chuc_vu = $thongTin[0]->chuc_vu;
-            $nhanVien->quyen = $thongTin[0]->quyen;
-            $nhanVien->luong = $thongTin[0]->luong;
-            $nhanVien->ghi_chu = $thongTin[0]->ghi_chu;
-            $nhanVien->ngay_thang_nam_sinh = $thongTin[0]->ngay_thang_nam_sinh;
-            $nhanVien->gioi_tinh = $thongTin[0]->gioi_tinh;
-            $nhanVien->dia_chi = $thongTin[0]->dia_chi;
-            $nhanVien->email = $thongTin[0]->email;
-            $nhanVien->so_dien_thoai = $thongTin[0]->so_dien_thoai;
-            $nhanVien->da_xoa = $thongTin[0]->da_xoa;
+            $nhanVien->id = $thongTin->id;
+            $nhanVien->ho_ten = $thongTin->ho_ten;
+            $nhanVien->mat_khau = $thongTin->mat_khau;
+            $nhanVien->chuc_vu = $thongTin->chuc_vu;
+            $nhanVien->quyen = $thongTin->quyen;
+            $nhanVien->luong = $thongTin->luong;
+            $nhanVien->ghi_chu = $thongTin->ghi_chu;
+            $nhanVien->ngay_thang_nam_sinh = $thongTin->ngay_thang_nam_sinh;
+            $nhanVien->gioi_tinh = $thongTin->gioi_tinh;
+            $nhanVien->dia_chi = $thongTin->dia_chi;
+            $nhanVien->email = $thongTin->email;
+            $nhanVien->so_dien_thoai = $thongTin->so_dien_thoai;
+            $nhanVien->da_xoa = $thongTin->da_xoa;
 
             return $nhanVien;
         }
 
         // Username không tồn tại trong database
         return false;
+    }
+
+    public function getDanhSachNhanVienDet()
+    {
+        $list_nhan_vien_det = DB::table('nhan_vien')
+                                ->where('da_xoa', '=', 0)
+                                ->where('chuc_vu', '=', 'Nhân viên dệt')
+                                ->get();
+        return $list_nhan_vien_det;
     }
 }

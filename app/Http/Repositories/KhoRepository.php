@@ -9,7 +9,10 @@ class KhoRepository
 {
     public function getDanhSachKhoMoc()
     {
-        $list_kho_moc = DB::table('kho')->where('ten', 'like', '%Kho mộc%')->get();
+        $list_kho_moc = DB::table('kho')
+                          ->where('da_xoa', '=', 0)
+                          ->where('ten', 'like', '%Kho mộc%')
+                          ->get();
         return $list_kho_moc;
     }
 
@@ -21,12 +24,12 @@ class KhoRepository
 
         if (count($thongTin) == 1)  // Lấy được thông tin của kho mộc bằng id
         {
-            $kho_moc->ten = $thongTin[0]->ten;
-            $kho_moc->id_nhan_vien_quan_ly = $thongTin[0]->id_nhan_vien_quan_ly;
-            $kho_moc->dien_tich = $thongTin[0]->dien_tich;
-            $kho_moc->dia_chi = $thongTin[0]->dia_chi;
-            $kho_moc->so_dien_thoai = $thongTin[0]->so_dien_thoai;
-            $kho_moc->da_xoa = $thongTin[0]->da_xoa;
+            $kho_moc->ten = $thongTin->ten;
+            $kho_moc->id_nhan_vien_quan_ly = $thongTin->id_nhan_vien_quan_ly;
+            $kho_moc->dien_tich = $thongTin->dien_tich;
+            $kho_moc->dia_chi = $thongTin->dia_chi;
+            $kho_moc->so_dien_thoai = $thongTin->so_dien_thoai;
+            $kho_moc->da_xoa = $thongTin->da_xoa;
 
             return $kho_moc;
         }
@@ -37,7 +40,10 @@ class KhoRepository
 
     public function getDanhSachKhoThanhPham()
     {
-        $list_kho_thanh_pham = DB::table('kho')->where('ten', 'like', '%Kho thành phẩm%')->get();
+        $list_kho_thanh_pham = DB::table('kho')
+                                 ->where('da_xoa', '=', 0)
+                                 ->where('ten', 'like', '%Kho thành phẩm%')
+                                 ->get();
         return $list_kho_thanh_pham;
     }
 }
