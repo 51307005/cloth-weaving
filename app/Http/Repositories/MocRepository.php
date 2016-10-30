@@ -213,4 +213,14 @@ class MocRepository
 
         $cay_moc->update();
     }
+
+    public function getIdCayMocCuoiCung()
+    {
+        $id_cay_moc_cuoi_cung = DB::table('cay_vai_moc')
+                                  ->select('id')
+                                  ->orderBy('id', 'desc')
+                                  ->first();
+        $id_cay_moc_cuoi_cung = $id_cay_moc_cuoi_cung->id;
+        return $id_cay_moc_cuoi_cung;
+    }
 }

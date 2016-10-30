@@ -11,6 +11,7 @@ class QuanLyHeThongController extends HelperController
 {
     public function getLogin()
     {
+        // Check Login
         if (Session::has('username') && Session::has('quyen'))  // Đã Login
         {
             // Redirect tới view mà tương ứng với quyền của user

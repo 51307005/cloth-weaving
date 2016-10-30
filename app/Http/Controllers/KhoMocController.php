@@ -19,6 +19,7 @@ class KhoMocController extends HelperController
 {
     public function getKhoMoc(Request $request)
     {
+        // Check Login
         if (Session::has('username') && Session::has('quyen'))  // Đã Login
         {
             // Redirect tới view mà tương ứng với quyền của user
@@ -372,7 +373,57 @@ class KhoMocController extends HelperController
 
     public function getNhapMoc()
     {
-        
+        // Check Login
+        if (Session::has('username') && Session::has('quyen'))  // Đã Login
+        {
+            // Redirect tới view mà tương ứng với quyền của user
+            switch (Session::get('quyen'))
+            {
+                case self::QUYEN_ADMIN:
+                    //return redirect()->to(route('route_get_trang_chu_manager'));
+                case self::QUYEN_SAN_XUAT:
+                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                case self::QUYEN_BAN_HANG:
+                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                case self::QUYEN_KHO:
+                    // Lấy danh sách chức năng tương ứng với quyền của user
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+
+                    // Lấy danh sách loại vải
+                    $loaiVaiRepository = new LoaiVaiRepository();
+                    $list_loai_vai = $loaiVaiRepository->getDanhSachLoaiVai();
+
+                    // Lấy danh sách loại sợi
+                    $loaiSoiRepository = new LoaiSoiRepository();
+                    $list_loai_soi = $loaiSoiRepository->getDanhSachLoaiSoi();
+
+                    // Lấy danh sách kho mộc
+                    $khoRepository = new KhoRepository();
+                    $list_kho_moc = $khoRepository->getDanhSachKhoMoc();
+
+                    // Lấy "id cây mộc cuối cùng" trong database
+                    $mocRepository = new MocRepository();
+                    $id_cay_moc_cuoi_cung = $mocRepository->getIdCayMocCuoiCung();
+
+                    // Lấy danh sách nhân viên dệt
+                    $nhanVienRepository = new NhanVienRepository();
+                    $list_nhan_vien_det = $nhanVienRepository->getDanhSachNhanVienDet();
+
+                    // Lấy danh sách mã máy dệt
+                    $list_ma_may_det = $this->ma_may_det;
+
+                    return view('nhap_moc')->with('list_chuc_nang', $list_chuc_nang)
+                                           ->with('list_loai_vai', $list_loai_vai)
+                                           ->with('list_loai_soi', $list_loai_soi)
+                                           ->with('list_kho_moc', $list_kho_moc)
+                                           ->with('id_cay_moc_cuoi_cung', $id_cay_moc_cuoi_cung)
+                                           ->with('list_nhan_vien_det', $list_nhan_vien_det)
+                                           ->with('list_ma_may_det', $list_ma_may_det);
+            }
+        }
+
+        // Chưa Login
+        return redirect()->to(route('route_get_login_he_thong'));
     }
 
     public function postNhapMoc(Request $request)   // Xài Request chung
@@ -382,6 +433,7 @@ class KhoMocController extends HelperController
 
     public function getCapNhatCayMoc($id_cay_moc = null)
     {
+        // Check Login
         if (Session::has('username') && Session::has('quyen'))  // Đã Login
         {
             // Redirect tới view mà tương ứng với quyền của user
@@ -589,8 +641,8 @@ class KhoMocController extends HelperController
             {
                 $errorMessage = 'Ngày giờ dệt phải trước ngày giờ nhập kho !';
 
-                // Tạo Validation error messages
-                $validator = Validator::make($request->all(), [], []);
+                // Tạo thủ công Validation error messages
+                $validator = Validator::make($request->all(), array(), array());
                 $errors = $validator->errors();
                 $errors->add('NgayGioDet_NgayGioNhapKho', $errorMessage);
 

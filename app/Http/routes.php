@@ -15,6 +15,7 @@
     return view('welcome');
 });*/
 
+////////// LOGIN //////////
 Route::get('/login_he_thong', [
     'as' => 'route_get_login_he_thong',
     'uses' => 'QuanLyHeThongController@getLogin'
@@ -29,7 +30,9 @@ Route::get('/logout_he_thong', [
     'as' => 'route_get_logout_he_thong',
     'uses' => 'QuanLyHeThongController@getLogout'
     ]);
-/*
+////////// END LOGIN //////////
+
+/*////////// PHÂN QUYỀN //////////
 Route::get('/he_thong_quan_ly/manager', [
     'as' => 'route_get_trang_chu_manager',
     'uses' => 'ManagerController@getTrangChu'
@@ -49,8 +52,9 @@ Route::get('/he_thong_quan_ly/ban_hang', [
     'as' => 'route_get_trang_chu_ban_hang',
     'uses' => 'BanHangController@getTrangChu'
     ]);
-*/
+*/////////// END PHÂN QUYỀN //////////
 
+////////// MỘC //////////
 Route::get('/he_thong_quan_ly/kho/kho_moc', [
     'as' => 'route_get_kho_moc',
     'uses' => 'KhoMocController@getKhoMoc'
@@ -80,3 +84,6 @@ Route::post('/he_thong_quan_ly/kho/cap_nhat_cay_moc/{id_cay_moc}', [
     'as' => 'route_post_cap_nhat_cay_moc',
     'uses' => 'KhoMocController@postCapNhatCayMoc'
     ]);
+
+
+////////// END MỘC //////////

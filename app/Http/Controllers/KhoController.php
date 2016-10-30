@@ -9,10 +9,9 @@ class KhoController extends HelperController
 {
     public function getTrangChu()
     {
+        // Check Login
         if (Session::has('username') && Session::has('quyen'))  // Đã Login
         {
-            
-
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {

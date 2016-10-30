@@ -279,12 +279,39 @@
                     alert('Bạn chưa nhập ngày giờ dệt !');
                     return false;
                 }
+                else
+                {
+                    var ngayGioDet = new Date(ngay_gio_det);
+                    if (isNaN(ngayGioDet))
+                    {
+                        alert('Ngày giờ dệt không hợp lệ !');
+                        return false;
+                    }
+                }
 
                 // Validate Ngày giờ nhập kho
                 var ngay_gio_nhap_kho = $('#ngay_gio_nhap_kho').val();
                 if (ngay_gio_nhap_kho == '')
                 {
                     alert('Bạn chưa nhập ngày giờ nhập kho !');
+                    return false;
+                }
+                else
+                {
+                    var ngayGioNhapKho = new Date(ngay_gio_nhap_kho);
+                    if (isNaN(ngayGioNhapKho))
+                    {
+                        alert('Ngày giờ nhập kho không hợp lệ !');
+                        return false;
+                    }
+                }
+
+                // Validate trường hợp: Ngày giờ dệt >= Ngày giờ nhập kho
+                var ngaygiodet = new Date(ngay_gio_det);
+                var ngaygionhapkho = new Date(ngay_gio_nhap_kho);
+                if (ngaygiodet.getTime() >= ngaygionhapkho.getTime())
+                {
+                    alert('Ngày giờ dệt phải trước ngày giờ nhập kho !');
                     return false;
                 }
 
