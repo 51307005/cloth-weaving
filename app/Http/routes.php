@@ -85,5 +85,53 @@ Route::post('/he_thong_quan_ly/kho/cap_nhat_cay_moc/{id_cay_moc}', [
     'uses' => 'KhoMocController@postCapNhatCayMoc'
     ]);
 
+Route::get('/he_thong_quan_ly/kho/phieu_xuat_moc', [
+    'as' => 'route_get_phieu_xuat_moc',
+    'uses' => 'KhoMocController@getPhieuXuatMoc'
+    ]);
 
+Route::post('/he_thong_quan_ly/kho/phieu_xuat_moc', [
+    'as' => 'route_post_phieu_xuat_moc',
+    'uses' => 'KhoMocController@postPhieuXuatMoc'
+    ]);
+
+Route::get('/he_thong_quan_ly/kho/them_phieu_xuat_moc', [
+    'as' => 'route_get_them_phieu_xuat_moc',
+    'uses' => 'KhoMocController@getThemPhieuXuatMoc'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/them_phieu_xuat_moc', [
+    'as' => 'route_post_them_phieu_xuat_moc',
+    'uses' => 'KhoMocController@postThemPhieuXuatMoc'
+    ]);
+
+Route::get('/he_thong_quan_ly/kho/cap_nhat_phieu_xuat_moc/{id_phieu_xuat_moc?}', [
+    'as' => 'route_get_cap_nhat_phieu_xuat_moc',
+    'uses' => 'KhoMocController@getCapNhatPhieuXuatMoc'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/cap_nhat_phieu_xuat_moc/{id_phieu_xuat_moc}', [
+    'as' => 'route_post_cap_nhat_phieu_xuat_moc',
+    'uses' => 'KhoMocController@postCapNhatPhieuXuatMoc'
+    ]);
+
+Route::get('/he_thong_quan_ly/kho/xuat_moc', [
+    'as' => 'route_get_xuat_moc',
+    'uses' => 'KhoMocController@getXuatMoc'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/xuat_moc', [
+    'as' => 'route_post_xuat_moc',
+    'uses' => 'KhoMocController@postXuatMoc'
+    ]);
+
+Route::get('/he_thong_quan_ly/kho/cap_nhat_xuat_moc', [
+    'as' => 'route_get_cap_nhat_xuat_moc',
+    'uses' => 'KhoMocController@getCapNhatXuatMoc'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/cap_nhat_xuat_moc', [
+    'as' => 'route_post_cap_nhat_xuat_moc',
+    'uses' => 'KhoMocController@postCapNhatXuatMoc'
+    ]);
 ////////// END MỘC //////////

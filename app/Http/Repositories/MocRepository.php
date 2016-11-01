@@ -223,4 +223,41 @@ class MocRepository
         $id_cay_moc_cuoi_cung = $id_cay_moc_cuoi_cung->id;
         return $id_cay_moc_cuoi_cung;
     }
+
+    public function nhapMoc(Request $request)
+    {
+        // Lấy các dữ liệu để nhập mộc
+        $id_loai_vai = (int)($request->get('id_loai_vai'));
+        $id_loai_soi = (int)($request->get('id_loai_soi'));
+        $id_kho = (int)($request->get('id_kho'));
+        $ngay_gio_nhap_kho = $request->get('ngay_gio_nhap_kho');
+        $list_cay_moc = $request->get('data');
+        $list_cay_moc = json_decode($list_cay_moc);
+        //echo '<pre>',print_r($list_cay_moc),'</pre>';
+
+        // Format lại cho "ngay_gio_nhap_kho"
+        $ngay_gio_nhap_kho = date('Y-m-d H:i:s', strtotime($ngay_gio_nhap_kho));
+
+        // Tạo câu lệnh INSERT
+        $sql = 'INSERT INTO cay_vai_moc (id_loai_vai, id_loai_soi, so_met, id_nhan_vien_det, ma_may_det, ngay_gio_det, id_kho, ngay_gio_nhap_kho)
+                VALUES ';
+        foreach ($list_cay_moc as $cay_moc)
+        {
+            $so_met = $cay_moc->so_met;
+            $id_nhan_vien_det = $cay_moc->id_nhan_vien_det;
+            $id_may_det = $cay_moc->id_may_det;
+            $ngay_gio_det = $cay_moc->ngay_gio_det;
+
+            // Format lại cho "ngay_gio_det"
+            $ngay_gio_det = date('Y-m-d H:i:s', strtotime($ngay_gio_det));
+
+            $sql .= '('.$id_loai_vai.', '.$id_loai_soi.', '.$so_met.', '.$id_nhan_vien_det.', '.$id_may_det.', "'.$ngay_gio_det.'", '.$id_kho.', "'.$ngay_gio_nhap_kho.'"), ';
+        }
+        $sql = trim($sql, ', ');
+        //echo $sql;
+
+        return DB::transaction(function() use ($sql) {
+            DB::insert($sql);
+        });
+    }
 }

@@ -17,11 +17,15 @@
 
         <style>
             #tbl_cap_nhat_cay_moc input, select {
-                width: 250px;
+                width: 255px;
             }
 
             #btn_cap_nhat {
                 width: 76px !important;
+            }
+
+            input, select {
+                padding-left: 5px;
             }
         </style>
     </head>
@@ -63,7 +67,9 @@
                                     <b>Chọn mã cây mộc:</b>
                                     <select id="IdCayMoc" name="IdCayMoc" style="margin-left:16px;margin-right:5px;">
                                         @foreach ($list_id_cay_moc as $cay_moc)
-                                            <option value="{{ $cay_moc->id }}" {{ (isset($cay_moc_duoc_chon) && ($cay_moc->id == $cay_moc_duoc_chon->id))?'selected':'' }}>{{ $cay_moc->id }}</option>
+                                            <option value="{{ $cay_moc->id }}" {{ (isset($cay_moc_duoc_chon) && ($cay_moc->id == $cay_moc_duoc_chon->id))?'selected':'' }}>
+                                                {{ $cay_moc->id }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     <input id="btn_chon" type="button" value="Chọn" onclick="chonCayMoc()">
@@ -82,7 +88,7 @@
                                 <!-- FORM CẬP NHẬT CÂY MỘC -->
                                 <div style="margin-left:30px;margin-top:15px;margin-bottom:15px;float:left;width:50%;">
                                     {!! Form::open(array('method' => 'post', 'id' => 'frm_cap_nhat_cay_moc')) !!}
-                                    <table id="tbl_cap_nhat_cay_moc" style="width:410px;height:360px;">
+                                        <table id="tbl_cap_nhat_cay_moc" style="width:410px;height:360px;">
                                             <tr>
                                                 <td style="font-weight:bold;">Mã cây mộc:</td>
                                                 <td>

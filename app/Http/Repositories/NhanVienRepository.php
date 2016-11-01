@@ -40,8 +40,17 @@ class NhanVienRepository
     {
         $list_nhan_vien_det = DB::table('nhan_vien')
                                 ->where('da_xoa', '=', 0)
-                                ->where('chuc_vu', '=', 'Nhân viên dệt')
+                                ->where('chuc_vu', 'like', '%Nhân viên dệt%')
                                 ->get();
         return $list_nhan_vien_det;
+    }
+
+    public function getDanhSachNhanVienKhoMoc()
+    {
+        $list_nhan_vien_kho_moc = DB::table('nhan_vien')
+                                    ->where('da_xoa', '=', 0)
+                                    ->where('chuc_vu', 'like', '%Nhân viên kho mộc%')
+                                    ->get();
+        return $list_nhan_vien_kho_moc;
     }
 }
