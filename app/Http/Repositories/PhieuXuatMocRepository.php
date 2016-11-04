@@ -103,4 +103,16 @@ class PhieuXuatMocRepository
 
         $phieu_xuat_moc->update();
     }
+
+    public function capNhatXuatMoc($id_phieu_xuat_moc, $tong_so_cay_moc, $tong_so_met)
+    {
+        $sql = 'UPDATE phieu_xuat_moc
+                SET tong_so_cay_moc = '.$tong_so_cay_moc.',
+                    tong_so_met = '.$tong_so_met.'
+                WHERE da_xoa = 0 AND id = '.$id_phieu_xuat_moc;
+
+        return DB::transaction(function() use ($sql) {
+            DB::update($sql);
+        });
+    }
 }

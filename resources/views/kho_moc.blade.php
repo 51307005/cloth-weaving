@@ -186,10 +186,10 @@
         </div>
         <script>
             // Đổi ký hiệu "<<" thành "Previous" và ">>" thành "Next" trong chuỗi button phân trang
-            $('ul.pagination>li:first>span').text('Previous');
-            $('ul.pagination>li:first>a').text('Previous');
-            $('ul.pagination>li:last>span').text('Next');
-            $('ul.pagination>li:last>a').text('Next');
+            $('ul.pagination > li:first > span').text('Previous');
+            $('ul.pagination > li:first > a').text('Previous');
+            $('ul.pagination > li:last > span').text('Next');
+            $('ul.pagination > li:last > a').text('Next');
 
             function xemTatCaCayMoc()
             {

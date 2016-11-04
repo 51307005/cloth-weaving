@@ -13,6 +13,7 @@
         <script src="{{ url('/') }}/resources/assets/js/jquery-ui-1.11.4.js" type="text/javascript"></script>
         <script src="{{ url('/') }}/resources/assets/js/jquery-ui-timepicker-1.6.3.js" type="text/javascript"></script>
         <script src="{{ url('/') }}/resources/assets/js/jquery-numeric-1.4.1.js" type="text/javascript"></script>
+        <script src="{{ url('/') }}/resources/assets/js/jquery-number-2.1.6.js" type="text/javascript"></script>
         <script src="{{ url('/') }}/resources/assets/js/bootstrap-3.3.7.js" type="text/javascript"></script>
 
         <style>
@@ -49,6 +50,7 @@
 
             .id_cay_moc {
                 text-align: right;
+                padding-left: 5px;
                 padding-right: 5px;
             }
 
@@ -61,12 +63,14 @@
                 width: 98%;
                 text-align: right;
                 border: none;
+                padding-left: 5px;
                 padding-right: 5px;
             }
 
             .so_met {
                 text-align: right;
                 width: 100%;
+                padding-left: 5px;
                 padding-right: 5px;
                 border: none;
             }
@@ -74,6 +78,8 @@
             .ngay_gio_det {
                 width: 100%;
                 text-align: center;
+                padding-left: 5px;
+                padding-right: 5px;
                 border: none;
             }
 
@@ -249,6 +255,10 @@
                         tong_so_met += parseInt(so_met);
                     }
                 });
+
+                // Format tong_so_met
+                tong_so_met = $.number(tong_so_met, 0, ',', '.');
+
                 $('#tong_so_met').text(tong_so_met);
             }
 
@@ -293,6 +303,10 @@
                 // Tính lại tổng số cây mộc nhập kho
                 var tong_so_cay_moc_nhap_kho = $('#tong_so_cay_moc_nhap_kho').text();
                 tong_so_cay_moc_nhap_kho = parseInt(tong_so_cay_moc_nhap_kho) + 1;
+
+                // Format tong_so_cay_moc_nhap_kho
+                tong_so_cay_moc_nhap_kho = $.number(tong_so_cay_moc_nhap_kho, 0, ',', '.');
+
                 $('#tong_so_cay_moc_nhap_kho').text(tong_so_cay_moc_nhap_kho);
             }
 
@@ -320,6 +334,8 @@
                 // Tính lại Tổng số cây mộc nhập kho và Tổng số mét
                 // Tổng số cây mộc nhập kho
                 tong_so_cay_moc_nhap_kho = tong_so_cay_moc_nhap_kho - 1;
+                // Format tong_so_cay_moc_nhap_kho
+                tong_so_cay_moc_nhap_kho = $.number(tong_so_cay_moc_nhap_kho, 0, ',', '.');
                 $('#tong_so_cay_moc_nhap_kho').text(tong_so_cay_moc_nhap_kho);
                 // Tổng số mét
                 tinhTongSoMet();

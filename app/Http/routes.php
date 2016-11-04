@@ -125,13 +125,22 @@ Route::post('/he_thong_quan_ly/kho/xuat_moc', [
     'uses' => 'KhoMocController@postXuatMoc'
     ]);
 
-Route::get('/he_thong_quan_ly/kho/cap_nhat_xuat_moc', [
+Route::get('/he_thong_quan_ly/kho/cap_nhat_xuat_moc/{id_phieu_xuat_moc?}', [
     'as' => 'route_get_cap_nhat_xuat_moc',
     'uses' => 'KhoMocController@getCapNhatXuatMoc'
     ]);
 
-Route::post('/he_thong_quan_ly/kho/cap_nhat_xuat_moc', [
+Route::post('/he_thong_quan_ly/kho/cap_nhat_xuat_moc/{id_phieu_xuat_moc}', [
     'as' => 'route_post_cap_nhat_xuat_moc',
     'uses' => 'KhoMocController@postCapNhatXuatMoc'
     ]);
+
+Route::post('/he_thong_quan_ly/kho/show_thong_tin_cay_moc', [
+    'as' => 'route_post_show_thong_tin_cay_moc',
+    'uses' => 'KhoMocController@postShowThongTinCayMoc'
+    ]);
 ////////// END MỘC //////////
+
+////////// VẢI THÀNH PHẨM //////////
+
+////////// END VẢI THÀNH PHẨM //////////
