@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2016 at 06:39 AM
+-- Generation Time: Nov 11, 2016 at 04:08 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -27,7 +27,7 @@ USE `san_xuat_vai`;
 --
 -- Table structure for table `cay_vai_moc`
 --
--- Creation: Oct 22, 2016 at 12:50 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `cay_vai_moc`;
@@ -80,7 +80,7 @@ INSERT INTO `cay_vai_moc` (`id`, `id_loai_vai`, `id_loai_soi`, `so_met`, `id_nha
 --
 -- Table structure for table `cay_vai_thanh_pham`
 --
--- Creation: Oct 22, 2016 at 12:51 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `cay_vai_thanh_pham`;
@@ -128,7 +128,7 @@ INSERT INTO `cay_vai_thanh_pham` (`id`, `id_cay_vai_moc`, `id_loai_vai`, `id_mau
 --
 -- Table structure for table `don_hang_cong_ty`
 --
--- Creation: Oct 22, 2016 at 12:51 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `don_hang_cong_ty`;
@@ -162,7 +162,7 @@ INSERT INTO `don_hang_cong_ty` (`id`, `id_loai_soi`, `khoi_luong`, `han_chot`, `
 --
 -- Table structure for table `don_hang_khach_hang`
 --
--- Creation: Oct 22, 2016 at 12:52 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `don_hang_khach_hang`;
@@ -195,7 +195,7 @@ INSERT INTO `don_hang_khach_hang` (`id`, `id_khach_hang`, `id_loai_vai`, `id_mau
 --
 -- Table structure for table `hoa_don_nhap`
 --
--- Creation: Oct 11, 2016 at 01:45 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `hoa_don_nhap`;
@@ -236,7 +236,7 @@ INSERT INTO `hoa_don_nhap` (`id`, `id_don_hang_cong_ty`, `id_nha_cung_cap`, `id_
 --
 -- Table structure for table `hoa_don_xuat`
 --
--- Creation: Oct 12, 2016 at 07:50 AM
+-- Creation: Nov 11, 2016 at 03:06 PM
 --
 
 DROP TABLE IF EXISTS `hoa_don_xuat`;
@@ -250,6 +250,7 @@ CREATE TABLE IF NOT EXISTS `hoa_don_xuat` (
   `tong_so_cay_vai` mediumint(8) unsigned NOT NULL,
   `tong_so_met` mediumint(8) unsigned NOT NULL,
   `tong_tien` bigint(20) unsigned NOT NULL COMMENT 'VNĐ',
+  `id_kho` tinyint(2) unsigned NOT NULL,
   `id_nhan_vien_xuat` smallint(5) unsigned NOT NULL,
   `ngay_gio_xuat_hoa_don` datetime NOT NULL,
   `tinh_chat` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Trả dần / Trả liền',
@@ -261,17 +262,17 @@ CREATE TABLE IF NOT EXISTS `hoa_don_xuat` (
 -- Dumping data for table `hoa_don_xuat`
 --
 
-INSERT INTO `hoa_don_xuat` (`id`, `id_don_hang_khach_hang`, `id_khach_hang`, `id_loai_vai`, `id_mau`, `kho`, `tong_so_cay_vai`, `tong_so_met`, `tong_tien`, `id_nhan_vien_xuat`, `ngay_gio_xuat_hoa_don`, `tinh_chat`, `da_xoa`) VALUES
-(1, 1, 1, 1, 1, 0.5, 3, 300, 9000000, 10, '2016-05-20 10:30:25', 'Trả dần', 0),
-(2, 2, 3, 6, 8, 1.5, 2, 100, 6400000, 10, '2016-06-13 09:11:08', 'Trả dần', 0),
-(3, 3, 2, 5, 6, 1, 2, 200, 7600000, 10, '2016-07-02 14:15:43', 'Trả dần', 0);
+INSERT INTO `hoa_don_xuat` (`id`, `id_don_hang_khach_hang`, `id_khach_hang`, `id_loai_vai`, `id_mau`, `kho`, `tong_so_cay_vai`, `tong_so_met`, `tong_tien`, `id_kho`, `id_nhan_vien_xuat`, `ngay_gio_xuat_hoa_don`, `tinh_chat`, `da_xoa`) VALUES
+(1, 1, 1, 1, 1, 0.5, 3, 300, 9000000, 5, 10, '2016-05-20 10:30:25', 'Trả dần', 0),
+(2, 2, 3, 6, 8, 1.5, 2, 100, 6400000, 6, 10, '2016-06-13 09:11:08', 'Trả dần', 0),
+(3, 3, 2, 5, 6, 1, 2, 200, 7600000, 6, 10, '2016-07-02 14:15:43', 'Trả dần', 0);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `khach_hang`
 --
--- Creation: Oct 17, 2016 at 01:14 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `khach_hang`;
@@ -308,7 +309,7 @@ INSERT INTO `khach_hang` (`id`, `ho_ten`, `ten_dang_nhap`, `mat_khau`, `dia_chi`
 --
 -- Table structure for table `kho`
 --
--- Creation: Oct 17, 2016 at 01:05 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `kho`;
@@ -342,7 +343,7 @@ INSERT INTO `kho` (`id`, `ten`, `id_nhan_vien_quan_ly`, `dien_tich`, `dia_chi`, 
 --
 -- Table structure for table `loai_soi`
 --
--- Creation: Oct 17, 2016 at 01:05 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `loai_soi`;
@@ -374,7 +375,7 @@ INSERT INTO `loai_soi` (`id`, `ten`, `thong_tin_ky_thuat`, `khoi_luong_ton`, `so
 --
 -- Table structure for table `loai_vai`
 --
--- Creation: Oct 17, 2016 at 01:05 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `loai_vai`;
@@ -405,7 +406,7 @@ INSERT INTO `loai_vai` (`id`, `ten`, `don_gia`, `da_xoa`) VALUES
 --
 -- Table structure for table `loai_vai_loai_soi`
 --
--- Creation: Oct 11, 2016 at 01:24 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `loai_vai_loai_soi`;
@@ -436,7 +437,7 @@ INSERT INTO `loai_vai_loai_soi` (`id_loai_vai`, `id_loai_soi`, `dinh_muc`, `da_x
 --
 -- Table structure for table `lo_nhuom`
 --
--- Creation: Oct 05, 2016 at 02:06 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `lo_nhuom`;
@@ -465,7 +466,7 @@ INSERT INTO `lo_nhuom` (`id`, `id_mau`, `id_nhan_vien_nhuom`, `ngay_gio_nhuom`, 
 --
 -- Table structure for table `mau`
 --
--- Creation: Oct 17, 2016 at 01:09 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `mau`;
@@ -500,7 +501,7 @@ INSERT INTO `mau` (`id`, `ten`, `cong_thuc`, `id_nhan_vien_pha_che`, `ngay_gio_t
 --
 -- Table structure for table `nhan_vien`
 --
--- Creation: Oct 17, 2016 at 01:09 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `nhan_vien`;
@@ -546,7 +547,7 @@ INSERT INTO `nhan_vien` (`id`, `ho_ten`, `ten_dang_nhap`, `mat_khau`, `chuc_vu`,
 --
 -- Table structure for table `nha_cung_cap`
 --
--- Creation: Oct 17, 2016 at 01:08 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `nha_cung_cap`;
@@ -582,7 +583,7 @@ INSERT INTO `nha_cung_cap` (`id`, `ten`, `dia_chi`, `email`, `so_dien_thoai`, `f
 --
 -- Table structure for table `phieu_xuat_moc`
 --
--- Creation: Oct 11, 2016 at 08:43 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `phieu_xuat_moc`;
@@ -611,7 +612,7 @@ INSERT INTO `phieu_xuat_moc` (`id`, `tong_so_cay_moc`, `tong_so_met`, `id_kho`, 
 --
 -- Table structure for table `phieu_xuat_soi`
 --
--- Creation: Oct 11, 2016 at 01:56 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `phieu_xuat_soi`;
@@ -646,7 +647,7 @@ INSERT INTO `phieu_xuat_soi` (`id`, `id_loai_soi`, `so_thung`, `khoi_luong_thung
 --
 -- Table structure for table `thu_chi`
 --
--- Creation: Oct 05, 2016 at 02:15 PM
+-- Creation: Nov 11, 2016 at 03:04 PM
 --
 
 DROP TABLE IF EXISTS `thu_chi`;
