@@ -17,8 +17,11 @@ class PhieuXuatMoc
     public function getThongTinById()
     {
         $thongTin = DB::table('phieu_xuat_moc')
-                      ->where('da_xoa', '=', 0)
-                      ->where('id', '=', $this->id)
+                      ->join('kho', 'phieu_xuat_moc.id_kho', '=', 'kho.id')
+                      ->join('nhan_vien', 'phieu_xuat_moc.id_nhan_vien_xuat', '=', 'nhan_vien.id')
+                      ->select('phieu_xuat_moc.*', 'kho.ten as ten_kho', 'nhan_vien.ho_ten as ten_nhan_vien_xuat')
+                      ->where('phieu_xuat_moc.da_xoa', '=', 0)
+                      ->where('phieu_xuat_moc.id', '=', $this->id)
                       ->first();
         return $thongTin;
     }

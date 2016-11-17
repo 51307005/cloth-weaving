@@ -44,7 +44,10 @@ class HelperController extends Controller
         'Phiếu xuất sợi', 'Phiếu xuất mộc', 'Xuất mộc', 'Cập nhật xuất mộc',
         'Xuất vải thành phẩm', 'Cập nhật xuất vải thành phẩm', 'Đề xuất mua nguyên vật liệu'
         );
-    public $list_chuc_nang_ban_hang = array('tên chức năng 1', 'tên chức năng 2');
+    public $list_chuc_nang_ban_hang = array(
+        'Khách hàng', 'Đơn hàng khách hàng',
+        'Hóa đơn xuất', 'Báo giá'
+        );
 
     public $links_list_chuc_nang_admin = array('link 1', 'link 2');
     public $links_list_chuc_nang_san_xuat = array('link 1', 'link 2');
@@ -54,7 +57,10 @@ class HelperController extends Controller
         'phieu_xuat_soi', 'phieu_xuat_moc', 'xuat_moc', 'cap_nhat_xuat_moc',
         'xuat_vai_thanh_pham', 'cap_nhat_xuat_vai_thanh_pham', 'de_xuat_mua_nguyen_vat_lieu'
         );
-    public $links_list_chuc_nang_ban_hang = array('link 1', 'link 2');
+    public $links_list_chuc_nang_ban_hang = array(
+        'khach_hang', 'don_hang_khach_hang',
+        'hoa_don_xuat', 'bao_gia'
+        );
 
     public function taoLinkChoListChucNang($quyen)
     {

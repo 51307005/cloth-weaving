@@ -23,17 +23,11 @@ class Moc
     public function getThongTinById()
     {
         $thongTin = DB::table('cay_vai_moc')
-                      ->where('da_xoa', '=', 0)
-                      ->where('id', '=', $this->id)
-                      ->first();
-        return $thongTin;
-    }
-
-    public function getLoaiVaiSoMetById()
-    {
-        $thongTin = DB::table('cay_vai_moc')
                       ->join('loai_vai', 'cay_vai_moc.id_loai_vai', '=', 'loai_vai.id')
-                      ->select('loai_vai.ten as ten_loai_vai', 'cay_vai_moc.so_met')
+                      ->join('loai_soi', 'cay_vai_moc.id_loai_soi', '=', 'loai_soi.id')
+                      ->join('nhan_vien', 'cay_vai_moc.id_nhan_vien_det', '=', 'nhan_vien.id')
+                      ->join('kho', 'cay_vai_moc.id_kho', '=', 'kho.id')
+                      ->select('cay_vai_moc.*', 'loai_vai.ten as ten_loai_vai', 'loai_soi.ten as ten_loai_soi', 'nhan_vien.ho_ten as ten_nhan_vien_det', 'kho.ten as ten_kho')
                       ->where('cay_vai_moc.da_xoa', '=', 0)
                       ->where('cay_vai_moc.id', '=', $this->id)
                       ->first();

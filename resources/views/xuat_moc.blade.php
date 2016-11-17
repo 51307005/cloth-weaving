@@ -72,10 +72,11 @@
             <div id="content">
                 <!-- HEADER -->
                 <div style="margin-top:15px;border:1px solid black;">
-                    <div style="float:left;width:93%;text-align:center;color:red;">
+                    <div style="float:left;width:80%;text-align:center;color:red;">
                         <h2>QUẢN LÝ KHO</h2>
                     </div>
-                    <div style="float:left;width:7%;margin-top:28px;">
+                    <div style="float:left;width:20%;margin-top:16px;">
+                        <span>Xin chào <b>{{ Session::get('username') }}</b></span><br>
                         <a href="{{ route('route_get_logout_he_thong') }}">Đăng xuất</a>
                     </div>
                     <div style="clear:both;"></div>
@@ -103,7 +104,7 @@
                             <div id="div_xuat_moc">
                                 {!! Form::open(array('route' => 'route_post_xuat_moc', 'method' => 'post', 'id' => 'frm_xuat_moc')) !!}
                                     <b>Mã phiếu xuất mộc:</b>&nbsp;
-                                    <select id="id_phieu_xuat_moc" name="id_phieu_xuat_moc">
+                                    <select id="id_phieu_xuat_moc" name="id_phieu_xuat_moc" onchange="showLaiDanhSachMaCayMoc($(this).val())">
                                         @foreach ($list_id_phieu_xuat_moc as $phieu_xuat_moc)
                                             <option value="{{ $phieu_xuat_moc->id }}">{{ $phieu_xuat_moc->id }}</option>
                                         @endforeach
@@ -139,6 +140,7 @@
                                             </td>
                                             <td id="loai_vai_1" class="loai_vai"></td>
                                             <td id="so_met_1" class="so_met"></td>
+                                            <input type="hidden" id="soMet_1" class="soMet" value="">
                                             <td class="them_xoa">
                                                 <img src="{{ url('/') }}/resources/images/add_32x32.png" id="img_add_1" class="img" alt="add_32x32.png" title="Thêm" onclick="them()">
                                                 <img src="{{ url('/') }}/resources/images/delete_32x32.png" id="img_delete_1" class="img" alt="delete_32x32.png" title="Xóa" onclick="xoa($(this).attr('id'))">
@@ -160,8 +162,8 @@
             function tinhTongSoMet()
             {
                 var tong_so_met = 0;
-                $('.so_met').each(function() {
-                    var so_met = $(this).text();
+                $('.soMet').each(function() {
+                    var so_met = $(this).val();
                     if (so_met != '' && parseInt(so_met) != 0)
                     {
                         tong_so_met += parseInt(so_met);
@@ -176,6 +178,12 @@
 
             bien_dem = 1;
             id_cay_moc_muon_xuat_previous = 0;
+
+            list_option = '';
+            @foreach ($list_id_cay_moc_ton_kho as $cay_moc_ton_kho)
+                list_option += '<option value="' + {{ $cay_moc_ton_kho->id }} + '">' + {{ $cay_moc_ton_kho->id }} + '</option>';
+            @endforeach
+            //alert(list_option);
 
             function getValue(id_cay_moc_muon_xuat)
             {
@@ -192,13 +200,11 @@
                     '<tr id="cay_moc_' + id + '" class="cay_moc">' + 
                     '<td style="padding-right:2px;">' + 
                     '<select id="id_cay_moc_' + id + '" class="id_cay_moc" onclick="getValue($(this).val())" onchange="' + "showThongTinCayMoc($(this).val(), $(this).attr('id'))" + '">' + 
-                    '<option value="null"></option>' + 
-                    '@foreach ($list_id_cay_moc_ton_kho as $cay_moc_ton_kho)' + 
-                    '<option value="{{ $cay_moc_ton_kho->id }}">{{ $cay_moc_ton_kho->id }}</option>' + 
-                    '@endforeach' + 
+                    '<option value="null"></option>' + list_option + 
                     '</select></td>' + 
                     '<td id="loai_vai_' + id + '" class="loai_vai"></td>' + 
                     '<td id="so_met_' + id + '" class="so_met"></td>' + 
+                    '<input type="hidden" id="soMet_' + id + '" class="soMet" value="">' + 
                     '<td class="them_xoa">' + 
                     '<img src="' + "{{ url('/') }}/resources/images/add_32x32.png" + '" id="img_add_' + id + '" class="img" alt="add_32x32.png" title="Thêm" onclick="them()"> ' + 
                     '<img src="' + "{{ url('/') }}/resources/images/delete_32x32.png" + '" id="img_delete_' + id + '" class="img" alt="delete_32x32.png" title="Xóa" onclick="' + "xoa($(this).attr('id'))" + '">' + 
@@ -206,8 +212,7 @@
                 );
 
                 // Tính lại tổng số cây mộc muốn xuất
-                var tong_so_cay_moc_muon_xuat = $('#tong_so_cay_moc_muon_xuat').text();
-                tong_so_cay_moc_muon_xuat = parseInt(tong_so_cay_moc_muon_xuat) + 1;
+                var tong_so_cay_moc_muon_xuat = $('.cay_moc').length;
 
                 // Format tong_so_cay_moc_muon_xuat
                 tong_so_cay_moc_muon_xuat = $.number(tong_so_cay_moc_muon_xuat, 0, ',', '.');
@@ -255,6 +260,7 @@
                     // Xóa thông tin cây mộc muốn xuất trước đó
                     $('#loai_vai_' + id).text('');
                     $('#so_met_' + id).text('');
+                    $('#soMet_' + id).val('');
 
                     // Tính lại Tổng số mét
                     tinhTongSoMet();
@@ -292,7 +298,8 @@
                     }).done(function(cay_moc_muon_xuat) {
                             // Show thông tin cây mộc mà user muốn xuất
                             $('#loai_vai_' + id).text(cay_moc_muon_xuat.ten_loai_vai);
-                            $('#so_met_' + id).text(cay_moc_muon_xuat.so_met);
+                            $('#so_met_' + id).text($.number(cay_moc_muon_xuat.so_met, 0, ',', '.'));
+                            $('#soMet_' + id).val(cay_moc_muon_xuat.so_met);
 
                             // Tính lại Tổng số mét
                             tinhTongSoMet();
@@ -335,6 +342,52 @@
                 //var url = "{{ route('route_post_xuat_moc') }}";
                 //$('#frm_xuat_moc').attr('action', url);
                 $('#frm_xuat_moc').submit();
+            }
+
+            function showLaiDanhSachMaCayMoc(id_phieu_xuat_moc)
+            {
+                // Thiết lập Ajax
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                // Lấy thông tin danh sách id cây mộc tồn kho mà nằm trong kho mà ứng với id_phieu_xuat_moc vừa được chọn
+                $.ajax({
+                    method: 'POST',
+                    url: "{{ route('route_post_show_lai_danh_sach_ma_cay_moc') }}",
+                    data: {id_phieu_xuat_moc: id_phieu_xuat_moc},
+                    dataType: 'json'
+                }).done(function(list_id_cay_moc_ton_kho) {
+                        // Show lại "danh sách id cây mộc có thể xuất" mới
+                        // 1. Xóa tất cả dữ liệu: loại vải, số mét và "danh sách id cây mộc có thể xuất" hiện hành
+                        $('.loai_vai').text('');
+                        $('.so_met').text('');
+                        $('.soMet').val('');
+                        $('.id_cay_moc option').remove();
+
+                        // 2. Tính lại Tổng số mét
+                        $('#tong_so_met').text(0);
+
+                        // 3. Show lại "danh sách id cây mộc có thể xuất" mới
+                        list_option = '';
+                        var id_cay_moc = 0;
+                        for (var i = 0 ; i < list_id_cay_moc_ton_kho.length ; i++)
+                        {
+                            id_cay_moc = list_id_cay_moc_ton_kho[i].id;
+                            list_option += '<option value="' + id_cay_moc + '">' + id_cay_moc + '</option>';
+                        }
+                        //alert(list_option);
+                        $('.id_cay_moc').each(function() {
+                            $(this).append(
+                                '<option value="null"></option>' + list_option
+                            );
+                        });
+                   })
+                  .fail(function(jqXHR, textStatus) {
+                        alert('Request failed: ' + textStatus);
+                   });
             }
         </script>
     </body>

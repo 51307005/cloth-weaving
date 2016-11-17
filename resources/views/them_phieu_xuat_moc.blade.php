@@ -31,10 +31,11 @@
             <div id="content">
                 <!-- HEADER -->
                 <div style="margin-top:15px;border:1px solid black;">
-                    <div style="float:left;width:93%;text-align:center;color:red;">
+                    <div style="float:left;width:80%;text-align:center;color:red;">
                         <h2>QUẢN LÝ KHO</h2>
                     </div>
-                    <div style="float:left;width:7%;margin-top:28px;">
+                    <div style="float:left;width:20%;margin-top:16px;">
+                        <span>Xin chào <b>{{ Session::get('username') }}</b></span><br>
                         <a href="{{ route('route_get_logout_he_thong') }}">Đăng xuất</a>
                     </div>
                     <div style="clear:both;"></div>

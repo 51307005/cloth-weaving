@@ -31,7 +31,7 @@ class KhoMocController extends HelperController
                 case self::QUYEN_SAN_XUAT:
                     //return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
-                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
                 case self::QUYEN_KHO:
                     // Xử lý cho trường hợp phân trang
                     if ($request->has('page'))  // Có biến page trên URL
@@ -361,7 +361,7 @@ class KhoMocController extends HelperController
             }
             else    // Loại vải mà user đã chọn không có trong kho mà user đã chọn, hoặc có trong kho mà user đã chọn nhưng không còn cây mộc tồn kho nào
             {
-                $message = 'Loại vải '.$loai_vai_duoc_chon->ten.' không có trong '.$kho_moc_duoc_chon->ten.' hoặc loại vải này không còn cây mộc tồn kho nào trong '.$kho_moc_duoc_chon->ten.' !';
+                $message = 'Loại vải '.$loai_vai_duoc_chon->ten.' không có trong '.$kho_moc_duoc_chon->ten.' hoặc loại vải này có trong '.$kho_moc_duoc_chon->ten.' nhưng không còn cây mộc tồn kho nào !';
 
                 return view('kho_moc')->with('list_chuc_nang', $list_chuc_nang)
                                       ->with('list_kho_moc', $list_kho_moc)
@@ -387,7 +387,7 @@ class KhoMocController extends HelperController
                 case self::QUYEN_SAN_XUAT:
                     //return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
-                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
                     $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
@@ -459,7 +459,7 @@ class KhoMocController extends HelperController
                 case self::QUYEN_SAN_XUAT:
                     //return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
-                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
                     $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
@@ -500,6 +500,7 @@ class KhoMocController extends HelperController
                             {
                                 // Lấy cây mộc mà user đã chọn
                                 $cay_moc_duoc_chon = $mocRepository->getCayMocById($id_cay_moc);
+                                $cay_moc_duoc_chon_json = json_encode($cay_moc_duoc_chon);
 
                                 // Lấy danh sách loại vải
                                 $loaiVaiRepository = new LoaiVaiRepository();
@@ -540,6 +541,7 @@ class KhoMocController extends HelperController
                                 return view('cap_nhat_cay_moc')->with('list_chuc_nang', $list_chuc_nang)
                                                                ->with('list_id_cay_moc', $list_id_cay_moc)
                                                                ->with('cay_moc_duoc_chon', $cay_moc_duoc_chon)
+                                                               ->with('cay_moc_cu', $cay_moc_duoc_chon_json)
                                                                ->with('list_loai_vai', $list_loai_vai)
                                                                ->with('list_loai_soi', $list_loai_soi)
                                                                ->with('list_nhan_vien_det', $list_nhan_vien_det)
@@ -576,6 +578,10 @@ class KhoMocController extends HelperController
 
     public function postCapNhatCayMoc(Request $request, $id_cay_moc)
     {
+        // Tạo đối tượng MocRepository và PhieuXuatMocRepository
+        $mocRepository = new MocRepository();
+        $phieuXuatMocRepository = new PhieuXuatMocRepository();
+
         if ($request->has('frm_chon_ma_cay_moc'))   // Button "Chọn" được click
         {
             $id_cay_moc = (int)($request->get('IdCayMoc'));
@@ -583,14 +589,12 @@ class KhoMocController extends HelperController
             // Lấy danh sách chức năng tương ứng với quyền của user
             $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
 
-            // Tạo đối tượng MocRepository
-            $mocRepository = new MocRepository();
-
             // Lấy danh sách id cây mộc
             $list_id_cay_moc = $mocRepository->getDanhSachIdCayMoc();
 
             // Lấy cây mộc mà user đã chọn
             $cay_moc_duoc_chon = $mocRepository->getCayMocById($id_cay_moc);
+            $cay_moc_duoc_chon_json = json_encode($cay_moc_duoc_chon);
 
             // Lấy danh sách loại vải
             $loaiVaiRepository = new LoaiVaiRepository();
@@ -618,7 +622,6 @@ class KhoMocController extends HelperController
             $list_kho_moc = $khoRepository->getDanhSachKhoMoc();
 
             // Lấy danh sách id phiếu xuất mộc
-            $phieuXuatMocRepository = new PhieuXuatMocRepository();
             $list_id_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachIdPhieuXuatMoc();
 
             // Lấy danh sách tình trạng có thể có của cây mộc
@@ -631,6 +634,7 @@ class KhoMocController extends HelperController
             return view('cap_nhat_cay_moc')->with('list_chuc_nang', $list_chuc_nang)
                                            ->with('list_id_cay_moc', $list_id_cay_moc)
                                            ->with('cay_moc_duoc_chon', $cay_moc_duoc_chon)
+                                           ->with('cay_moc_cu', $cay_moc_duoc_chon_json)
                                            ->with('list_loai_vai', $list_loai_vai)
                                            ->with('list_loai_soi', $list_loai_soi)
                                            ->with('list_nhan_vien_det', $list_nhan_vien_det)
@@ -679,8 +683,8 @@ class KhoMocController extends HelperController
 
             // Validate successful
             // Xử lý cập nhật cây mộc
-            $mocRepository = new MocRepository();
             $mocRepository->capNhatCayMoc($request);
+            $phieuXuatMocRepository->capNhatCayMoc($request);
             //echo "<script> alert('Cập nhật thành công !'); </script>";
 
             // Show lại trang Cập nhật cây mộc
@@ -694,6 +698,7 @@ class KhoMocController extends HelperController
 
             // Lấy cây mộc mà user đã chọn
             $cay_moc_duoc_chon = $mocRepository->getCayMocById($id_cay_moc);
+            $cay_moc_duoc_chon_json = json_encode($cay_moc_duoc_chon);
 
             // Lấy danh sách loại vải
             $loaiVaiRepository = new LoaiVaiRepository();
@@ -721,7 +726,6 @@ class KhoMocController extends HelperController
             $list_kho_moc = $khoRepository->getDanhSachKhoMoc();
 
             // Lấy danh sách id phiếu xuất mộc
-            $phieuXuatMocRepository = new PhieuXuatMocRepository();
             $list_id_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachIdPhieuXuatMoc();
 
             // Lấy danh sách tình trạng có thể có của cây mộc
@@ -734,6 +738,7 @@ class KhoMocController extends HelperController
             return view('cap_nhat_cay_moc')->with('list_chuc_nang', $list_chuc_nang)
                                            ->with('list_id_cay_moc', $list_id_cay_moc)
                                            ->with('cay_moc_duoc_chon', $cay_moc_duoc_chon)
+                                           ->with('cay_moc_cu', $cay_moc_duoc_chon_json)
                                            ->with('list_loai_vai', $list_loai_vai)
                                            ->with('list_loai_soi', $list_loai_soi)
                                            ->with('list_nhan_vien_det', $list_nhan_vien_det)
@@ -758,7 +763,7 @@ class KhoMocController extends HelperController
                 case self::QUYEN_SAN_XUAT:
                     //return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
-                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
                     $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
@@ -823,31 +828,49 @@ class KhoMocController extends HelperController
 
     public function getThemPhieuXuatMoc()
     {
-        // Lấy danh sách chức năng tương ứng với quyền của user
-        $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
-
-        // Lấy "id phiếu xuất mộc cuối cùng" trong database
-        $phieuXuatMocRepository = new PhieuXuatMocRepository();
-        $id_phieu_xuat_moc_cuoi_cung = $phieuXuatMocRepository->getIdPhieuXuatMocCuoiCung();
-
-        // Lấy danh sách kho mộc
-        $khoRepository = new KhoRepository();
-        $list_kho_moc = $khoRepository->getDanhSachKhoMoc();
-
-        // Lấy danh sách nhân viên kho mộc
-        $nhanVienRepository = new NhanVienRepository();
-        $list_nhan_vien_kho_moc = $nhanVienRepository->getDanhSachNhanVienKhoMoc();
-        // Xử lý chỉ lấy tên nhân viên kho mộc chứ không lấy cả họ tên (nếu cần)
-        /*foreach ($list_nhan_vien_kho_moc as $nhan_vien_kho_moc)
+        // Check Login
+        if (Session::has('username') && Session::has('quyen'))  // Đã Login
         {
-            $temp = explode(' ', $nhan_vien_kho_moc->ho_ten);
-            $nhan_vien_kho_moc->ho_ten = $temp[count($temp) - 1];
-        }*/
+            // Redirect tới view mà tương ứng với quyền của user
+            switch (Session::get('quyen'))
+            {
+                case self::QUYEN_ADMIN:
+                    //return redirect()->to(route('route_get_trang_chu_manager'));
+                case self::QUYEN_SAN_XUAT:
+                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                case self::QUYEN_BAN_HANG:
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                case self::QUYEN_KHO:
+                    // Lấy danh sách chức năng tương ứng với quyền của user
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
 
-        return view('them_phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
-                                          ->with('id_phieu_xuat_moc_cuoi_cung', $id_phieu_xuat_moc_cuoi_cung)
-                                          ->with('list_kho_moc', $list_kho_moc)
-                                          ->with('list_nhan_vien_kho_moc', $list_nhan_vien_kho_moc);
+                    // Lấy "id phiếu xuất mộc cuối cùng" trong database
+                    $phieuXuatMocRepository = new PhieuXuatMocRepository();
+                    $id_phieu_xuat_moc_cuoi_cung = $phieuXuatMocRepository->getIdPhieuXuatMocCuoiCung();
+
+                    // Lấy danh sách kho mộc
+                    $khoRepository = new KhoRepository();
+                    $list_kho_moc = $khoRepository->getDanhSachKhoMoc();
+
+                    // Lấy danh sách nhân viên kho mộc
+                    $nhanVienRepository = new NhanVienRepository();
+                    $list_nhan_vien_kho_moc = $nhanVienRepository->getDanhSachNhanVienKhoMoc();
+                    // Xử lý chỉ lấy tên nhân viên kho mộc chứ không lấy cả họ tên (nếu cần)
+                    /*foreach ($list_nhan_vien_kho_moc as $nhan_vien_kho_moc)
+                    {
+                        $temp = explode(' ', $nhan_vien_kho_moc->ho_ten);
+                        $nhan_vien_kho_moc->ho_ten = $temp[count($temp) - 1];
+                    }*/
+
+                    return view('them_phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
+                                                      ->with('id_phieu_xuat_moc_cuoi_cung', $id_phieu_xuat_moc_cuoi_cung)
+                                                      ->with('list_kho_moc', $list_kho_moc)
+                                                      ->with('list_nhan_vien_kho_moc', $list_nhan_vien_kho_moc);
+            }
+        }
+
+        // Chưa Login
+        return redirect()->to(route('route_get_login_he_thong'));
     }
 
     public function postThemPhieuXuatMoc(ThemPhieuXuatMocRequest $request)
@@ -873,7 +896,7 @@ class KhoMocController extends HelperController
                 case self::QUYEN_SAN_XUAT:
                     //return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
-                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
                     $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
@@ -1063,7 +1086,7 @@ class KhoMocController extends HelperController
                 case self::QUYEN_SAN_XUAT:
                     //return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
-                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
                     $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
@@ -1072,9 +1095,12 @@ class KhoMocController extends HelperController
                     $phieuXuatMocRepository = new PhieuXuatMocRepository();
                     $list_id_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachIdPhieuXuatMoc();
 
+                    // Lấy phiếu xuất mộc đầu tiên trong database
+                    $phieu_xuat_moc_dau_tien = $phieuXuatMocRepository->getPhieuXuatMocById($list_id_phieu_xuat_moc[0]->id);
+
                     // Lấy danh sách id cây mộc tồn kho (chưa xuất)
                     $mocRepository = new MocRepository();
-                    $list_id_cay_moc_ton_kho = $mocRepository->getDanhSachIdCayMocTonKho();
+                    $list_id_cay_moc_ton_kho = $mocRepository->getDanhSachIdCayMocTonKho($phieu_xuat_moc_dau_tien->id_kho);
 
                     return view('xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
                                            ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc)
@@ -1109,7 +1135,7 @@ class KhoMocController extends HelperController
                 case self::QUYEN_SAN_XUAT:
                     //return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
-                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
                     $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
@@ -1156,7 +1182,7 @@ class KhoMocController extends HelperController
                                 $list_cay_moc_trong_phieu_xuat_moc = $mocRepository->getDanhSachCayMocTrongPhieuXuatMoc($id_phieu_xuat_moc);
 
                                 // Lấy danh sách id cây mộc tồn kho và danh sách id cây mộc nằm trong phiếu xuất mộc mà user đã chọn
-                                $list_id_cay_moc_ton_kho_hoac_trong_phieu_xuat_moc_duoc_chon = $mocRepository->getDanhSachIdCayMocTonKhoVaTrongPhieuXuatMoc($id_phieu_xuat_moc);
+                                $list_id_cay_moc_ton_kho_hoac_trong_phieu_xuat_moc_duoc_chon = $mocRepository->getDanhSachIdCayMocTonKhoVaTrongPhieuXuatMoc($id_phieu_xuat_moc, $phieu_xuat_moc_duoc_chon->id_kho);
 
                                 return view('cap_nhat_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
                                                                 ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc)
@@ -1196,7 +1222,7 @@ class KhoMocController extends HelperController
         // Tạo đối tượng MocRepository
         $mocRepository = new MocRepository();
 
-        // Tạo đối tượng MocRepository
+        // Tạo đối tượng PhieuXuatMocRepository
         $phieuXuatMocRepository = new PhieuXuatMocRepository();
 
         if ($request->get('chon_ma_phieu_xuat_moc') == 'false')     // Button "Cập nhật xuất mộc" được click
@@ -1223,7 +1249,7 @@ class KhoMocController extends HelperController
         $list_cay_moc_trong_phieu_xuat_moc = $mocRepository->getDanhSachCayMocTrongPhieuXuatMoc($id_phieu_xuat_moc);
 
         // Lấy danh sách id cây mộc tồn kho và danh sách id cây mộc nằm trong phiếu xuất mộc mà user đã chọn
-        $list_id_cay_moc_ton_kho_hoac_trong_phieu_xuat_moc_duoc_chon = $mocRepository->getDanhSachIdCayMocTonKhoVaTrongPhieuXuatMoc($id_phieu_xuat_moc);
+        $list_id_cay_moc_ton_kho_hoac_trong_phieu_xuat_moc_duoc_chon = $mocRepository->getDanhSachIdCayMocTonKhoVaTrongPhieuXuatMoc($id_phieu_xuat_moc, $phieu_xuat_moc_duoc_chon->id_kho);
 
         return view('cap_nhat_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
                                         ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc)
@@ -1238,7 +1264,7 @@ class KhoMocController extends HelperController
 
         // Lấy thông tin cây mộc mà user muốn xuất
         $mocRepository = new MocRepository();
-        $cay_moc_muon_xuat = $mocRepository->getLoaiVaiSoMetCayMocById($id_cay_moc_muon_xuat);
+        $cay_moc_muon_xuat = $mocRepository->getCayMocById($id_cay_moc_muon_xuat);
         //echo '<pre>',print_r($cay_moc_muon_xuat),'</pre>';
 
         // Chuyển $cay_moc_muon_xuat về dạng chuỗi JSON
@@ -1247,5 +1273,26 @@ class KhoMocController extends HelperController
 
         //return $cay_moc_muon_xuat;
         return response()->json($cay_moc_muon_xuat);
+    }
+
+    public function postShowLaiDanhSachMaCayMoc(Request $request)
+    {
+        $id_phieu_xuat_moc = (int)($request->get('id_phieu_xuat_moc'));
+
+        // Lấy phiếu xuất mộc tương ứng với $id_phieu_xuat_moc
+        $phieuXuatMocRepository = new PhieuXuatMocRepository();
+        $phieu_xuat_moc = $phieuXuatMocRepository->getPhieuXuatMocById($id_phieu_xuat_moc);
+
+        // Lấy danh sách id cây mộc tồn kho (chưa xuất)
+        $mocRepository = new MocRepository();
+        $list_id_cay_moc_ton_kho = $mocRepository->getDanhSachIdCayMocTonKho($phieu_xuat_moc->id_kho);
+        //echo '<pre>',print_r($list_id_cay_moc_ton_kho),'</pre>';
+
+        // Chuyển $list_id_cay_moc_ton_kho về dạng chuỗi JSON
+        //$list_id_cay_moc_ton_kho = json_encode($list_id_cay_moc_ton_kho);
+        //echo $list_id_cay_moc_ton_kho;
+
+        //return $list_id_cay_moc_ton_kho;
+        return response()->json($list_id_cay_moc_ton_kho);
     }
 }

@@ -16,8 +16,8 @@
         <script src="{{ url('/') }}/resources/assets/js/bootstrap-3.3.7.js" type="text/javascript"></script>
 
         <style>
-            #tbl_cap_nhat_phieu_xuat_moc input, select {
-                width: 255px;
+            #tbl_cap_nhat_phieu_xuat_moc input, #tbl_cap_nhat_phieu_xuat_moc select {
+                width: 200px;
             }
 
             #btn_cap_nhat {
@@ -34,10 +34,11 @@
             <div id="content">
                 <!-- HEADER -->
                 <div style="margin-top:15px;border:1px solid black;">
-                    <div style="float:left;width:93%;text-align:center;color:red;">
+                    <div style="float:left;width:80%;text-align:center;color:red;">
                         <h2>QUẢN LÝ KHO</h2>
                     </div>
-                    <div style="float:left;width:7%;margin-top:28px;">
+                    <div style="float:left;width:20%;margin-top:16px;">
+                        <span>Xin chào <b>{{ Session::get('username') }}</b></span><br>
                         <a href="{{ route('route_get_logout_he_thong') }}">Đăng xuất</a>
                     </div>
                     <div style="clear:both;"></div>
@@ -65,7 +66,7 @@
                             <div style="margin-top:20px;margin-left:30px;">
                                 {!! Form::open(array('method' => 'post', 'id' => 'frm_chon_ma_phieu_xuat_moc')) !!}
                                     <b>Chọn mã phiếu xuất mộc:</b>
-                                    <select id="IdPhieuXuatMoc" name="IdPhieuXuatMoc" style="margin-left:5px;margin-right:5px;">
+                                    <select id="IdPhieuXuatMoc" name="IdPhieuXuatMoc" style="margin-left:5px;margin-right:5px;width:152px;">
                                         @foreach ($list_id_phieu_xuat_moc as $phieu_xuat_moc)
                                             <option value="{{ $phieu_xuat_moc->id }}" {{ (isset($phieu_xuat_moc_duoc_chon) && ($phieu_xuat_moc->id == $phieu_xuat_moc_duoc_chon->id))?'selected':'' }}>
                                                 {{ $phieu_xuat_moc->id }}
@@ -88,7 +89,7 @@
                                 <!-- FORM CẬP NHẬT PHIẾU XUẤT MỘC -->
                                 <div style="margin-left:30px;margin-top:15px;margin-bottom:15px;float:left;width:50%;">
                                     {!! Form::open(array('method' => 'post', 'id' => 'frm_cap_nhat_phieu_xuat_moc')) !!}
-                                        <table id="tbl_cap_nhat_phieu_xuat_moc" style="width:410px;height:210px;">
+                                        <table id="tbl_cap_nhat_phieu_xuat_moc" style="width:350px;height:210px;">
                                             <tr>
                                                 <td style="font-weight:bold;">Mã phiếu:</td>
                                                 <td>
@@ -98,13 +99,15 @@
                                             <tr>
                                                 <td style="font-weight:bold;">Tổng số cây mộc:</td>
                                                 <td>
-                                                    <input type="text" id="tong_so_cay_moc" name="tong_so_cay_moc" value="{{ $phieu_xuat_moc_duoc_chon->tong_so_cay_moc }}" readonly style="background-color:#cccccc;">
+                                                    <input type="text" id="tong_so_cay_moc" name="tong_so_cay_moc" value="{{ number_format($phieu_xuat_moc_duoc_chon->tong_so_cay_moc, 0, ',', '.') }}" readonly style="background-color:#cccccc;">
+                                                    <input type="hidden" id="tongSoCayMoc" name="tongSoCayMoc" value="{{ $phieu_xuat_moc_duoc_chon->tong_so_cay_moc }}">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style="font-weight:bold;">Tổng số mét:</td>
                                                 <td>
-                                                    <input type="text" id="tong_so_met" name="tong_so_met" value="{{ $phieu_xuat_moc_duoc_chon->tong_so_met }}" readonly style="background-color:#cccccc;">
+                                                    <input type="text" id="tong_so_met" name="tong_so_met" value="{{ number_format($phieu_xuat_moc_duoc_chon->tong_so_met, 0, ',', '.') }}" readonly style="background-color:#cccccc;">
+                                                    <input type="hidden" id="tongSoMet" name="tongSoMet" value="{{ $phieu_xuat_moc_duoc_chon->tong_so_met }}">
                                                 </td>
                                             </tr>
                                             <tr>

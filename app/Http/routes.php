@@ -47,12 +47,12 @@ Route::get('/he_thong_quan_ly/kho', [
     'as' => 'route_get_trang_chu_kho',
     'uses' => 'KhoController@getTrangChu'
     ]);
-/*
+
 Route::get('/he_thong_quan_ly/ban_hang', [
     'as' => 'route_get_trang_chu_ban_hang',
     'uses' => 'BanHangController@getTrangChu'
     ]);
-*/////////// END PHÂN QUYỀN //////////
+////////// END PHÂN QUYỀN //////////
 
 ////////// MỘC //////////
 Route::get('/he_thong_quan_ly/kho/kho_moc', [
@@ -139,8 +139,159 @@ Route::post('/he_thong_quan_ly/kho/show_thong_tin_cay_moc', [
     'as' => 'route_post_show_thong_tin_cay_moc',
     'uses' => 'KhoMocController@postShowThongTinCayMoc'
     ]);
+
+Route::post('/he_thong_quan_ly/kho/show_lai_danh_sach_ma_cay_moc', [
+    'as' => 'route_post_show_lai_danh_sach_ma_cay_moc',
+    'uses' => 'KhoMocController@postShowLaiDanhSachMaCayMoc'
+    ]);
 ////////// END MỘC //////////
 
 ////////// VẢI THÀNH PHẨM //////////
+Route::get('/he_thong_quan_ly/kho/kho_thanh_pham', [
+    'as' => 'route_get_kho_thanh_pham',
+    'uses' => 'KhoThanhPhamController@getKhoThanhPham'
+    ]);
 
+Route::post('/he_thong_quan_ly/kho/kho_thanh_pham', [
+    'as' => 'route_post_kho_thanh_pham',
+    'uses' => 'KhoThanhPhamController@postKhoThanhPham'
+    ]);
+
+Route::get('/he_thong_quan_ly/kho/nhap_vai_thanh_pham', [
+    'as' => 'route_get_nhap_vai_thanh_pham',
+    'uses' => 'KhoThanhPhamController@getNhapVaiThanhPham'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/nhap_vai_thanh_pham', [
+    'as' => 'route_post_nhap_vai_thanh_pham',
+    'uses' => 'KhoThanhPhamController@postNhapVaiThanhPham'
+    ]);
+
+Route::get('/he_thong_quan_ly/kho/cap_nhat_cay_vai_thanh_pham/{id_cay_thanh_pham?}', [
+    'as' => 'route_get_cap_nhat_cay_vai_thanh_pham',
+    'uses' => 'KhoThanhPhamController@getCapNhatCayVaiThanhPham'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/cap_nhat_cay_vai_thanh_pham/{id_cay_thanh_pham}', [
+    'as' => 'route_post_cap_nhat_cay_vai_thanh_pham',
+    'uses' => 'KhoThanhPhamController@postCapNhatCayVaiThanhPham'
+    ]);
+
+Route::get('/he_thong_quan_ly/kho/xuat_vai_thanh_pham', [
+    'as' => 'route_get_xuat_vai_thanh_pham',
+    'uses' => 'KhoThanhPhamController@getXuatVaiThanhPham'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/xuat_vai_thanh_pham', [
+    'as' => 'route_post_xuat_vai_thanh_pham',
+    'uses' => 'KhoThanhPhamController@postXuatVaiThanhPham'
+    ]);
+
+Route::get('/he_thong_quan_ly/kho/cap_nhat_xuat_vai_thanh_pham/{id_hoa_don_xuat?}', [
+    'as' => 'route_get_cap_nhat_xuat_vai_thanh_pham',
+    'uses' => 'KhoThanhPhamController@getCapNhatXuatVaiThanhPham'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/cap_nhat_xuat_vai_thanh_pham/{id_hoa_don_xuat}', [
+    'as' => 'route_post_cap_nhat_xuat_vai_thanh_pham',
+    'uses' => 'KhoThanhPhamController@postCapNhatXuatVaiThanhPham'
+    ]);
+
+Route::get('/he_thong_quan_ly/ban_hang/hoa_don_xuat', [
+    'as' => 'route_get_hoa_don_xuat',
+    'uses' => 'KhoThanhPhamController@getHoaDonXuat'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/hoa_don_xuat', [
+    'as' => 'route_post_hoa_don_xuat',
+    'uses' => 'KhoThanhPhamController@postHoaDonXuat'
+    ]);
+
+Route::get('/he_thong_quan_ly/ban_hang/them_hoa_don_xuat', [
+    'as' => 'route_get_them_hoa_don_xuat',
+    'uses' => 'KhoThanhPhamController@getThemHoaDonXuat'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/them_hoa_don_xuat', [
+    'as' => 'route_post_them_hoa_don_xuat',
+    'uses' => 'KhoThanhPhamController@postThemHoaDonXuat'
+    ]);
+
+Route::get('/he_thong_quan_ly/ban_hang/cap_nhat_hoa_don_xuat/{id_hoa_don_xuat?}', [
+    'as' => 'route_get_cap_nhat_hoa_don_xuat',
+    'uses' => 'KhoThanhPhamController@getCapNhatHoaDonXuat'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/cap_nhat_hoa_don_xuat/{id_hoa_don_xuat}', [
+    'as' => 'route_post_cap_nhat_hoa_don_xuat',
+    'uses' => 'KhoThanhPhamController@postCapNhatHoaDonXuat'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/show_loai_vai', [
+    'as' => 'route_post_show_loai_vai',
+    'uses' => 'KhoThanhPhamController@postShowLoaiVai'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/show_mau', [
+    'as' => 'route_post_show_mau',
+    'uses' => 'KhoThanhPhamController@postShowMau'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/show_thong_tin_cay_thanh_pham', [
+    'as' => 'route_post_show_thong_tin_cay_thanh_pham',
+    'uses' => 'KhoThanhPhamController@postShowThongTinCayThanhPham'
+    ]);
+
+Route::post('/he_thong_quan_ly/kho/show_lai_danh_sach_ma_cay_thanh_pham', [
+    'as' => 'route_post_show_lai_danh_sach_ma_cay_thanh_pham',
+    'uses' => 'KhoThanhPhamController@postShowLaiDanhSachMaCayThanhPham'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/show_thong_tin_don_hang_khach_hang', [
+    'as' => 'route_post_show_thong_tin_don_hang_khach_hang',
+    'uses' => 'KhoThanhPhamController@postShowThongTinDonHangKhachHang'
+    ]);
 ////////// END VẢI THÀNH PHẨM //////////
+
+////////// ĐƠN HÀNG KHÁCH HÀNG //////////
+Route::get('/he_thong_quan_ly/ban_hang/don_hang_khach_hang', [
+    'as' => 'route_get_don_hang_khach_hang',
+    'uses' => 'DonHangKhachHangController@getDonHangKhachHang'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/don_hang_khach_hang', [
+    'as' => 'route_post_don_hang_khach_hang',
+    'uses' => 'DonHangKhachHangController@postDonHangKhachHang'
+    ]);
+
+Route::get('/he_thong_quan_ly/ban_hang/them_don_hang_khach_hang', [
+    'as' => 'route_get_them_don_hang_khach_hang',
+    'uses' => 'DonHangKhachHangController@getThemDonHangKhachHang'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/them_don_hang_khach_hang', [
+    'as' => 'route_post_them_don_hang_khach_hang',
+    'uses' => 'DonHangKhachHangController@postThemDonHangKhachHang'
+    ]);
+
+Route::get('/he_thong_quan_ly/ban_hang/cap_nhat_don_hang_khach_hang/{id_don_hang_khach_hang?}', [
+    'as' => 'route_get_cap_nhat_don_hang_khach_hang',
+    'uses' => 'DonHangKhachHangController@getCapNhatDonHangKhachHang'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/cap_nhat_don_hang_khach_hang/{id_don_hang_khach_hang}', [
+    'as' => 'route_post_cap_nhat_don_hang_khach_hang',
+    'uses' => 'DonHangKhachHangController@postCapNhatDonHangKhachHang'
+    ]);
+////////// END ĐƠN HÀNG KHÁCH HÀNG //////////
+
+
+Route::get('/nhap', [
+    'as' => 'route_get_nhap',
+    'uses' => 'NhapController@getNhap'
+    ]);
+
+Route::post('/nhap', [
+    'as' => 'route_post_nhap',
+    'uses' => 'NhapController@postNhap'
+    ]);

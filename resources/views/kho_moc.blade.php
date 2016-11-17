@@ -15,6 +15,10 @@
                 margin: 0px;
             }
 
+            #tbl_thong_ke_kho_moc td {
+                padding-left: 5px;
+            }
+
             #tbl_list_cay_moc td {
                 padding-left: 5px;
                 padding-right: 5px;
@@ -26,10 +30,11 @@
             <div id="content">
                 <!-- HEADER -->
                 <div style="margin-top:15px;border:1px solid black;">
-                    <div style="float:left;width:93%;text-align:center;color:red;">
+                    <div style="float:left;width:80%;text-align:center;color:red;">
                         <h2>QUẢN LÝ KHO</h2>
                     </div>
-                    <div style="float:left;width:7%;margin-top:28px;">
+                    <div style="float:left;width:20%;margin-top:16px;">
+                        <span>Xin chào <b>{{ Session::get('username') }}</b></span><br>
                         <a href="{{ route('route_get_logout_he_thong') }}">Đăng xuất</a>
                     </div>
                     <div style="clear:both;"></div>
@@ -56,7 +61,7 @@
                             <div style="margin-top:18px;margin-left:20px;">
                                 {!! Form::open(array('route' => 'route_post_kho_moc', 'method' => 'post', 'id' => 'frm_chon_kho_moc')) !!}
                                     <b>Chọn kho mộc:</b>
-                                    <select id="id_kho_moc" name="id_kho_moc">
+                                    <select id="id_kho_moc" name="id_kho_moc" style="margin-left:5px;margin-right:5px;">
                                         @foreach ($list_kho_moc as $kho_moc)
                                             <option value="{{ $kho_moc->id }}" {{ (isset($kho_moc_duoc_chon) && ($kho_moc->id == $kho_moc_duoc_chon->id))?'selected':'' }}>
                                                 {{ $kho_moc->ten }}
@@ -74,12 +79,12 @@
                             <!-- END FORM SUBMIT -->
                             @if (isset($list_cay_moc))
                                 <div style="margin-left:20px;margin-top:16px;">
-                                    <div id="button_group" style="float:left;">
+                                    <div id="button_group" style="float:left;width:40%;">
                                         <input type="button" value="Xem tất cả cây mộc" onclick="xemTatCaCayMoc()">
-                                        <input type="button" value="Nhập mộc" onclick="nhapMoc()">
+                                        <input type="button" value="Nhập mộc" onclick="nhapMoc()" style="margin-left:5px;margin-right:5px;">
                                         <input type="button" value="Cập nhật cây mộc" onclick="capNhatCayMoc()">
                                     </div>
-                                    <div id="loc_cay_moc_ton_kho_theo_loai_vai" style="float:right;">
+                                    <div id="loc_cay_moc_ton_kho_theo_loai_vai" style="float:right;width:58%;">
                                         Lọc cây mộc tồn kho theo loại vải: 
                                         <select id="idLoaiVai" name="idLoaiVai">
                                             @foreach ($list_loai_vai as $loai_vai)
@@ -92,20 +97,24 @@
                                     </div>
                                     <div style="clear:both;"></div>
                                     <div id="thong_ke_kho_moc">
-                                        <h2 style="text-align:center;margin-bottom:0px;">Danh sách cây mộc {{ isset($loai_vai_duoc_chon)?$loai_vai_duoc_chon->ten:'' }} {{ isset($tong_so_cay_moc)?'':'tồn kho' }}</h2>
+                                        <h2 style="text-align:center;margin-bottom:0px;">Danh sách cây mộc{{ isset($loai_vai_duoc_chon)?' '.$loai_vai_duoc_chon->ten:'' }}{{ isset($tong_so_cay_moc)?'':' tồn kho' }}</h2>
                                         <h3 style="margin-top:0px;margin-bottom:5px;">{{ $kho_moc_duoc_chon->ten }}</h3>
                                         @if (isset($message))
                                             <div style="text-align:center;color:red;margin-top:25px;">{{ $message }}</div>
                                         @else
-                                            <table id="tbl_thong_ke_kho_moc" style="width:310px;">
+                                            <table id="tbl_thong_ke_kho_moc">
                                                 <tr>
-                                                    <td>Tổng số cây mộc {{ isset($loai_vai_duoc_chon)?$loai_vai_duoc_chon->ten:'' }} {{ isset($tong_so_cay_moc)?'':'tồn kho' }}:</td>
-                                                    <td>{{ isset($tong_so_cay_moc)?$tong_so_cay_moc:$tong_so_cay_moc_ton_kho }} cây</td>
+                                                    <td style="padding-left:0px;">
+                                                        Tổng số cây mộc{{ isset($loai_vai_duoc_chon)?' '.$loai_vai_duoc_chon->ten:'' }}{{ isset($tong_so_cay_moc)?'':' tồn kho' }}:
+                                                    </td>
+                                                    <td>
+                                                        {{ isset($tong_so_cay_moc)?$tong_so_cay_moc:$tong_so_cay_moc_ton_kho }} cây
+                                                    </td>
                                                 </tr>
                                                 @if (!isset($loai_vai_duoc_chon))
                                                     @foreach ($soCayMocTheoLoaiVai as $element)
                                                         <tr>
-                                                            <td>Loại vải {{ $element->ten_loai_vai }}:</td>
+                                                            <td style="padding-left:0px;">Loại vải {{ $element->ten_loai_vai }}:</td>
                                                             <td>{{ $element->so_cay_moc }} cây</td>
                                                         </tr>
                                                     @endforeach
@@ -153,15 +162,15 @@
                                                         @if (!isset($loai_vai_duoc_chon))
                                                             <td style="text-align:left;">{{ $cay_moc->ten_loai_vai }}</td>
                                                         @endif
-                                                        <td style="text-align:right;">{{ $cay_moc->so_met }}</td>
+                                                        <td style="text-align:right;">{{ number_format($cay_moc->so_met, 0, ',', '.') }}</td>
                                                         <td style="text-align:left;">{{ $cay_moc->ten_nhan_vien_det }}</td>
                                                         <td style="text-align:right;">{{ $cay_moc->ma_may_det }}</td>
                                                         <td>{{ $cay_moc->ngay_gio_det }}</td>
                                                         <td>{{ $cay_moc->ngay_gio_nhap_kho }}</td>
                                                         @if (isset($tong_so_cay_moc))
-                                                            <td>{{ $cay_moc->id_phieu_xuat_moc }}</td>
+                                                            <td style="text-align:right;">{{ $cay_moc->id_phieu_xuat_moc }}</td>
                                                             <td style="text-align:center;">{{ $cay_moc->tinh_trang }}</td>
-                                                            <td>{{ $cay_moc->id_lo_nhuom }}</td>
+                                                            <td style="text-align:right;">{{ $cay_moc->id_lo_nhuom }}</td>
                                                         @endif
                                                         @if ($showButtonXoa == true)
                                                             <td>

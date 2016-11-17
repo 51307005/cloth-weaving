@@ -26,10 +26,11 @@
             <div id="content">
                 <!-- HEADER -->
                 <div style="margin-top:15px;border:1px solid black;">
-                    <div style="float:left;width:93%;text-align:center;color:red;">
+                    <div style="float:left;width:80%;text-align:center;color:red;">
                         <h2>QUẢN LÝ KHO</h2>
                     </div>
-                    <div style="float:left;width:7%;margin-top:28px;">
+                    <div style="float:left;width:20%;margin-top:16px;">
+                        <span>Xin chào <b>{{ Session::get('username') }}</b></span><br>
                         <a href="{{ route('route_get_logout_he_thong') }}">Đăng xuất</a>
                     </div>
                     <div style="clear:both;"></div>
@@ -54,7 +55,7 @@
                         <div id="main_content">
                             <h3 style="text-align:center;">DANH SÁCH PHIẾU XUẤT MỘC</h3>
                             <div id="button_group" style="margin-left:20px;margin-top:14px;">
-                                <input type="button" value="Thêm phiếu" onclick="themPhieu()">
+                                <input type="button" value="Thêm phiếu" onclick="themPhieu()">&nbsp;
                                 <input type="button" value="Cập nhật phiếu" onclick="capNhatPhieu()">
                             </div>
                             <!-- FORM XÓA PHIẾU XUẤT MỘC -->
@@ -71,7 +72,7 @@
                             <div id="list_phieu_xuat_moc" style="margin-top:5px;margin-bottom:15px;margin-left:20px;">
                                 <table id="tbl_list_phieu_xuat_moc" border="1px solid black" style="border-collapse:collapse;">
                                     <tr style="text-align:center;font-weight:bold;">
-                                        <td>Mã phiếu</td>
+                                        <td>Mã phiếu xuất mộc</td>
                                         <td>Tổng số cây mộc</td>
                                         <td>Tổng số mét</td>
                                         <td>Kho</td>
@@ -96,7 +97,7 @@
                                             <td style="text-align:left;">{{ $phieu_xuat_moc->ten_nhan_vien_xuat }}</td>
                                             <td style="text-align:center;">{{ $phieu_xuat_moc->ngay_gio_xuat_kho }}</td>
                                             @if ($showButtonXoa == true)
-                                            <td style="text-align:center;">
+                                                <td style="text-align:center;">
                                                     <input type="checkbox" value="{{ $phieu_xuat_moc->id }}">
                                                 </td>
                                             @endif

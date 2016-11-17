@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Quản lý Kho</title>
+        <title>Quản lý Bán hàng</title>
 
         <link href="{{ url('/') }}/resources/assets/css/bootstrap-3.3.7.css" type="text/css" rel="stylesheet">
         <script src="{{ url('/') }}/resources/assets/js/jquery-3.1.1.js" type="text/javascript"></script>
@@ -16,7 +16,7 @@
                 <!-- HEADER -->
                 <div style="margin-top:15px;border:1px solid black;">
                     <div style="float:left;width:80%;text-align:center;color:red;">
-                        <h2>QUẢN LÝ KHO</h2>
+                        <h2>QUẢN LÝ BÁN HÀNG</h2>
                     </div>
                     <div style="float:left;width:20%;margin-top:16px;">
                         <span>Xin chào <b>{{ Session::get('username') }}</b></span><br>

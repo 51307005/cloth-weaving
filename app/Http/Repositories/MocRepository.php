@@ -74,6 +74,7 @@ class MocRepository
                                               FROM cay_vai_moc cvm
                                               WHERE cvm.da_xoa = 0 AND cvm.tinh_trang = 'Chưa xuất' AND cvm.id_kho = ".$id_kho.")
                 GROUP BY cvm.id_loai_vai";
+
         $cacLoaiVaiKhongConCayMocTonKhoTrongKhoMoc = DB::select($sql);
 
         return $cacLoaiVaiKhongConCayMocTonKhoTrongKhoMoc;
@@ -140,21 +141,43 @@ class MocRepository
         return $list_id_cay_moc;
     }
 
-    public function getDanhSachIdCayMocTonKho()
+    public function getDanhSachIdCayMocTonKho($id_kho = null)
     {
-        $list_id_cay_moc_ton_kho = DB::table('cay_vai_moc')
-                                     ->select('id')
-                                     ->where('da_xoa', '=', 0)
-                                     ->where('tinh_trang', '=', 'Chưa xuất')
-                                     ->get();
+        if ($id_kho == null)
+        {
+            $list_id_cay_moc_ton_kho = DB::table('cay_vai_moc')
+                                         ->select('id')
+                                         ->where('da_xoa', '=', 0)
+                                         ->where('tinh_trang', '=', 'Chưa xuất')
+                                         ->get();
+        }
+        else
+        {
+            $list_id_cay_moc_ton_kho = DB::table('cay_vai_moc')
+                                         ->select('id')
+                                         ->where('da_xoa', '=', 0)
+                                         ->where('tinh_trang', '=', 'Chưa xuất')
+                                         ->where('id_kho', '=', $id_kho)
+                                         ->get();
+        }
+
         return $list_id_cay_moc_ton_kho;
     }
 
-    public function getDanhSachIdCayMocTonKhoVaTrongPhieuXuatMoc($id_phieu_xuat_moc)
+    public function getDanhSachIdCayMocTonKhoVaTrongPhieuXuatMoc($id_phieu_xuat_moc, $id_kho = null)
     {
-        $sql = 'SELECT id
-                FROM cay_vai_moc
-                WHERE da_xoa = 0 AND (tinh_trang = "Chưa xuất" OR id_phieu_xuat_moc = '.$id_phieu_xuat_moc.')';
+        if ($id_kho == null)
+        {
+            $sql = 'SELECT id
+                    FROM cay_vai_moc
+                    WHERE da_xoa = 0 AND (tinh_trang = "Chưa xuất" OR id_phieu_xuat_moc = '.$id_phieu_xuat_moc.')';
+        }
+        else
+        {
+            $sql = 'SELECT id
+                    FROM cay_vai_moc
+                    WHERE da_xoa = 0 AND ((tinh_trang = "Chưa xuất" AND id_kho = '.$id_kho.') OR (id_phieu_xuat_moc = '.$id_phieu_xuat_moc.'))';
+        }
 
         $list_id_cay_moc_ton_kho_hoac_trong_phieu_xuat_moc_duoc_chon = DB::select($sql);
 
@@ -181,24 +204,10 @@ class MocRepository
             $cay_moc->tinh_trang = $thongTin->tinh_trang;
             $cay_moc->id_lo_nhuom = $thongTin->id_lo_nhuom;
             $cay_moc->da_xoa = $thongTin->da_xoa;
-
-            return $cay_moc;
-        }
-
-        // Id cây mộc không tồn tại trong database
-        return false;
-    }
-
-    public function getLoaiVaiSoMetCayMocById($id_cay_moc)
-    {
-        $cay_moc = new Moc();
-        $cay_moc->id = $id_cay_moc;
-        $thongTin = $cay_moc->getLoaiVaiSoMetById();
-
-        if (count($thongTin) == 1)  // Lấy được thông tin của cây mộc bằng id
-        {
             $cay_moc->ten_loai_vai = $thongTin->ten_loai_vai;
-            $cay_moc->so_met = $thongTin->so_met;
+            $cay_moc->ten_loai_soi = $thongTin->ten_loai_soi;
+            $cay_moc->ten_nhan_vien_det = $thongTin->ten_nhan_vien_det;
+            $cay_moc->ten_kho = $thongTin->ten_kho;
 
             return $cay_moc;
         }
@@ -310,7 +319,7 @@ class MocRepository
         $sql = 'UPDATE cay_vai_moc
                 SET id_phieu_xuat_moc = '.$id_phieu_xuat_moc.',
                     tinh_trang = "Đã xuất"
-                WHERE id IN ('.$list_id_cay_moc_muon_xuat.')';
+                WHERE da_xoa = 0 AND id IN ('.$list_id_cay_moc_muon_xuat.')';
 
         return DB::transaction(function() use ($sql) {
             DB::update($sql);
@@ -321,7 +330,10 @@ class MocRepository
     {
         $list_cay_moc_trong_phieu_xuat_moc = DB::table('cay_vai_moc')
                                                ->join('loai_vai', 'cay_vai_moc.id_loai_vai', '=', 'loai_vai.id')
-                                               ->select('cay_vai_moc.id', 'loai_vai.ten as ten_loai_vai', 'cay_vai_moc.so_met')
+                                               ->join('loai_soi', 'cay_vai_moc.id_loai_soi', '=', 'loai_soi.id')
+                                               ->join('nhan_vien', 'cay_vai_moc.id_nhan_vien_det', '=', 'nhan_vien.id')
+                                               ->join('kho', 'cay_vai_moc.id_kho', '=', 'kho.id')
+                                               ->select('cay_vai_moc.*', 'loai_vai.ten as ten_loai_vai', 'loai_soi.ten as ten_loai_soi', 'nhan_vien.ho_ten as ten_nhan_vien_det', 'kho.ten as ten_kho')
                                                ->where('cay_vai_moc.da_xoa', '=', 0)
                                                ->where('cay_vai_moc.id_phieu_xuat_moc', '=', $id_phieu_xuat_moc)
                                                ->get();
@@ -339,11 +351,53 @@ class MocRepository
         $sql_2 = 'UPDATE cay_vai_moc
                   SET id_phieu_xuat_moc = '.$id_phieu_xuat_moc.',
                       tinh_trang = "Đã xuất"
-                      WHERE da_xoa = 0 AND id IN ('.$list_id_cay_moc_muon_xuat.')';
+                  WHERE da_xoa = 0 AND id IN ('.$list_id_cay_moc_muon_xuat.')';
 
         return DB::transaction(function() use ($sql_1, $sql_2) {
             DB::update($sql_1);
             DB::update($sql_2);
+        });
+    }
+
+    public function getDanhSachIdCayMocChoViecNhap_CapNhatCayThanhPham()
+    {
+        $sql = 'SELECT id
+                FROM cay_vai_moc
+                WHERE da_xoa = 0 AND tinh_trang = "Đã xuất" AND
+                      id NOT IN (SELECT id_cay_vai_moc
+                                 FROM cay_vai_thanh_pham
+                                 WHERE da_xoa = 0)';
+
+        $list_id_cay_moc = DB::select($sql);
+
+        return $list_id_cay_moc;
+    }
+
+    public function nhapThanhPham(Request $request)
+    {
+        // Lấy các dữ liệu để cập nhật cho cây mộc
+        $id_lo_nhuom = (int)($request->get('id_lo_nhuom'));
+        $list_cay_thanh_pham = $request->get('data');
+        $list_cay_thanh_pham = json_decode($list_cay_thanh_pham);
+        //echo '<pre>',print_r($list_cay_thanh_pham),'</pre>';
+
+        // Tạo danh sách id cây mộc cần cập nhật
+        $list_id_cay_moc_can_cap_nhat = '';
+        foreach ($list_cay_thanh_pham as $cay_thanh_pham)
+        {
+            $list_id_cay_moc_can_cap_nhat .= $cay_thanh_pham->id_cay_moc.',';
+        }
+        $list_id_cay_moc_can_cap_nhat = trim($list_id_cay_moc_can_cap_nhat, ',');
+        //echo $list_id_cay_moc_can_cap_nhat;
+
+        // Tạo câu lệnh UPDATE
+        $sql = 'UPDATE cay_vai_moc
+                SET id_lo_nhuom = '.$id_lo_nhuom.'
+                WHERE da_xoa = 0 AND id IN ('.$list_id_cay_moc_can_cap_nhat.')';
+        //echo $sql;
+
+        return DB::transaction(function() use ($sql) {
+            DB::update($sql);
         });
     }
 }

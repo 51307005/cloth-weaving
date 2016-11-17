@@ -24,7 +24,7 @@ class QuanLyHeThongController extends HelperController
                 case self::QUYEN_KHO:
                     return redirect()->to(route('route_get_trang_chu_kho'));
                 case self::QUYEN_BAN_HANG:
-                    //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
             }
         }
 
@@ -55,7 +55,7 @@ class QuanLyHeThongController extends HelperController
                     case self::QUYEN_KHO:
                         return redirect()->to(route('route_get_trang_chu_kho'));
                     case self::QUYEN_BAN_HANG:
-                        //return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                        return redirect()->to(route('route_get_trang_chu_ban_hang'));
                 }
             }
         }

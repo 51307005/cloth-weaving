@@ -17,8 +17,10 @@ class Kho
     public function getThongTinById()
     {
         $thongTin = DB::table('kho')
-                      ->where('da_xoa', '=', 0)
-                      ->where('id', '=', $this->id)
+                      ->leftJoin('nhan_vien', 'kho.id_nhan_vien_quan_ly', '=', 'nhan_vien.id')
+                      ->select('kho.*', 'nhan_vien.ho_ten as ten_nhan_vien_quan_ly')
+                      ->where('kho.da_xoa', '=', 0)
+                      ->where('kho.id', '=', $this->id)
                       ->first();
         return $thongTin;
     }

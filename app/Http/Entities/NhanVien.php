@@ -30,6 +30,15 @@ class NhanVien
         return $thongTin;
     }
 
+    public function getThongTinById()
+    {
+        $thongTin = DB::table('nhan_vien')
+                      ->where('da_xoa', '=', 0)
+                      ->where('id', '=', $this->id)
+                      ->first();
+        return $thongTin;
+    }
+
     public function getId()
     {
         return $this->id;

@@ -60,11 +60,11 @@
             }
 
             .id_may_det {
-                width: 98%;
                 text-align: right;
-                border: none;
+                width: 98%;
                 padding-left: 5px;
                 padding-right: 5px;
+                border: none;
             }
 
             .so_met {
@@ -76,8 +76,8 @@
             }
 
             .ngay_gio_det {
-                width: 100%;
                 text-align: center;
+                width: 100%;
                 padding-left: 5px;
                 padding-right: 5px;
                 border: none;
@@ -98,10 +98,11 @@
             <div id="content">
                 <!-- HEADER -->
                 <div style="margin-top:15px;border:1px solid black;">
-                    <div style="float:left;width:93%;text-align:center;color:red;">
+                    <div style="float:left;width:80%;text-align:center;color:red;">
                         <h2>QUẢN LÝ KHO</h2>
                     </div>
-                    <div style="float:left;width:7%;margin-top:28px;">
+                    <div style="float:left;width:20%;margin-top:16px;">
+                        <span>Xin chào <b>{{ Session::get('username') }}</b></span><br>
                         <a href="{{ route('route_get_logout_he_thong') }}">Đăng xuất</a>
                     </div>
                     <div style="clear:both;"></div>
@@ -194,7 +195,7 @@
                                                 {{ $id_cay_moc_cuoi_cung + 1 }}
                                             </td>
                                             <td style="width:70px;">
-                                                <input type="text" id="so_met_1" class="so_met" required onblur="tinhTongSoMet()">
+                                                <input type="text" id="so_met_1" class="so_met" required onchange="tinhTongSoMet()">
                                             </td>
                                             <td style="width:160px;">
                                                 <select id="id_nhan_vien_det_1" class="id_nhan_vien_det">
@@ -276,14 +277,28 @@
                 $('#tbl_list_cay_moc_nhap_kho').append(
                     '<tr id="cay_moc_' + id + '" class="cay_moc">' + 
                     '<td id="id_cay_moc_' + id + '" class="id_cay_moc">' + id_cay_moc + '</td>' + 
-                    '<td style="width:70px;">' + '<input type="text" id="so_met_' + id + '" class="so_met" required onblur="tinhTongSoMet()">' + '</td>' + 
-                    '<td style="width:160px;">' + '<select id="id_nhan_vien_det_' + id + '" class="id_nhan_vien_det">' + 
-                    '@foreach ($list_nhan_vien_det as $nhan_vien_det)' + '<option value="{{ $nhan_vien_det->id }}">{{ $nhan_vien_det->ho_ten }}</option>' + '@endforeach' + '</select></td>' + 
-                    '<td style="width:100px;">' + '<select id="id_may_det_' + id + '" class="id_may_det">' + 
-                    '@foreach ($list_ma_may_det as $idMayDet)' + '<option value="{{ $idMayDet }}">{{ $idMayDet }}</option>' + '@endforeach' + '</select></td>' + 
-                    '<td style="width:150px;">' + '<input type="text" id="ngay_gio_det_' + id + '" class="datetime ngay_gio_det" value="" required>' + '</td>' + 
-                    '<td class="them_xoa">' + '<img src="' + "{{ url('/') }}/resources/images/add_32x32.png" + '" id="img_add_' + id + '" class="img" alt="add_32x32.png" title="Thêm" onclick="them()"> ' + 
-                    '<img src="' + "{{ url('/') }}/resources/images/delete_32x32.png" + '" id="img_delete_' + id + '" class="img" alt="delete_32x32.png" title="Xóa" onclick="' + "xoa($(this).attr('id'))" + '"></td></tr>'
+                    '<td style="width:70px;">' + 
+                    '<input type="text" id="so_met_' + id + '" class="so_met" required onchange="tinhTongSoMet()">' + 
+                    '</td>' + 
+                    '<td style="width:160px;">' + 
+                    '<select id="id_nhan_vien_det_' + id + '" class="id_nhan_vien_det">' + 
+                    '@foreach ($list_nhan_vien_det as $nhan_vien_det)' + 
+                    '<option value="{{ $nhan_vien_det->id }}">{{ $nhan_vien_det->ho_ten }}</option>' + 
+                    '@endforeach' + 
+                    '</select></td>' + 
+                    '<td style="width:100px;">' + 
+                    '<select id="id_may_det_' + id + '" class="id_may_det">' + 
+                    '@foreach ($list_ma_may_det as $idMayDet)' + 
+                    '<option value="{{ $idMayDet }}">{{ $idMayDet }}</option>' + 
+                    '@endforeach' + 
+                    '</select></td>' + 
+                    '<td style="width:150px;">' + 
+                    '<input type="text" id="ngay_gio_det_' + id + '" class="datetime ngay_gio_det" value="" required>' + 
+                    '</td>' + 
+                    '<td class="them_xoa">' + 
+                    '<img src="' + "{{ url('/') }}/resources/images/add_32x32.png" + '" id="img_add_' + id + '" class="img" alt="add_32x32.png" title="Thêm" onclick="them()"> ' + 
+                    '<img src="' + "{{ url('/') }}/resources/images/delete_32x32.png" + '" id="img_delete_' + id + '" class="img" alt="delete_32x32.png" title="Xóa" onclick="' + "xoa($(this).attr('id'))" + '">' + 
+                    '</td></tr>'
                 );
 
                 $('.datetime').each(function() {
@@ -301,8 +316,7 @@
                 });
 
                 // Tính lại tổng số cây mộc nhập kho
-                var tong_so_cay_moc_nhap_kho = $('#tong_so_cay_moc_nhap_kho').text();
-                tong_so_cay_moc_nhap_kho = parseInt(tong_so_cay_moc_nhap_kho) + 1;
+                var tong_so_cay_moc_nhap_kho = $('.cay_moc').length;
 
                 // Format tong_so_cay_moc_nhap_kho
                 tong_so_cay_moc_nhap_kho = $.number(tong_so_cay_moc_nhap_kho, 0, ',', '.');
@@ -443,7 +457,7 @@
                     }
                 ];*/
 
-                // Tạo các đối tượng rỗng trong data, 
+                // Tạo các đối tượng rỗng trong data, mỗi đối tượng rỗng tương ứng với 1 cây mộc
                 $('.cay_moc').each(function() {
                     // Tạo 1 đối tượng rỗng trong data, tương ứng với 1 cây mộc
                     data.push({});

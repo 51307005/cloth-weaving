@@ -34,10 +34,11 @@
             <div id="content">
                 <!-- HEADER -->
                 <div style="margin-top:15px;border:1px solid black;">
-                    <div style="float:left;width:93%;text-align:center;color:red;">
+                    <div style="float:left;width:80%;text-align:center;color:red;">
                         <h2>QUẢN LÝ KHO</h2>
                     </div>
-                    <div style="float:left;width:7%;margin-top:28px;">
+                    <div style="float:left;width:20%;margin-top:16px;">
+                        <span>Xin chào <b>{{ Session::get('username') }}</b></span><br>
                         <a href="{{ route('route_get_logout_he_thong') }}">Đăng xuất</a>
                     </div>
                     <div style="clear:both;"></div>
@@ -65,7 +66,7 @@
                             <div style="margin-top:20px;margin-left:30px;">
                                 {!! Form::open(array('method' => 'post', 'id' => 'frm_chon_ma_cay_moc')) !!}
                                     <b>Chọn mã cây mộc:</b>
-                                    <select id="IdCayMoc" name="IdCayMoc" style="margin-left:16px;margin-right:5px;">
+                                    <select id="IdCayMoc" name="IdCayMoc" style="margin-left:15px;margin-right:5px;">
                                         @foreach ($list_id_cay_moc as $cay_moc)
                                             <option value="{{ $cay_moc->id }}" {{ (isset($cay_moc_duoc_chon) && ($cay_moc->id == $cay_moc_duoc_chon->id))?'selected':'' }}>
                                                 {{ $cay_moc->id }}
@@ -88,7 +89,7 @@
                                 <!-- FORM CẬP NHẬT CÂY MỘC -->
                                 <div style="margin-left:30px;margin-top:15px;margin-bottom:15px;float:left;width:50%;">
                                     {!! Form::open(array('method' => 'post', 'id' => 'frm_cap_nhat_cay_moc')) !!}
-                                        <table id="tbl_cap_nhat_cay_moc" style="width:410px;height:360px;">
+                                        <table id="tbl_cap_nhat_cay_moc" style="width:415px;height:360px;">
                                             <tr>
                                                 <td style="font-weight:bold;">Mã cây mộc:</td>
                                                 <td>
@@ -218,6 +219,7 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                        <input type="hidden" name="cay_moc_cu" value="{{ $cay_moc_cu }}">
                                     {!! Form::close() !!}
                                 </div>
                                 <script>
