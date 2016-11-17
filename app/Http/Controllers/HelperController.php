@@ -36,8 +36,13 @@ class HelperController extends Controller
 
     public $phuong_thuc = array('Chuyển khoản', 'Tiền mặt');
 
-    public $list_chuc_nang_admin = array('tên chức năng 1', 'tên chức năng 2');
-    public $list_chuc_nang_san_xuat = array('tên chức năng 1', 'tên chức năng 2');
+    public $list_chuc_nang_admin = array(
+        'Quản lý Kho', 'Quản lý Sản xuất', 'Quản lý Bán hàng',
+        'Nhân viên', 'Thu - Chi', 'Thống kê'
+        );
+    public $list_chuc_nang_san_xuat = array(
+        'Loại vải', 'Lô nhuộm', 'Màu'
+        );
     public $list_chuc_nang_kho = array(
         'Danh sách kho', 'Kho sợi', 'Kho mộc', 'Kho thành phẩm',
         'Loại sợi', 'Nhà cung cấp', 'Đơn hàng công ty', 'Hóa đơn nhập',
@@ -49,8 +54,13 @@ class HelperController extends Controller
         'Hóa đơn xuất', 'Báo giá'
         );
 
-    public $links_list_chuc_nang_admin = array('link 1', 'link 2');
-    public $links_list_chuc_nang_san_xuat = array('link 1', 'link 2');
+    public $links_list_chuc_nang_admin = array(
+        'kho', 'san_xuat', 'ban_hang',
+        'manager/nhan_vien', 'manager/thu_chi', 'manager/thong_ke'
+        );
+    public $links_list_chuc_nang_san_xuat = array(
+        'loai_vai', 'lo_nhuom', 'mau'
+        );
     public $links_list_chuc_nang_kho = array(
         'danh_sach_kho', 'kho_soi', 'kho_moc', 'kho_thanh_pham',
         'loai_soi', 'nha_cung_cap', 'don_hang_cong_ty', 'hoa_don_nhap',
@@ -70,10 +80,10 @@ class HelperController extends Controller
         switch ($quyen)
         {
             case self::QUYEN_ADMIN:
-                $url = route('route_get_trang_chu_manager');
+                $url = url('/');
                 for ($i = 0 ; $i < count($this->list_chuc_nang_admin) ; $i++)
                 {
-                    $list_chuc_nang[$this->list_chuc_nang_admin[$i]] = $url.'/'.$this->links_list_chuc_nang_admin[$i];
+                    $list_chuc_nang[$this->list_chuc_nang_admin[$i]] = $url.'/he_thong_quan_ly/'.$this->links_list_chuc_nang_admin[$i];
                 }
                 break;
             case self::QUYEN_SAN_XUAT:

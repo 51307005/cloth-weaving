@@ -28,12 +28,11 @@ class KhoThanhPhamController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
                     return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_KHO:
                     // Xử lý cho trường hợp phân trang
                     if ($request->has('page'))  // Có biến page trên URL
@@ -114,7 +113,7 @@ class KhoThanhPhamController extends HelperController
                     else    // Không có biến page trên URL hoặc không click trên chuỗi button phân trang
                     {
                         // Lấy danh sách chức năng tương ứng với quyền của user
-                        $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                        $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
                         // Lấy danh sách kho thành phẩm
                         $khoRepository = new KhoRepository();
@@ -133,7 +132,7 @@ class KhoThanhPhamController extends HelperController
     public function postKhoThanhPham(Request $request)
     {
         // Lấy danh sách chức năng tương ứng với quyền của user
-        $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+        $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
         // Lấy danh sách kho thành phẩm
         $khoRepository = new KhoRepository();
@@ -392,15 +391,14 @@ class KhoThanhPhamController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
                     return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
-                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
                     // Lấy danh sách id lô nhuộm
                     $loNhuomRepository = new LoNhuomRepository();
@@ -459,15 +457,14 @@ class KhoThanhPhamController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
                     return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
-                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
                     // Tạo đối tượng ThanhPhamRepository
                     $thanhPhamRepository = new ThanhPhamRepository();
@@ -583,7 +580,7 @@ class KhoThanhPhamController extends HelperController
             $id_cay_thanh_pham = (int)($request->get('IdCayThanhPham'));
 
             // Lấy danh sách chức năng tương ứng với quyền của user
-            $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+            $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
             // Lấy danh sách id cây thành phẩm
             $list_id_cay_thanh_pham = $thanhPhamRepository->getDanhSachIdCayThanhPham();
@@ -703,7 +700,7 @@ class KhoThanhPhamController extends HelperController
             $id_cay_thanh_pham = (int)($request->get('idCayThanhPham'));
 
             // Lấy danh sách chức năng tương ứng với quyền của user
-            $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+            $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
             // Lấy danh sách id cây thành phẩm
             $list_id_cay_thanh_pham = $thanhPhamRepository->getDanhSachIdCayThanhPham();
@@ -761,15 +758,14 @@ class KhoThanhPhamController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
                     return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
-                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
                     // Lấy danh sách id hóa đơn xuất
                     $hoaDonXuatRepository = new HoaDonXuatRepository();
@@ -810,15 +806,14 @@ class KhoThanhPhamController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
                     return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
-                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
                     // Lấy danh sách id hóa đơn xuất
                     $hoaDonXuatRepository = new HoaDonXuatRepository();
@@ -925,7 +920,7 @@ class KhoThanhPhamController extends HelperController
         }
 
         // Lấy danh sách chức năng tương ứng với quyền của user
-        $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+        $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
         // Lấy danh sách id hóa đơn xuất
         $list_id_hoa_don_xuat = $hoaDonXuatRepository->getDanhSachIdHoaDonXuat();
@@ -954,15 +949,14 @@ class KhoThanhPhamController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_KHO:
                     return redirect()->to(route('route_get_trang_chu_kho'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_BAN_HANG:
                     // Lấy danh sách chức năng tương ứng với quyền của user
-                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_BAN_HANG);
 
                     // Lấy danh sách hóa đơn xuất
                     $hoaDonXuatRepository = new HoaDonXuatRepository();
@@ -985,9 +979,16 @@ class KhoThanhPhamController extends HelperController
                         $hoa_don_xuat->ten_nhan_vien_xuat = $temp[count($temp) - 1];
                     }*/
 
+                    // Thiết lập việc có show button Xóa hay không
+                    $showButtonXoa = false;
+                    if (Session::get('quyen') == self::QUYEN_ADMIN)
+                    {
+                        $showButtonXoa = true;
+                    }
+
                     return view('hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
                                                ->with('list_hoa_don_xuat', $list_hoa_don_xuat)
-                                               ->with('showButtonXoa', false);
+                                               ->with('showButtonXoa', $showButtonXoa);
             }
         }
 
@@ -1005,7 +1006,7 @@ class KhoThanhPhamController extends HelperController
         $hoaDonXuatRepository->deleteCacHoaDonXuat($list_id_hoa_don_xuat_muon_xoa);
 
         // Lấy danh sách chức năng tương ứng với quyền của user
-        $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+        $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_BAN_HANG);
 
         // Lấy danh sách hóa đơn xuất
         $list_hoa_don_xuat = $hoaDonXuatRepository->getDanhSachHoaDonXuat();
@@ -1027,9 +1028,16 @@ class KhoThanhPhamController extends HelperController
             $hoa_don_xuat->ten_nhan_vien_xuat = $temp[count($temp) - 1];
         }*/
 
+        // Thiết lập việc có show button Xóa hay không
+        $showButtonXoa = false;
+        if (Session::get('quyen') == self::QUYEN_ADMIN)
+        {
+            $showButtonXoa = true;
+        }
+
         return view('hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
                                    ->with('list_hoa_don_xuat', $list_hoa_don_xuat)
-                                   ->with('showButtonXoa', true);
+                                   ->with('showButtonXoa', $showButtonXoa);
     }
 
     public function getThemHoaDonXuat()
@@ -1040,15 +1048,14 @@ class KhoThanhPhamController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_KHO:
                     return redirect()->to(route('route_get_trang_chu_kho'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_BAN_HANG:
                     // Lấy danh sách chức năng tương ứng với quyền của user
-                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_BAN_HANG);
 
                     // Lấy "id hóa đơn xuất cuối cùng" trong database
                     $hoaDonXuatRepository = new HoaDonXuatRepository();
@@ -1239,15 +1246,14 @@ class KhoThanhPhamController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_BAN_HANG:
                     return redirect()->to(route('route_get_trang_chu_ban_hang'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_KHO:
                     // Lấy danh sách chức năng tương ứng với quyền của user
-                    $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
                     // Tạo đối tượng PhieuXuatMocRepository
                     $phieuXuatMocRepository = new PhieuXuatMocRepository();
@@ -1338,7 +1344,7 @@ class KhoThanhPhamController extends HelperController
             $id_phieu_xuat_moc = (int)($request->get('IdPhieuXuatMoc'));
 
             // Lấy danh sách chức năng tương ứng với quyền của user
-            $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+            $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
             // Tạo đối tượng PhieuXuatMocRepository
             $phieuXuatMocRepository = new PhieuXuatMocRepository();
@@ -1391,7 +1397,7 @@ class KhoThanhPhamController extends HelperController
             $id_phieu_xuat_moc = (int)($request->get('idPhieuXuatMoc'));
 
             // Lấy danh sách chức năng tương ứng với quyền của user
-            $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+            $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
 
             // Lấy danh sách id phiếu xuất mộc
             $list_id_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachIdPhieuXuatMoc();

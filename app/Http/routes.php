@@ -32,7 +32,7 @@ Route::get('/logout_he_thong', [
     ]);
 ////////// END LOGIN //////////
 
-/*////////// PHÂN QUYỀN //////////
+////////// PHÂN QUYỀN //////////
 Route::get('/he_thong_quan_ly/manager', [
     'as' => 'route_get_trang_chu_manager',
     'uses' => 'ManagerController@getTrangChu'
@@ -42,7 +42,7 @@ Route::get('/he_thong_quan_ly/san_xuat', [
     'as' => 'route_get_trang_chu_san_xuat',
     'uses' => 'SanXuatController@getTrangChu'
     ]);
-*/
+
 Route::get('/he_thong_quan_ly/kho', [
     'as' => 'route_get_trang_chu_kho',
     'uses' => 'KhoController@getTrangChu'
@@ -284,14 +284,3 @@ Route::post('/he_thong_quan_ly/ban_hang/cap_nhat_don_hang_khach_hang/{id_don_han
     'uses' => 'DonHangKhachHangController@postCapNhatDonHangKhachHang'
     ]);
 ////////// END ĐƠN HÀNG KHÁCH HÀNG //////////
-
-
-Route::get('/nhap', [
-    'as' => 'route_get_nhap',
-    'uses' => 'NhapController@getNhap'
-    ]);
-
-Route::post('/nhap', [
-    'as' => 'route_post_nhap',
-    'uses' => 'NhapController@postNhap'
-    ]);

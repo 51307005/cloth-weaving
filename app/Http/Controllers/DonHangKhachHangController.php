@@ -19,12 +19,11 @@ class DonHangKhachHangController extends HelperController
             // Redirect tới view mà tương ứng với quyền của user
             switch (Session::get('quyen'))
             {
-                case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_KHO:
                     return redirect()->to(route('route_get_trang_chu_kho'));
+                case self::QUYEN_ADMIN:
                 case self::QUYEN_BAN_HANG:
                     // Chưa làm PHÂN TRANG
                     // Xử lý cho trường hợp phân trang
@@ -119,7 +118,7 @@ class DonHangKhachHangController extends HelperController
                     else    // Không có biến page trên URL hoặc không click trên chuỗi button phân trang
                     {*/
                         // Lấy danh sách chức năng tương ứng với quyền của user
-                        $list_chuc_nang = $this->taoLinkChoListChucNang(Session::get('quyen'));
+                        $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_BAN_HANG);
 
                         // Lấy danh sách khách hàng
                         $khachHangRepository = new KhachHangRepository();
@@ -163,11 +162,18 @@ class DonHangKhachHangController extends HelperController
                             //$don_hang_khach_hang->ten_khach_hang = $temp[count($temp) - 1];
                         }
 
+                        // Thiết lập việc có show button Xóa hay không
+                        $showButtonXoa = false;
+                        if (Session::get('quyen') == self::QUYEN_ADMIN)
+                        {
+                            $showButtonXoa = true;
+                        }
+
                         return view('don_hang_khach_hang')->with('list_chuc_nang', $list_chuc_nang)
                                                           ->with('list_khach_hang', $list_khach_hang)
                                                           ->with('tong_so_don_hang_khach_hang_theo_tinh_trang', $tong_so_don_hang_khach_hang_theo_tinh_trang)
                                                           ->with('listDonHangKhachHang_ChuaHoanThanh_Moi', $listDonHangKhachHang_ChuaHoanThanh_Moi)
-                                                          ->with('showButtonXoa', false);
+                                                          ->with('showButtonXoa', $showButtonXoa);
                     //}
             }
         }

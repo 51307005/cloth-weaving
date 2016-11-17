@@ -18,9 +18,9 @@ class QuanLyHeThongController extends HelperController
             switch (Session::get('quyen'))
             {
                 case self::QUYEN_ADMIN:
-                    //return redirect()->to(route('route_get_trang_chu_manager'));
+                    return redirect()->to(route('route_get_trang_chu_manager'));
                 case self::QUYEN_SAN_XUAT:
-                    //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
                 case self::QUYEN_KHO:
                     return redirect()->to(route('route_get_trang_chu_kho'));
                 case self::QUYEN_BAN_HANG:
@@ -49,9 +49,9 @@ class QuanLyHeThongController extends HelperController
                 switch (Session::get('quyen'))
                 {
                     case self::QUYEN_ADMIN:
-                        //return redirect()->to(route('route_get_trang_chu_manager'));
+                        return redirect()->to(route('route_get_trang_chu_manager'));
                     case self::QUYEN_SAN_XUAT:
-                        //return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                        return redirect()->to(route('route_get_trang_chu_san_xuat'));
                     case self::QUYEN_KHO:
                         return redirect()->to(route('route_get_trang_chu_kho'));
                     case self::QUYEN_BAN_HANG:
