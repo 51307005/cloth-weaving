@@ -182,9 +182,9 @@ class ThanhPhamRepository
         $ngay_gio_nhap_kho = $request->get('ngay_gio_nhap_kho');
         $ngay_gio_nhap_kho = date('Y-m-d H:i:s', strtotime($ngay_gio_nhap_kho));
 
-        // Xử lý trường hợp "don_gia" để trống (không nhập) hoặc "thanh_tien" để trống (không nhập) hoặc "id_hoa_don_xuat" null
+        // Xử lý trường hợp "don_gia" để trống (không nhập) hoặc "thanhTien" để trống (không nhập) hoặc "id_hoa_don_xuat" null
         $don_gia = $request->get('don_gia');
-        $thanh_tien = $request->get('thanh_tien');
+        $thanh_tien = $request->get('thanhTien');
         $id_hoa_don_xuat = $request->get('id_hoa_don_xuat');
         if ($don_gia == '')
         {

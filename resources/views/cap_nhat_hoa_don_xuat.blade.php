@@ -19,7 +19,7 @@
 
         <style>
             #tbl_cap_nhat_hoa_don_xuat input, #tbl_cap_nhat_hoa_don_xuat select {
-                width: 200px;
+                width: 170px;
             }
 
             #btn_cap_nhat {
@@ -68,7 +68,7 @@
                             <div style="margin-top:20px;margin-left:30px;">
                                 {!! Form::open(array('method' => 'post', 'id' => 'frm_chon_ma_hoa_don_xuat')) !!}
                                     <b>Chọn mã hóa đơn xuất:</b>
-                                    <select id="IdHoaDonXuat" name="IdHoaDonXuat" style="margin-left:28px;margin-right:5px;width:199px;">
+                                    <select id="IdHoaDonXuat" name="IdHoaDonXuat" style="margin-left:28px;margin-right:5px;width:170px;">
                                         @foreach ($list_id_hoa_don_xuat as $hoa_don_xuat)
                                             <option value="{{ $hoa_don_xuat->id }}" {{ (isset($hoa_don_xuat_duoc_chon) && ($hoa_don_xuat->id == $hoa_don_xuat_duoc_chon->id))?'selected':'' }}>
                                                 {{ $hoa_don_xuat->id }}
@@ -92,7 +92,7 @@
                                 <div style="margin-left:30px;margin-top:15px;margin-bottom:15px;float:left;width:50%;">
                                     {!! Form::open(array('method' => 'post', 'id' => 'frm_cap_nhat_hoa_don_xuat')) !!}
                                         <input type="hidden" id="hoa_don_xuat_cu" name="hoa_don_xuat_cu" value="{{ $hoa_don_xuat_cu }}">
-                                        <table id="tbl_cap_nhat_hoa_don_xuat" style="width:405px;height:410px;">
+                                        <table id="tbl_cap_nhat_hoa_don_xuat" style="width:375px;height:410px;">
                                             <tr>
                                                 <td style="font-weight:bold;">Mã hóa đơn xuất:</td>
                                                 <td>

@@ -17,7 +17,7 @@
 
         <style>
             #tbl_cap_nhat_phieu_xuat_moc input, #tbl_cap_nhat_phieu_xuat_moc select {
-                width: 200px;
+                width: 160px;
             }
 
             #btn_cap_nhat {
@@ -66,7 +66,7 @@
                             <div style="margin-top:20px;margin-left:30px;">
                                 {!! Form::open(array('method' => 'post', 'id' => 'frm_chon_ma_phieu_xuat_moc')) !!}
                                     <b>Chọn mã phiếu xuất mộc:</b>
-                                    <select id="IdPhieuXuatMoc" name="IdPhieuXuatMoc" style="margin-left:5px;margin-right:5px;width:160px;">
+                                    <select id="IdPhieuXuatMoc" name="IdPhieuXuatMoc" style="margin-left:5px;margin-right:5px;width:121px;">
                                         @foreach ($list_id_phieu_xuat_moc as $phieu_xuat_moc)
                                             <option value="{{ $phieu_xuat_moc->id }}" {{ (isset($phieu_xuat_moc_duoc_chon) && ($phieu_xuat_moc->id == $phieu_xuat_moc_duoc_chon->id))?'selected':'' }}>
                                                 {{ $phieu_xuat_moc->id }}
@@ -89,7 +89,7 @@
                                 <!-- FORM CẬP NHẬT PHIẾU XUẤT MỘC -->
                                 <div style="margin-left:30px;margin-top:15px;margin-bottom:15px;float:left;width:50%;">
                                     {!! Form::open(array('method' => 'post', 'id' => 'frm_cap_nhat_phieu_xuat_moc')) !!}
-                                        <table id="tbl_cap_nhat_phieu_xuat_moc" style="width:360px;height:210px;">
+                                        <table id="tbl_cap_nhat_phieu_xuat_moc" style="width:320px;height:210px;">
                                             <tr>
                                                 <td style="font-weight:bold;">Mã phiếu xuất mộc:</td>
                                                 <td>

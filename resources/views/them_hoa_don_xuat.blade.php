@@ -19,7 +19,7 @@
 
         <style>
             #tbl_them_hoa_don_xuat input, select {
-                width: 180px;
+                width: 170px;
                 padding-left: 5px;
             }
 
@@ -64,7 +64,7 @@
                             <!-- FORM THÊM HÓA ĐƠN XUẤT -->
                             <div style="margin-top:10px;margin-left:30px;margin-bottom:10px;float:left;width:50%;">
                                 {!! Form::open(array('route' => 'route_post_them_hoa_don_xuat', 'method' => 'post', 'id' => 'frm_them_hoa_don_xuat')) !!}
-                                    <table id="tbl_them_hoa_don_xuat" style="width:385px;height:410px;">
+                                    <table id="tbl_them_hoa_don_xuat" style="width:375px;height:410px;">
                                         <tr>
                                             <td style="font-weight:bold;">Mã hóa đơn xuất:</td>
                                             <td>

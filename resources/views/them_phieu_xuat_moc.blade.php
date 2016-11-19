@@ -17,7 +17,7 @@
 
         <style>
             #tbl_them_phieu_xuat_moc input, select {
-                width: 200px;
+                width: 160px;
                 padding-left: 5px;
             }
 
@@ -62,7 +62,7 @@
                             <!-- FORM THÊM PHIẾU XUẤT MỘC -->
                             <div style="margin-top:15px;margin-left:30px;float:left;width:50%;">
                                 {!! Form::open(array('route' => 'route_post_them_phieu_xuat_moc', 'method' => 'post', 'id' => 'frm_them_phieu_xuat_moc')) !!}
-                                    <table id="tbl_them_phieu_xuat_moc" style="width:350px;height:215px;">
+                                    <table id="tbl_them_phieu_xuat_moc" style="width:310px;height:215px;">
                                         <tr>
                                             <td style="font-weight:bold;">Mã phiếu:</td>
                                             <td>

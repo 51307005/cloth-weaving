@@ -5,7 +5,9 @@ namespace App\Http\Repositories;
 use DB;
 use Illuminate\Http\Request;
 use App\Http\Entities\HoaDonXuat;
+use App\Http\Repositories\KhachHangRepository;
 use App\Http\Repositories\DonHangKhachHangRepository;
+use App\Http\Repositories\ThuChiRepository;
 
 class HoaDonXuatRepository
 {
@@ -62,7 +64,7 @@ class HoaDonXuatRepository
         $so_met_cu = $cay_thanh_pham_cu->so_met;
         $so_met_moi = (int)($request->get('so_met'));
         $thanh_tien_cu = $cay_thanh_pham_cu->thanh_tien;
-        $thanh_tien_moi = $request->get('thanh_tien');
+        $thanh_tien_moi = $request->get('thanhTien');
         if ($thanh_tien_cu == null)
         {
             $thanh_tien_cu = 0;
@@ -76,13 +78,10 @@ class HoaDonXuatRepository
             $thanh_tien_moi = (int)$thanh_tien_moi;
         }
 
-        $hoa_don_xuat_cu = $this->getHoaDonXuatById($id_hoa_don_xuat_cu);
-        $hoa_don_xuat_moi = $this->getHoaDonXuatById($id_hoa_don_xuat_moi);
-        $id_don_hang_khach_hang_cu = $hoa_don_xuat_cu->id_don_hang_khach_hang;
-        $id_don_hang_khach_hang_moi = $hoa_don_xuat_moi->id_don_hang_khach_hang;
-
-        // Tạo đối tượng DonHangKhachHangRepository
+        // Tạo đối tượng DonHangKhachHangRepository, ThuChiRepository và KhachHangRepository
         $donHangKhachHangRepository = new DonHangKhachHangRepository();
+        $thuChiRepository = new ThuChiRepository();
+        $khachHangRepository = new KhachHangRepository();
 
         if ($id_hoa_don_xuat_cu == null && $id_hoa_don_xuat_moi != 0)   // Lúc đầu cây thành phẩm không nằm trong hóa đơn xuất nào, lúc sau cây thành phẩm nằm trong 1 hóa đơn xuất nào đó
         {
@@ -96,9 +95,19 @@ class HoaDonXuatRepository
                 DB::update($sql);
             });
 
+            $hoa_don_xuat_moi = $this->getHoaDonXuatById($id_hoa_don_xuat_moi);
+            $id_don_hang_khach_hang_moi = $hoa_don_xuat_moi->id_don_hang_khach_hang;
+            $id_khach_hang_moi = $hoa_don_xuat_moi->id_khach_hang;
+
             // Update lại Tình trạng của Đơn hàng khách hàng mới mà tương ứng với Hóa đơn xuất mới
             $tong_so_met_da_giao = $this->tinhTongSoMetDaGiaoCuaDonHangKhachHang($id_don_hang_khach_hang_moi);
             $donHangKhachHangRepository->updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang_moi, $tong_so_met_da_giao);
+
+            // Update lại Công nợ của Khách hàng mới mà tương ứng với Hóa đơn xuất mới
+            $tong_so_tien_no_cua_khach_hang = $this->getTongSoTienNoCuaKhachHang($id_khach_hang_moi);
+            $tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang_moi);
+            $cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+            $khachHangRepository->updateCongNoKhachHang($id_khach_hang_moi, $cong_no_moi_cua_khach_hang);
         }
         else if ($id_hoa_don_xuat_cu != null && $id_hoa_don_xuat_moi == 0)  // Lúc đầu cây thành phẩm nằm trong 1 hóa đơn xuất nào đó, lúc sau cây thành phẩm không nằm trong hóa đơn xuất nào
         {
@@ -112,9 +121,19 @@ class HoaDonXuatRepository
                 DB::update($sql);
             });
 
+            $hoa_don_xuat_cu = $this->getHoaDonXuatById($id_hoa_don_xuat_cu);
+            $id_don_hang_khach_hang_cu = $hoa_don_xuat_cu->id_don_hang_khach_hang;
+            $id_khach_hang_cu = $hoa_don_xuat_cu->id_khach_hang;
+
             // Update lại Tình trạng của Đơn hàng khách hàng cũ mà tương ứng với Hóa đơn xuất cũ
             $tong_so_met_da_giao = $this->tinhTongSoMetDaGiaoCuaDonHangKhachHang($id_don_hang_khach_hang_cu);
             $donHangKhachHangRepository->updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang_cu, $tong_so_met_da_giao);
+
+            // Update lại Công nợ của Khách hàng cũ mà tương ứng với Hóa đơn xuất cũ
+            $tong_so_tien_no_cua_khach_hang = $this->getTongSoTienNoCuaKhachHang($id_khach_hang_cu);
+            $tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang_cu);
+            $cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+            $khachHangRepository->updateCongNoKhachHang($id_khach_hang_cu, $cong_no_moi_cua_khach_hang);
         }
         else if ($id_hoa_don_xuat_cu != null && $id_hoa_don_xuat_moi != 0 && $id_hoa_don_xuat_cu == $id_hoa_don_xuat_moi)   // Lúc đầu cây thành phẩm nằm trong hóa đơn xuất này và lúc sau cây thành phẩm vẫn nằm trong hóa đơn xuất đó
         {
@@ -127,9 +146,19 @@ class HoaDonXuatRepository
                 DB::update($sql);
             });
 
+            $hoa_don_xuat_moi = $this->getHoaDonXuatById($id_hoa_don_xuat_moi);
+            $id_don_hang_khach_hang_moi = $hoa_don_xuat_moi->id_don_hang_khach_hang;
+            $id_khach_hang_moi = $hoa_don_xuat_moi->id_khach_hang;
+
             // Update lại Tình trạng của Đơn hàng khách hàng mới (cũng chính là Đơn hàng khách hàng cũ) mà tương ứng với Hóa đơn xuất mới (cũng chính là Hóa đơn xuất cũ)
             $tong_so_met_da_giao = $this->tinhTongSoMetDaGiaoCuaDonHangKhachHang($id_don_hang_khach_hang_moi);
             $donHangKhachHangRepository->updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang_moi, $tong_so_met_da_giao);
+
+            // Update lại Công nợ của Khách hàng mới (cũng chính là Khách hàng cũ) mà tương ứng với Hóa đơn xuất mới (cũng chính là Hóa đơn xuất cũ)
+            $tong_so_tien_no_cua_khach_hang = $this->getTongSoTienNoCuaKhachHang($id_khach_hang_moi);
+            $tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang_moi);
+            $cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+            $khachHangRepository->updateCongNoKhachHang($id_khach_hang_moi, $cong_no_moi_cua_khach_hang);
         }
         else if ($id_hoa_don_xuat_cu != null && $id_hoa_don_xuat_moi != 0 && $id_hoa_don_xuat_cu != $id_hoa_don_xuat_moi)   // Lúc đầu cây thành phẩm nằm trong hóa đơn xuất này nhưng lúc sau cây thành phẩm lại nằm trong hóa đơn xuất khác
         {
@@ -150,6 +179,13 @@ class HoaDonXuatRepository
                 DB::update($sql_2);
             });
 
+            $hoa_don_xuat_cu = $this->getHoaDonXuatById($id_hoa_don_xuat_cu);
+            $hoa_don_xuat_moi = $this->getHoaDonXuatById($id_hoa_don_xuat_moi);
+            $id_don_hang_khach_hang_cu = $hoa_don_xuat_cu->id_don_hang_khach_hang;
+            $id_don_hang_khach_hang_moi = $hoa_don_xuat_moi->id_don_hang_khach_hang;
+            $id_khach_hang_cu = $hoa_don_xuat_cu->id_khach_hang;
+            $id_khach_hang_moi = $hoa_don_xuat_moi->id_khach_hang;
+
             // Update lại Tình trạng của Đơn hàng khách hàng cũ mà tương ứng với Hóa đơn xuất cũ
             $tong_so_met_da_giao = $this->tinhTongSoMetDaGiaoCuaDonHangKhachHang($id_don_hang_khach_hang_cu);
             $donHangKhachHangRepository->updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang_cu, $tong_so_met_da_giao);
@@ -157,6 +193,18 @@ class HoaDonXuatRepository
             // Update lại Tình trạng của Đơn hàng khách hàng mới mà tương ứng với Hóa đơn xuất mới
             $tong_so_met_da_giao = $this->tinhTongSoMetDaGiaoCuaDonHangKhachHang($id_don_hang_khach_hang_moi);
             $donHangKhachHangRepository->updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang_moi, $tong_so_met_da_giao);
+
+            // Update lại Công nợ của Khách hàng cũ mà tương ứng với Hóa đơn xuất cũ
+            $tong_so_tien_no_cua_khach_hang = $this->getTongSoTienNoCuaKhachHang($id_khach_hang_cu);
+            $tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang_cu);
+            $cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+            $khachHangRepository->updateCongNoKhachHang($id_khach_hang_cu, $cong_no_moi_cua_khach_hang);
+
+            // Update lại Công nợ của Khách hàng mới mà tương ứng với Hóa đơn xuất mới
+            $tong_so_tien_no_cua_khach_hang = $this->getTongSoTienNoCuaKhachHang($id_khach_hang_moi);
+            $tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang_moi);
+            $cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+            $khachHangRepository->updateCongNoKhachHang($id_khach_hang_moi, $cong_no_moi_cua_khach_hang);
         }
     }
 

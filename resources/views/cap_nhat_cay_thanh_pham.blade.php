@@ -19,7 +19,7 @@
 
         <style>
             #tbl_cap_nhat_cay_thanh_pham input, select {
-                width: 255px;
+                width: 175px;
             }
 
             #btn_cap_nhat {
@@ -68,7 +68,7 @@
                             <div style="margin-top:20px;margin-left:30px;">
                                 {!! Form::open(array('method' => 'post', 'id' => 'frm_chon_ma_cay_thanh_pham')) !!}
                                     <b>Chọn mã cây thành phẩm:</b>
-                                    <select id="IdCayThanhPham" name="IdCayThanhPham" style="margin-left:5px;margin-right:5px;width:215px;">
+                                    <select id="IdCayThanhPham" name="IdCayThanhPham" style="margin-left:5px;margin-right:5px;width:135px;">
                                         @foreach ($list_id_cay_thanh_pham as $cay_thanh_pham)
                                             <option value="{{ $cay_thanh_pham->id }}" {{ (isset($cay_thanh_pham_duoc_chon) && ($cay_thanh_pham->id == $cay_thanh_pham_duoc_chon->id))?'selected':'' }}>
                                                 {{ $cay_thanh_pham->id }}
@@ -92,7 +92,7 @@
                                 <div style="margin-left:30px;margin-top:15px;margin-bottom:15px;float:left;width:50%;">
                                     {!! Form::open(array('method' => 'post', 'id' => 'frm_cap_nhat_cay_thanh_pham')) !!}
                                         <input type="hidden" id="cay_thanh_pham_cu" name="cay_thanh_pham_cu" value="{{ $cay_thanh_pham_cu }}">
-                                        <table id="tbl_cap_nhat_cay_thanh_pham" style="width:420px;height:380px;">
+                                        <table id="tbl_cap_nhat_cay_thanh_pham" style="width:335px;height:380px;">
                                             <tr>
                                                 <td style="font-weight:bold;">Mã cây thành phẩm:</td>
                                                 <td>
@@ -152,7 +152,8 @@
                                             <tr>
                                                 <td style="font-weight:bold;">Thành tiền (VNĐ):</td>
                                                 <td>
-                                                    <input type="text" id="thanh_tien" name="thanh_tien" value="{{ $cay_thanh_pham_duoc_chon->thanh_tien }}" readonly style="background-color:#cccccc;">
+                                                    <input type="text" id="thanh_tien" name="thanh_tien" value="{{ number_format($cay_thanh_pham_duoc_chon->thanh_tien, 0, ',', '.') }}" readonly style="background-color:#cccccc;">
+                                                    <input type="hidden" id="thanhTien" name="thanhTien" value="{{ $cay_thanh_pham_duoc_chon->thanh_tien }}">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -189,7 +190,7 @@
                                                 <td style="font-weight:bold;">Mã hóa đơn xuất:</td>
                                                 <td>
                                                     <select id="id_hoa_don_xuat" name="id_hoa_don_xuat">
-                                                        <option value="null">null</option>
+                                                        <option value="null"></option>
                                                         @foreach ($list_id_hoa_don_xuat as $hoa_don_xuat)
                                                             <option value="{{ $hoa_don_xuat->id }}" {{ ($hoa_don_xuat->id == $cay_thanh_pham_duoc_chon->id_hoa_don_xuat)?'selected':'' }}>
                                                                 {{ $hoa_don_xuat->id }}
@@ -277,7 +278,15 @@
                     thanh_tien = parseInt(so_met) * parseInt(don_gia);
                 }
 
-                $('#thanh_tien').val(thanh_tien);
+                $('#thanhTien').val(thanh_tien);
+                if (thanh_tien == '')
+                {
+                    $('#thanh_tien').val(thanh_tien);
+                }
+                else
+                {
+                    $('#thanh_tien').val($.number(thanh_tien, 0, ',', '.'));
+                }
             }
 
             function showLoaiVai(id_cay_moc)
@@ -375,12 +384,12 @@
                 var tinh_trang = $('#tinh_trang').val();
                 if (id_hoa_don_xuat == 'null' && tinh_trang == 'Đã xuất')   // Cây thành phẩm chưa được xuất, còn tồn kho nhưng tình trạng lại là "Đã xuất"
                 {
-                    alert('Mã hóa đơn xuất là null thì tình trạng phải là chưa xuất !');
+                    alert('Không có mã hóa đơn xuất thì tình trạng phải là chưa xuất !');
                     return false;
                 }
                 if (id_hoa_don_xuat != 'null' && tinh_trang == 'Chưa xuất')     // Cây thành phẩm nằm trong 1 hóa đơn xuất nhưng tình trạng lại là "Chưa xuất"
                 {
-                    alert('Mã hóa đơn xuất có tồn tại thì tình trạng phải là đã xuất !');
+                    alert('Có mã hóa đơn xuất thì tình trạng phải là đã xuất !');
                     return false;
                 }
 
