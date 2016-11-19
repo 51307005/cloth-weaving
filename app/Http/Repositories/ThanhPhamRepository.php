@@ -237,6 +237,7 @@ class ThanhPhamRepository
                                          ->orderBy('id', 'desc')
                                          ->first();
         $id_cay_thanh_pham_cuoi_cung = $id_cay_thanh_pham_cuoi_cung->id;
+
         return $id_cay_thanh_pham_cuoi_cung;
     }
 

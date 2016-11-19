@@ -222,6 +222,7 @@ class HoaDonXuatRepository
                                        ->orderBy('id', 'desc')
                                        ->first();
         $id_hoa_don_xuat_cuoi_cung = $id_hoa_don_xuat_cuoi_cung->id;
+
         return $id_hoa_don_xuat_cuoi_cung;
     }
 
@@ -249,55 +250,42 @@ class HoaDonXuatRepository
         $hoa_don_xuat->insert();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // TỪ ĐÂY TRỞ XUỐNG LÀ XÓA
-    public function capNhatPhieuXuatMoc(Request $request)
+    public function getTongSoTienNoCuaKhachHang($id_khach_hang)
     {
-        // Format lại cho "ngay_gio_xuat_kho"
-        $ngay_gio_xuat_kho = $request->get('ngay_gio_xuat_kho');
-        $ngay_gio_xuat_kho = date('Y-m-d H:i:s', strtotime($ngay_gio_xuat_kho));
+        $tong_so_tien_no = DB::table('hoa_don_xuat')
+                             ->selectRaw('SUM(tong_tien) as tong_so_tien_no')
+                             ->where('da_xoa', '=', 0)
+                             ->where('id_khach_hang', '=', $id_khach_hang)
+                             ->first();
+        $tong_so_tien_no = $tong_so_tien_no->tong_so_tien_no;
 
-        // Cập nhật phiếu xuất mộc
-        $phieu_xuat_moc = new PhieuXuatMoc();
-        $phieu_xuat_moc->id = (int)($request->get('idPhieuXuatMoc'));
-        $phieu_xuat_moc->id_kho = (int)($request->get('id_kho'));
-        $phieu_xuat_moc->id_nhan_vien_xuat = (int)($request->get('id_nhan_vien_xuat'));
-        $phieu_xuat_moc->ngay_gio_xuat_kho = $ngay_gio_xuat_kho;
+        if ($tong_so_tien_no == null)
+        {
+            $tong_so_tien_no = 0;
+        }
 
-        $phieu_xuat_moc->update();
+        return $tong_so_tien_no;
+    }
+
+    public function capNhatHoaDonXuat(Request $request)
+    {
+        // Format lại cho "ngay_gio_xuat_hoa_don"
+        $ngay_gio_xuat_hoa_don = $request->get('ngay_gio_xuat_hoa_don');
+        $ngay_gio_xuat_hoa_don = date('Y-m-d H:i:s', strtotime($ngay_gio_xuat_hoa_don));
+
+        // Cập nhật hóa đơn xuất
+        $hoa_don_xuat = new HoaDonXuat();
+        $hoa_don_xuat->id = (int)($request->get('idHoaDonXuat'));
+        $hoa_don_xuat->id_don_hang_khach_hang = (int)($request->get('id_don_hang_khach_hang'));
+        $hoa_don_xuat->id_khach_hang = (int)($request->get('id_khach_hang'));
+        $hoa_don_xuat->id_loai_vai = (int)($request->get('id_loai_vai'));
+        $hoa_don_xuat->id_mau = (int)($request->get('id_mau'));
+        $hoa_don_xuat->kho = (float)($request->get('kho'));
+        $hoa_don_xuat->id_kho = (int)($request->get('id_kho'));
+        $hoa_don_xuat->id_nhan_vien_xuat = (int)($request->get('id_nhan_vien_xuat'));
+        $hoa_don_xuat->ngay_gio_xuat_hoa_don = $ngay_gio_xuat_hoa_don;
+        $hoa_don_xuat->tinh_chat = $request->get('tinh_chat');
+
+        $hoa_don_xuat->update();
     }
 }

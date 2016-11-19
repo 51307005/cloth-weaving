@@ -269,6 +269,7 @@ class MocRepository
                                   ->orderBy('id', 'desc')
                                   ->first();
         $id_cay_moc_cuoi_cung = $id_cay_moc_cuoi_cung->id;
+
         return $id_cay_moc_cuoi_cung;
     }
 

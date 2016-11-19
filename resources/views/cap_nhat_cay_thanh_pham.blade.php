@@ -14,6 +14,7 @@
         <script src="{{ url('/') }}/resources/assets/js/jquery-ui-1.11.4.js" type="text/javascript"></script>
         <script src="{{ url('/') }}/resources/assets/js/jquery-ui-timepicker-1.6.3.js" type="text/javascript"></script>
         <script src="{{ url('/') }}/resources/assets/js/jquery-numeric-1.4.1.js" type="text/javascript"></script>
+        <script src="{{ url('/') }}/resources/assets/js/jquery-number-2.1.6.js" type="text/javascript"></script>
         <script src="{{ url('/') }}/resources/assets/js/bootstrap-3.3.7.js" type="text/javascript"></script>
 
         <style>
@@ -90,6 +91,7 @@
                                 <!-- FORM CẬP NHẬT CÂY VẢI THÀNH PHẨM -->
                                 <div style="margin-left:30px;margin-top:15px;margin-bottom:15px;float:left;width:50%;">
                                     {!! Form::open(array('method' => 'post', 'id' => 'frm_cap_nhat_cay_thanh_pham')) !!}
+                                        <input type="hidden" id="cay_thanh_pham_cu" name="cay_thanh_pham_cu" value="{{ $cay_thanh_pham_cu }}">
                                         <table id="tbl_cap_nhat_cay_thanh_pham" style="width:420px;height:380px;">
                                             <tr>
                                                 <td style="font-weight:bold;">Mã cây thành phẩm:</td>
@@ -215,7 +217,6 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                        <input type="hidden" name="cay_thanh_pham_cu" value="{{ $cay_thanh_pham_cu }}">
                                     {!! Form::close() !!}
                                 </div>
                                 <script>

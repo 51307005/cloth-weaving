@@ -16,7 +16,9 @@ use App\Http\Repositories\NhanVienRepository;
 use App\Http\Repositories\HoaDonXuatRepository;
 use App\Http\Repositories\LoNhuomRepository;
 use App\Http\Repositories\MauRepository;
+use App\Http\Repositories\KhachHangRepository;
 use App\Http\Repositories\DonHangKhachHangRepository;
+use App\Http\Repositories\ThuChiRepository;
 
 class KhoThanhPhamController extends HelperController
 {
@@ -505,7 +507,7 @@ class KhoThanhPhamController extends HelperController
                                 $cay_thanh_pham_duoc_chon_json = json_encode($cay_thanh_pham_duoc_chon);
 
                                 // Lấy danh sách id cây mộc mà dành cho việc Nhập/Cập nhật cây thành phẩm
-                                $list_id_cay_moc = [];
+                                $list_id_cay_moc = array();
                                 $mocRepository = new MocRepository();
                                 $temp = $mocRepository->getDanhSachIdCayMocChoViecNhap_CapNhatCayThanhPham();
                                 foreach ($temp as $cay_moc)
@@ -513,6 +515,7 @@ class KhoThanhPhamController extends HelperController
                                     $list_id_cay_moc[] = $cay_moc->id;
                                 }
                                 $list_id_cay_moc[] = $cay_thanh_pham_duoc_chon->id_cay_vai_moc;
+                                $list_id_cay_moc = array_unique($list_id_cay_moc);
                                 sort($list_id_cay_moc);
 
                                 // Lấy danh sách khổ
@@ -590,7 +593,7 @@ class KhoThanhPhamController extends HelperController
             $cay_thanh_pham_duoc_chon_json = json_encode($cay_thanh_pham_duoc_chon);
 
             // Lấy danh sách id cây mộc mà dành cho việc Nhập/Cập nhật cây thành phẩm
-            $list_id_cay_moc = [];
+            $list_id_cay_moc = array();
             $mocRepository = new MocRepository();
             $temp = $mocRepository->getDanhSachIdCayMocChoViecNhap_CapNhatCayThanhPham();
             foreach ($temp as $cay_moc)
@@ -598,6 +601,7 @@ class KhoThanhPhamController extends HelperController
                 $list_id_cay_moc[] = $cay_moc->id;
             }
             $list_id_cay_moc[] = $cay_thanh_pham_duoc_chon->id_cay_vai_moc;
+            $list_id_cay_moc = array_unique($list_id_cay_moc);
             sort($list_id_cay_moc);
 
             // Lấy danh sách khổ
@@ -710,7 +714,7 @@ class KhoThanhPhamController extends HelperController
             $cay_thanh_pham_duoc_chon_json = json_encode($cay_thanh_pham_duoc_chon);
 
             // Lấy danh sách id cây mộc mà dành cho việc Nhập/Cập nhật cây thành phẩm
-            $list_id_cay_moc = [];
+            $list_id_cay_moc = array();
             $mocRepository = new MocRepository();
             $temp = $mocRepository->getDanhSachIdCayMocChoViecNhap_CapNhatCayThanhPham();
             foreach ($temp as $cay_moc)
@@ -718,6 +722,7 @@ class KhoThanhPhamController extends HelperController
                 $list_id_cay_moc[] = $cay_moc->id;
             }
             $list_id_cay_moc[] = $cay_thanh_pham_duoc_chon->id_cay_vai_moc;
+            $list_id_cay_moc = array_unique($list_id_cay_moc);
             sort($list_id_cay_moc);
 
             // Lấy danh sách khổ
@@ -894,14 +899,18 @@ class KhoThanhPhamController extends HelperController
     {
         $id_hoa_don_xuat = (int)($request->get('id_hoa_don_xuat'));
 
-        // Tạo đối tượng ThanhPhamRepository
+        // Tạo đối tượng ThanhPhamRepository và HoaDonXuatRepository
         $thanhPhamRepository = new ThanhPhamRepository();
-
-        // Tạo đối tượng HoaDonXuatRepository
         $hoaDonXuatRepository = new HoaDonXuatRepository();
 
         if ($request->get('chon_ma_hoa_don_xuat') == 'false')     // Button "Cập nhật xuất vải thành phẩm" được click
         {
+            // Tạo đối tượng ThuChiRepository, KhachHangRepository và DonHangKhachHangRepository
+            $thuChiRepository = new ThuChiRepository();
+            $khachHangRepository = new KhachHangRepository();
+            $donHangKhachHangRepository = new DonHangKhachHangRepository();
+
+            // Lấy dữ liệu để cập nhật xuất vải thành phẩm
             $tong_so_cay_thanh_pham = (int)($request->get('tongSoCayThanhPham'));
             $tong_so_met = (int)($request->get('tongSoMet'));
             $tong_tien = (int)($request->get('tongTien'));
@@ -911,11 +920,19 @@ class KhoThanhPhamController extends HelperController
             $thanhPhamRepository->capNhatXuatThanhPham($id_hoa_don_xuat, $list_id_cay_thanh_pham_muon_xuat);
             $hoaDonXuatRepository->capNhatXuatThanhPham($id_hoa_don_xuat, $tong_so_cay_thanh_pham, $tong_so_met, $tong_tien);
 
-            // Update lại Tình trạng của Đơn hàng khách hàng mà tương ứng với Hóa đơn xuất mà user đã chọn
+            // Lấy hóa đơn xuất mà user đã chọn
             $hoa_don_xuat_duoc_chon = $hoaDonXuatRepository->getHoaDonXuatById($id_hoa_don_xuat);
+
+            // Update lại Công nợ của Khách hàng mà tương ứng với Hóa đơn xuất mà user đã chọn
+            $id_khach_hang = $hoa_don_xuat_duoc_chon->id_khach_hang;
+            $tong_so_tien_no_cua_khach_hang = $hoaDonXuatRepository->getTongSoTienNoCuaKhachHang($id_khach_hang);
+            $tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang);
+            $cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+            $khachHangRepository->updateCongNoKhachHang($id_khach_hang, $cong_no_moi_cua_khach_hang);
+
+            // Update lại Tình trạng của Đơn hàng khách hàng mà tương ứng với Hóa đơn xuất mà user đã chọn
             $id_don_hang_khach_hang = $hoa_don_xuat_duoc_chon->id_don_hang_khach_hang;
             $tong_so_met_da_giao = $hoaDonXuatRepository->tinhTongSoMetDaGiaoCuaDonHangKhachHang($id_don_hang_khach_hang);
-            $donHangKhachHangRepository = new DonHangKhachHangRepository();
             $donHangKhachHangRepository->updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang, $tong_so_met_da_giao);
         }
 
@@ -1097,12 +1114,21 @@ class KhoThanhPhamController extends HelperController
 
     public function postThemHoaDonXuat(ThemHoaDonXuatRequest $request)
     {
-        // Tạo đối tượng HoaDonXuatRepository và DonHangKhachHangRepository
+        // Tạo đối tượng HoaDonXuatRepository, DonHangKhachHangRepository, ThuChiRepository và KhachHangRepository
         $hoaDonXuatRepository = new HoaDonXuatRepository();
         $donHangKhachHangRepository = new DonHangKhachHangRepository();
+        $thuChiRepository = new ThuChiRepository();
+        $khachHangRepository = new KhachHangRepository();
 
         // Thêm hóa đơn xuất
         $hoaDonXuatRepository->themHoaDonXuat($request);
+
+        // Update lại Công nợ của Khách hàng mà tương ứng với Hóa đơn xuất vừa được tạo
+        $id_khach_hang = (int)($request->get('id_khach_hang'));
+        $tong_so_tien_no_cua_khach_hang = $hoaDonXuatRepository->getTongSoTienNoCuaKhachHang($id_khach_hang);
+	$tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang);
+	$cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+	$khachHangRepository->updateCongNoKhachHang($id_khach_hang, $cong_no_moi_cua_khach_hang);
 
         // Update lại Tình trạng của Đơn hàng khách hàng mà tương ứng với Hóa đơn xuất vừa mới Thêm
         $id_don_hang_khach_hang = (int)($request->get('id_don_hang_khach_hang'));
@@ -1115,12 +1141,247 @@ class KhoThanhPhamController extends HelperController
 
     public function getCapNhatHoaDonXuat($id_hoa_don_xuat = null)
     {
-        
+        // Check Login
+        if (Session::has('username') && Session::has('quyen'))  // Đã Login
+        {
+            // Redirect tới view mà tương ứng với quyền của user
+            switch (Session::get('quyen'))
+            {
+                case self::QUYEN_SAN_XUAT:
+                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
+                case self::QUYEN_KHO:
+                    return redirect()->to(route('route_get_trang_chu_kho'));
+                case self::QUYEN_ADMIN:
+                case self::QUYEN_BAN_HANG:
+                    // Lấy danh sách chức năng tương ứng với quyền của user
+                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_BAN_HANG);
+
+                    // Tạo đối tượng HoaDonXuatRepository
+                    $hoaDonXuatRepository = new HoaDonXuatRepository();
+
+                    // Lấy danh sách id hóa đơn xuất
+                    $list_id_hoa_don_xuat = $hoaDonXuatRepository->getDanhSachIdHoaDonXuat();
+
+                    if ($id_hoa_don_xuat == null)   // $id_hoa_don_xuat không được truyền
+                    {
+                        return view('cap_nhat_hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
+                                                            ->with('list_id_hoa_don_xuat', $list_id_hoa_don_xuat);
+                    }
+                    else    // $id_hoa_don_xuat được truyền
+                    {
+                        $errorMessage = '';
+
+                        if (ctype_digit($id_hoa_don_xuat) == true && (int)($id_hoa_don_xuat) > 0)   // $id_hoa_don_xuat là số nguyên dương
+                        {
+                            $hopLe = false;
+
+                            // Ép kiểu $id_hoa_don_xuat về kiểu int
+                            $id_hoa_don_xuat = (int)$id_hoa_don_xuat;
+
+                            // Kiểm tra xem $id_hoa_don_xuat có tồn tại trong database hay không
+                            foreach ($list_id_hoa_don_xuat as $hoa_don_xuat)
+                            {
+                                if ($id_hoa_don_xuat == $hoa_don_xuat->id)
+                                {
+                                    $hopLe = true;
+                                    break;
+                                }
+                            }
+
+                            if ($hopLe == true)
+                            {
+                                // Lấy hóa đơn xuất mà user đã chọn
+                                $hoa_don_xuat_duoc_chon = $hoaDonXuatRepository->getHoaDonXuatById($id_hoa_don_xuat);
+                                // Xử lý chỉ lấy tên khách hàng, tên nhân viên xuất hóa đơn chứ không lấy cả họ tên (nếu cần)
+                                /*$temp = explode(' ', $hoa_don_xuat_duoc_chon->ten_khach_hang);
+                                $hoa_don_xuat_duoc_chon->ten_khach_hang = $temp[count($temp) - 1];
+                                $temp = explode(' ', $hoa_don_xuat_duoc_chon->ten_nhan_vien_xuat);
+                                $hoa_don_xuat_duoc_chon->ten_nhan_vien_xuat = $temp[count($temp) - 1];*/
+                                $hoa_don_xuat_duoc_chon_json = json_encode($hoa_don_xuat_duoc_chon);
+
+                                // Lấy danh sách id đơn hàng khách hàng
+                                $listIdDonHangKhachHangChuaHoanThanh_Moi = array();
+				$donHangKhachHangRepository = new DonHangKhachHangRepository();
+				$temp = $donHangKhachHangRepository->getDanhSachIdDonHangKhachHangChuaHoanThanh_Moi();
+                                foreach ($temp as $don_hang_khach_hang)
+                                {
+                                    $listIdDonHangKhachHangChuaHoanThanh_Moi[] = $don_hang_khach_hang->id;
+                                }
+                                $listIdDonHangKhachHangChuaHoanThanh_Moi[] = $hoa_don_xuat_duoc_chon->id_don_hang_khach_hang;
+                                $listIdDonHangKhachHangChuaHoanThanh_Moi = array_unique($listIdDonHangKhachHangChuaHoanThanh_Moi);
+                                sort($listIdDonHangKhachHangChuaHoanThanh_Moi);
+
+                                // Lấy danh sách kho thành phẩm
+				$khoRepository = new KhoRepository();
+				$list_kho_thanh_pham = $khoRepository->getDanhSachKhoThanhPham();
+
+                                // Lấy danh sách nhân viên xuất hóa đơn
+				$nhanVienRepository = new NhanVienRepository();
+				$list_nhan_vien_xuat_hoa_don = $nhanVienRepository->getDanhSachNhanVienXuatHoaDon();
+				// Xử lý chỉ lấy tên nhân viên xuất hóa đơn chứ không lấy cả họ tên (nếu cần)
+				/*foreach ($list_nhan_vien_xuat_hoa_don as $nhan_vien_xuat_hoa_don)
+				{
+					$temp = explode(' ', $nhan_vien_xuat_hoa_don->ho_ten);
+					$nhan_vien_xuat_hoa_don->ho_ten = $temp[count($temp) - 1];
+				}*/
+
+                                // Lấy danh sách tính chất có thể có của hóa đơn xuất
+				$list_tinh_chat = $this->tinh_chat;
+
+                                return view('cap_nhat_hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
+                                                                    ->with('list_id_hoa_don_xuat', $list_id_hoa_don_xuat)
+                                                                    ->with('hoa_don_xuat_duoc_chon', $hoa_don_xuat_duoc_chon)
+                                                                    ->with('hoa_don_xuat_cu', $hoa_don_xuat_duoc_chon_json)
+                                                                    ->with('listIdDonHangKhachHangChuaHoanThanh_Moi', $listIdDonHangKhachHangChuaHoanThanh_Moi)
+                                                                    ->with('list_kho_thanh_pham', $list_kho_thanh_pham)
+                                                                    ->with('list_nhan_vien_xuat_hoa_don', $list_nhan_vien_xuat_hoa_don)
+                                                                    ->with('list_tinh_chat', $list_tinh_chat);
+                            }
+                            else
+                            {
+                                $errorMessage = 'Id hóa đơn xuất không tồn tại trong database !';
+
+                                return view('cap_nhat_hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
+                                                                    ->with('list_id_hoa_don_xuat', $list_id_hoa_don_xuat)
+                                                                    ->with('errorMessage', $errorMessage);
+                            }
+                        }
+                        else    // $id_hoa_don_xuat không phải là số nguyên dương
+                        {
+                            $errorMessage = 'Id hóa đơn xuất phải là số nguyên dương !';
+
+                            return view('cap_nhat_hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
+                                                                ->with('list_id_hoa_don_xuat', $list_id_hoa_don_xuat)
+                                                                ->with('errorMessage', $errorMessage);
+                        }
+                    }
+            }
+        }
+
+        // Chưa Login
+        return redirect()->to(route('route_get_login_he_thong'));
     }
 
     public function postCapNhatHoaDonXuat(Request $request, $id_hoa_don_xuat)
     {
-        
+        // Tạo đối tượng HoaDonXuatRepository và DonHangKhachHangRepository
+        $hoaDonXuatRepository = new HoaDonXuatRepository();
+        $donHangKhachHangRepository = new DonHangKhachHangRepository();
+
+        $id_hoa_don_xuat = (int)($request->get('IdHoaDonXuat'));
+
+        if (!$request->has('frm_chon_ma_hoa_don_xuat'))     // Button "Cập nhật" được click
+        {
+            // Validate fields
+            $rules = [
+                'ngay_gio_xuat_hoa_don' => 'required|date'
+            ];
+            $messages = [
+                'ngay_gio_xuat_hoa_don.required' => 'Bạn chưa nhập ngày giờ xuất hóa đơn !',
+                'ngay_gio_xuat_hoa_don.date' => 'Ngày giờ xuất hóa đơn không hợp lệ !'
+            ];
+            $this->validate($request, $rules, $messages);
+
+            // Validate successful
+            // Xử lý cập nhật hóa đơn xuất
+            $hoaDonXuatRepository->capNhatHoaDonXuat($request);
+
+            // Lấy hóa đơn xuất cũ (trước khi cập nhật)
+            $hoa_don_xuat_cu = $request->get('hoa_don_xuat_cu');
+            $hoa_don_xuat_cu = json_decode($hoa_don_xuat_cu);
+            $id_khach_hang_cu = $hoa_don_xuat_cu->id_khach_hang;
+            $id_don_hang_khach_hang_cu = $hoa_don_xuat_cu->id_don_hang_khach_hang;
+            $id_khach_hang_moi = (int)($request->get('id_khach_hang'));
+            $id_don_hang_khach_hang_moi = (int)($request->get('id_don_hang_khach_hang'));
+
+            // Tạo đối tượng ThuChiRepository, KhachHangRepository
+            $thuChiRepository = new ThuChiRepository();
+            $khachHangRepository = new KhachHangRepository();
+
+            // Update lại Công nợ của Khách hàng
+            if ($id_khach_hang_cu != $id_khach_hang_moi)
+            {
+                // Update lại Công nợ của Khách hàng cũ
+                $tong_so_tien_no_cua_khach_hang = $hoaDonXuatRepository->getTongSoTienNoCuaKhachHang($id_khach_hang_cu);
+                $tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang_cu);
+                $cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+                $khachHangRepository->updateCongNoKhachHang($id_khach_hang_cu, $cong_no_moi_cua_khach_hang);
+
+                // Update lại Công nợ của Khách hàng mới
+                $tong_so_tien_no_cua_khach_hang = $hoaDonXuatRepository->getTongSoTienNoCuaKhachHang($id_khach_hang_moi);
+                $tong_so_tien_tra_cua_khach_hang = $thuChiRepository->getTongSoTienTraCuaKhachHang($id_khach_hang_moi);
+                $cong_no_moi_cua_khach_hang = $tong_so_tien_no_cua_khach_hang - $tong_so_tien_tra_cua_khach_hang;
+                $khachHangRepository->updateCongNoKhachHang($id_khach_hang_moi, $cong_no_moi_cua_khach_hang);
+            }
+
+            // Update lại Tình trạng của Đơn hàng khách hàng
+            if ($id_don_hang_khach_hang_cu != $id_don_hang_khach_hang_moi)
+            {
+                // Update lại Tình trạng của Đơn hàng khách hàng cũ
+                $tong_so_met_da_giao = $hoaDonXuatRepository->tinhTongSoMetDaGiaoCuaDonHangKhachHang($id_don_hang_khach_hang_cu);
+                $donHangKhachHangRepository->updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang_cu, $tong_so_met_da_giao);
+
+                // Update lại Tình trạng của Đơn hàng khách hàng mới
+                $tong_so_met_da_giao = $hoaDonXuatRepository->tinhTongSoMetDaGiaoCuaDonHangKhachHang($id_don_hang_khach_hang_moi);
+                $donHangKhachHangRepository->updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang_moi, $tong_so_met_da_giao);
+            }
+
+            //echo "<script> alert('Cập nhật thành công !'); </script>";
+
+            $id_hoa_don_xuat = (int)($request->get('idHoaDonXuat'));
+        }
+
+        // Lấy danh sách chức năng tương ứng với quyền của user
+        $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_BAN_HANG);
+
+        // Lấy danh sách id hóa đơn xuất
+        $list_id_hoa_don_xuat = $hoaDonXuatRepository->getDanhSachIdHoaDonXuat();
+
+        // Lấy hóa đơn xuất mà user đã chọn
+        $hoa_don_xuat_duoc_chon = $hoaDonXuatRepository->getHoaDonXuatById($id_hoa_don_xuat);
+        // Xử lý chỉ lấy tên khách hàng, tên nhân viên xuất hóa đơn chứ không lấy cả họ tên (nếu cần)
+        /*$temp = explode(' ', $hoa_don_xuat_duoc_chon->ten_khach_hang);
+        $hoa_don_xuat_duoc_chon->ten_khach_hang = $temp[count($temp) - 1];
+        $temp = explode(' ', $hoa_don_xuat_duoc_chon->ten_nhan_vien_xuat);
+        $hoa_don_xuat_duoc_chon->ten_nhan_vien_xuat = $temp[count($temp) - 1];*/
+        $hoa_don_xuat_duoc_chon_json = json_encode($hoa_don_xuat_duoc_chon);
+
+        // Lấy danh sách id đơn hàng khách hàng
+        $listIdDonHangKhachHangChuaHoanThanh_Moi = array();
+        $temp = $donHangKhachHangRepository->getDanhSachIdDonHangKhachHangChuaHoanThanh_Moi();
+        foreach ($temp as $don_hang_khach_hang)
+        {
+            $listIdDonHangKhachHangChuaHoanThanh_Moi[] = $don_hang_khach_hang->id;
+        }
+        $listIdDonHangKhachHangChuaHoanThanh_Moi[] = $hoa_don_xuat_duoc_chon->id_don_hang_khach_hang;
+        $listIdDonHangKhachHangChuaHoanThanh_Moi = array_unique($listIdDonHangKhachHangChuaHoanThanh_Moi);
+        sort($listIdDonHangKhachHangChuaHoanThanh_Moi);
+
+        // Lấy danh sách kho thành phẩm
+        $khoRepository = new KhoRepository();
+        $list_kho_thanh_pham = $khoRepository->getDanhSachKhoThanhPham();
+
+        // Lấy danh sách nhân viên xuất hóa đơn
+        $nhanVienRepository = new NhanVienRepository();
+        $list_nhan_vien_xuat_hoa_don = $nhanVienRepository->getDanhSachNhanVienXuatHoaDon();
+        // Xử lý chỉ lấy tên nhân viên xuất hóa đơn chứ không lấy cả họ tên (nếu cần)
+        /*foreach ($list_nhan_vien_xuat_hoa_don as $nhan_vien_xuat_hoa_don)
+        {
+                $temp = explode(' ', $nhan_vien_xuat_hoa_don->ho_ten);
+                $nhan_vien_xuat_hoa_don->ho_ten = $temp[count($temp) - 1];
+        }*/
+
+        // Lấy danh sách tính chất có thể có của hóa đơn xuất
+        $list_tinh_chat = $this->tinh_chat;
+
+        return view('cap_nhat_hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
+                                            ->with('list_id_hoa_don_xuat', $list_id_hoa_don_xuat)
+                                            ->with('hoa_don_xuat_duoc_chon', $hoa_don_xuat_duoc_chon)
+                                            ->with('hoa_don_xuat_cu', $hoa_don_xuat_duoc_chon_json)
+                                            ->with('listIdDonHangKhachHangChuaHoanThanh_Moi', $listIdDonHangKhachHangChuaHoanThanh_Moi)
+                                            ->with('list_kho_thanh_pham', $list_kho_thanh_pham)
+                                            ->with('list_nhan_vien_xuat_hoa_don', $list_nhan_vien_xuat_hoa_don)
+                                            ->with('list_tinh_chat', $list_tinh_chat);
     }
 
     public function postShowLoaiVai(Request $request)
@@ -1203,8 +1464,8 @@ class KhoThanhPhamController extends HelperController
         $donHangKhachHangRepository = new DonHangKhachHangRepository();
         $don_hang_khach_hang_duoc_chon = $donHangKhachHangRepository->getDonHangKhachHangById($id_don_hang_khach_hang);
         // Xử lý chỉ lấy tên khách hàng chứ không lấy cả họ tên (nếu cần)
-        //$temp = explode(' ', $don_hang_khach_hang_duoc_chon->ten_khach_hang);
-        //$don_hang_khach_hang_duoc_chon->ten_khach_hang = $temp[count($temp) - 1];
+        /*$temp = explode(' ', $don_hang_khach_hang_duoc_chon->ten_khach_hang);
+        $don_hang_khach_hang_duoc_chon->ten_khach_hang = $temp[count($temp) - 1];*/
         //echo '<pre>',print_r($don_hang_khach_hang_duoc_chon),'</pre>';
 
         // Chuyển $don_hang_khach_hang_duoc_chon về dạng chuỗi JSON
@@ -1213,217 +1474,5 @@ class KhoThanhPhamController extends HelperController
 
         //return $don_hang_khach_hang_duoc_chon;
         return response()->json($don_hang_khach_hang_duoc_chon);
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    public function getCapNhatPhieuXuatMoc($id_phieu_xuat_moc = null)
-    {
-        // Check Login
-        if (Session::has('username') && Session::has('quyen'))  // Đã Login
-        {
-            // Redirect tới view mà tương ứng với quyền của user
-            switch (Session::get('quyen'))
-            {
-                case self::QUYEN_SAN_XUAT:
-                    return redirect()->to(route('route_get_trang_chu_san_xuat'));
-                case self::QUYEN_BAN_HANG:
-                    return redirect()->to(route('route_get_trang_chu_ban_hang'));
-                case self::QUYEN_ADMIN:
-                case self::QUYEN_KHO:
-                    // Lấy danh sách chức năng tương ứng với quyền của user
-                    $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
-
-                    // Tạo đối tượng PhieuXuatMocRepository
-                    $phieuXuatMocRepository = new PhieuXuatMocRepository();
-
-                    // Lấy danh sách id phiếu xuất mộc
-                    $list_id_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachIdPhieuXuatMoc();
-
-                    if ($id_phieu_xuat_moc == null)     // $id_phieu_xuat_moc không được truyền
-                    {
-                        return view('cap_nhat_phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
-                                                              ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc);
-                    }
-                    else    // $id_phieu_xuat_moc được truyền
-                    {
-                        $errorMessage = '';
-
-                        if (ctype_digit($id_phieu_xuat_moc) == true && (int)($id_phieu_xuat_moc) > 0)   // $id_phieu_xuat_moc là số nguyên dương
-                        {
-                            $hopLe = false;
-
-                            // Ép kiểu $id_phieu_xuat_moc về kiểu int
-                            $id_phieu_xuat_moc = (int)$id_phieu_xuat_moc;
-
-                            // Kiểm tra xem $id_phieu_xuat_moc có tồn tại trong database hay không
-                            foreach ($list_id_phieu_xuat_moc as $phieu_xuat_moc)
-                            {
-                                if ($id_phieu_xuat_moc == $phieu_xuat_moc->id)
-                                {
-                                    $hopLe = true;
-                                    break;
-                                }
-                            }
-
-                            if ($hopLe == true)
-                            {
-                                // Lấy phiếu xuất mộc mà user đã chọn
-                                $phieu_xuat_moc_duoc_chon = $phieuXuatMocRepository->getPhieuXuatMocById($id_phieu_xuat_moc);
-
-                                // Lấy danh sách kho mộc
-                                $khoRepository = new KhoRepository();
-                                $list_kho_moc = $khoRepository->getDanhSachKhoMoc();
-
-                                // Lấy danh sách nhân viên kho mộc
-                                $nhanVienRepository = new NhanVienRepository();
-                                $list_nhan_vien_kho_moc = $nhanVienRepository->getDanhSachNhanVienKhoMoc();
-                                // Xử lý chỉ lấy tên nhân viên kho mộc chứ không lấy cả họ tên (nếu cần)
-                                /*foreach ($list_nhan_vien_kho_moc as $nhan_vien_kho_moc)
-                                {
-                                    $temp = explode(' ', $nhan_vien_kho_moc->ho_ten);
-                                    $nhan_vien_kho_moc->ho_ten = $temp[count($temp) - 1];
-                                }*/
-
-                                return view('cap_nhat_phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
-                                                                      ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc)
-                                                                      ->with('phieu_xuat_moc_duoc_chon', $phieu_xuat_moc_duoc_chon)
-                                                                      ->with('list_kho_moc', $list_kho_moc)
-                                                                      ->with('list_nhan_vien_kho_moc', $list_nhan_vien_kho_moc);
-                            }
-                            else
-                            {
-                                $errorMessage = 'Id phiếu xuất mộc không tồn tại trong database !';
-
-                                return view('cap_nhat_phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
-                                                                      ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc)
-                                                                      ->with('errorMessage', $errorMessage);
-                            }
-                        }
-                        else    // $id_phieu_xuat_moc không phải là số nguyên dương
-                        {
-                            $errorMessage = 'Id phiếu xuất mộc phải là số nguyên dương !';
-
-                            return view('cap_nhat_phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
-                                                                  ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc)
-                                                                  ->with('errorMessage', $errorMessage);
-                        }
-                    }
-            }
-        }
-
-        // Chưa Login
-        return redirect()->to(route('route_get_login_he_thong'));
-    }
-
-    public function postCapNhatPhieuXuatMoc(Request $request, $id_phieu_xuat_moc)
-    {
-        if ($request->has('frm_chon_ma_phieu_xuat_moc'))    // Button "Chọn" được click
-        {
-            $id_phieu_xuat_moc = (int)($request->get('IdPhieuXuatMoc'));
-
-            // Lấy danh sách chức năng tương ứng với quyền của user
-            $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
-
-            // Tạo đối tượng PhieuXuatMocRepository
-            $phieuXuatMocRepository = new PhieuXuatMocRepository();
-
-            // Lấy danh sách id phiếu xuất mộc
-            $list_id_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachIdPhieuXuatMoc();
-
-            // Lấy phiếu xuất mộc mà user đã chọn
-            $phieu_xuat_moc_duoc_chon = $phieuXuatMocRepository->getPhieuXuatMocById($id_phieu_xuat_moc);
-
-            // Lấy danh sách kho mộc
-            $khoRepository = new KhoRepository();
-            $list_kho_moc = $khoRepository->getDanhSachKhoMoc();
-
-            // Lấy danh sách nhân viên kho mộc
-            $nhanVienRepository = new NhanVienRepository();
-            $list_nhan_vien_kho_moc = $nhanVienRepository->getDanhSachNhanVienKhoMoc();
-            // Xử lý chỉ lấy tên nhân viên kho mộc chứ không lấy cả họ tên (nếu cần)
-            /*foreach ($list_nhan_vien_kho_moc as $nhan_vien_kho_moc)
-            {
-                $temp = explode(' ', $nhan_vien_kho_moc->ho_ten);
-                $nhan_vien_kho_moc->ho_ten = $temp[count($temp) - 1];
-            }*/
-
-            return view('cap_nhat_phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
-                                                  ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc)
-                                                  ->with('phieu_xuat_moc_duoc_chon', $phieu_xuat_moc_duoc_chon)
-                                                  ->with('list_kho_moc', $list_kho_moc)
-                                                  ->with('list_nhan_vien_kho_moc', $list_nhan_vien_kho_moc);
-        }
-        else    // Button "Cập nhật" được click
-        {
-            // Validate fields
-            $rules = [
-                'ngay_gio_xuat_kho' => 'required|date'
-            ];
-            $messages = [
-                'ngay_gio_xuat_kho.required' => 'Bạn chưa nhập ngày giờ xuất kho !',
-                'ngay_gio_xuat_kho.date' => 'Ngày giờ xuất kho không hợp lệ !'
-            ];
-            $this->validate($request, $rules, $messages);
-
-            // Validate successful
-            // Xử lý cập nhật phiếu xuất mộc
-            $phieuXuatMocRepository = new PhieuXuatMocRepository();
-            $phieuXuatMocRepository->capNhatPhieuXuatMoc($request);
-            //echo "<script> alert('Cập nhật thành công !'); </script>";
-
-            // Show lại trang Cập nhật phiếu xuất mộc
-            $id_phieu_xuat_moc = (int)($request->get('idPhieuXuatMoc'));
-
-            // Lấy danh sách chức năng tương ứng với quyền của user
-            $list_chuc_nang = $this->taoLinkChoListChucNang(self::QUYEN_KHO);
-
-            // Lấy danh sách id phiếu xuất mộc
-            $list_id_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachIdPhieuXuatMoc();
-
-            // Lấy phiếu xuất mộc mà user đã chọn
-            $phieu_xuat_moc_duoc_chon = $phieuXuatMocRepository->getPhieuXuatMocById($id_phieu_xuat_moc);
-
-            // Lấy danh sách kho mộc
-            $khoRepository = new KhoRepository();
-            $list_kho_moc = $khoRepository->getDanhSachKhoMoc();
-
-            // Lấy danh sách nhân viên kho mộc
-            $nhanVienRepository = new NhanVienRepository();
-            $list_nhan_vien_kho_moc = $nhanVienRepository->getDanhSachNhanVienKhoMoc();
-            // Xử lý chỉ lấy tên nhân viên kho mộc chứ không lấy cả họ tên (nếu cần)
-            /*foreach ($list_nhan_vien_kho_moc as $nhan_vien_kho_moc)
-            {
-                $temp = explode(' ', $nhan_vien_kho_moc->ho_ten);
-                $nhan_vien_kho_moc->ho_ten = $temp[count($temp) - 1];
-            }*/
-
-            return view('cap_nhat_phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
-                                                  ->with('list_id_phieu_xuat_moc', $list_id_phieu_xuat_moc)
-                                                  ->with('phieu_xuat_moc_duoc_chon', $phieu_xuat_moc_duoc_chon)
-                                                  ->with('list_kho_moc', $list_kho_moc)
-                                                  ->with('list_nhan_vien_kho_moc', $list_nhan_vien_kho_moc);
-        }
     }
 }

@@ -54,7 +54,7 @@ class ThanhPham
                   'id_hoa_don_xuat' => $this->id_hoa_don_xuat,
                   'tinh_trang' => $this->tinh_trang
                 ]);
-       });
+        });
     }
 
     function getId()

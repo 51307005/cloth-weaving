@@ -37,7 +37,7 @@ class PhieuXuatMoc
                   'id_nhan_vien_xuat' => $this->id_nhan_vien_xuat,
                   'ngay_gio_xuat_kho' => $this->ngay_gio_xuat_kho,
                 ]);
-       });
+        });
     }
 
     public function update()
@@ -51,7 +51,7 @@ class PhieuXuatMoc
                   'id_nhan_vien_xuat' => $this->id_nhan_vien_xuat,
                   'ngay_gio_xuat_kho' => $this->ngay_gio_xuat_kho
                 ]);
-       });
+        });
     }
 
     function getId()

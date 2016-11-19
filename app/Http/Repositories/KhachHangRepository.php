@@ -62,4 +62,14 @@ class KhachHangRepository
                              ->get();
         return $list_khach_hang;
     }
+
+    public function updateCongNoKhachHang($id_khach_hang, $cong_no_moi)
+    {
+        return DB::transaction(function() use ($id_khach_hang, $cong_no_moi) {
+            DB::table('khach_hang')
+              ->where('da_xoa', '=', 0)
+              ->where('id', '=', $id_khach_hang)
+              ->update(['cong_no' => $cong_no_moi]);
+        });
+    }
 }

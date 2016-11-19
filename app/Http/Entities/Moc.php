@@ -53,7 +53,7 @@ class Moc
                   'tinh_trang' => $this->tinh_trang,
                   'id_lo_nhuom' => $this->id_lo_nhuom
                 ]);
-       });
+        });
     }
 
     function getId()

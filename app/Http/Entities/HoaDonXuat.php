@@ -54,38 +54,29 @@ class HoaDonXuat
                   'ngay_gio_xuat_hoa_don' => $this->ngay_gio_xuat_hoa_don,
                   'tinh_chat' => $this->tinh_chat
                 ]);
-       });
+        });
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // XÓA
     public function update()
     {
         return DB::transaction(function() {
-            DB::table('phieu_xuat_moc')
+            DB::table('hoa_don_xuat')
               ->where('da_xoa', '=', 0)
               ->where('id', '=', $this->id)
               ->update([
+                  'id_don_hang_khach_hang' => $this->id_don_hang_khach_hang,
+                  'id_khach_hang' => $this->id_khach_hang,
+                  'id_loai_vai' => $this->id_loai_vai,
+                  'id_mau' => $this->id_mau,
+                  'kho' => $this->kho,
                   'id_kho' => $this->id_kho,
                   'id_nhan_vien_xuat' => $this->id_nhan_vien_xuat,
-                  'ngay_gio_xuat_kho' => $this->ngay_gio_xuat_kho
+                  'ngay_gio_xuat_hoa_don' => $this->ngay_gio_xuat_hoa_don,
+                  'tinh_chat' => $this->tinh_chat
                 ]);
-       });
+        });
     }
 
-    
-    
-    // GIỮ
     function getId()
     {
         return $this->id;

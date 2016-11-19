@@ -46,6 +46,7 @@ class PhieuXuatMocRepository
                                          ->orderBy('id', 'desc')
                                          ->first();
         $id_phieu_xuat_moc_cuoi_cung = $id_phieu_xuat_moc_cuoi_cung->id;
+
         return $id_phieu_xuat_moc_cuoi_cung;
     }
 
