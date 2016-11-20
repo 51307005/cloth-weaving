@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2016 at 04:08 PM
+-- Generation Time: Nov 20, 2016 at 07:15 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -27,7 +27,7 @@ USE `san_xuat_vai`;
 --
 -- Table structure for table `cay_vai_moc`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `cay_vai_moc`;
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `cay_vai_moc` (
   `id_lo_nhuom` int(10) unsigned DEFAULT NULL,
   `da_xoa` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Sai ; 1: Đúng',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=38 ;
 
 --
 -- Dumping data for table `cay_vai_moc`
@@ -80,7 +80,7 @@ INSERT INTO `cay_vai_moc` (`id`, `id_loai_vai`, `id_loai_soi`, `so_met`, `id_nha
 --
 -- Table structure for table `cay_vai_thanh_pham`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `cay_vai_thanh_pham`;
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `cay_vai_thanh_pham` (
   `tinh_trang` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Chưa xuất' COMMENT 'Chưa xuất / Đã xuất',
   `da_xoa` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Sai ; 1: Đúng',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=24 ;
 
 --
 -- Dumping data for table `cay_vai_thanh_pham`
@@ -128,7 +128,7 @@ INSERT INTO `cay_vai_thanh_pham` (`id`, `id_cay_vai_moc`, `id_loai_vai`, `id_mau
 --
 -- Table structure for table `don_hang_cong_ty`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `don_hang_cong_ty`;
@@ -162,7 +162,7 @@ INSERT INTO `don_hang_cong_ty` (`id`, `id_loai_soi`, `khoi_luong`, `han_chot`, `
 --
 -- Table structure for table `don_hang_khach_hang`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `don_hang_khach_hang`;
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `don_hang_khach_hang` (
   `tinh_trang` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Mới' COMMENT 'Mới / Chưa hoàn thành / Hoàn thành',
   `da_xoa` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Sai ; 1: Đúng',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `don_hang_khach_hang`
@@ -188,14 +188,18 @@ INSERT INTO `don_hang_khach_hang` (`id`, `id_khach_hang`, `id_loai_vai`, `id_mau
 (1, 1, 1, 1, 0.5, 300, NULL, '2016-04-04 10:30:25', 'Hoàn thành', 0),
 (2, 3, 6, 8, 1.5, 200, NULL, '2016-04-26 09:11:08', 'Chưa hoàn thành', 0),
 (3, 2, 5, 6, 1, 500, NULL, '2016-05-17 15:10:43', 'Chưa hoàn thành', 0),
-(4, 4, 2, 9, 1, 400, NULL, '2016-10-31 11:21:03', 'Mới', 0);
+(4, 4, 2, 9, 1, 400, NULL, '2016-10-31 11:21:03', 'Mới', 0),
+(5, 5, 3, 1, 1.5, 600, NULL, '2016-11-20 19:31:33', 'Mới', 0),
+(6, 6, 4, 3, 0.5, 700, NULL, '2016-11-20 19:31:36', 'Mới', 0),
+(7, 7, 7, 4, 1, 800, NULL, '2016-11-20 19:31:38', 'Mới', 0),
+(8, 8, 6, 5, 1, 1000, NULL, '2016-11-20 19:31:43', 'Mới', 0);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `hoa_don_nhap`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `hoa_don_nhap`;
@@ -236,7 +240,7 @@ INSERT INTO `hoa_don_nhap` (`id`, `id_don_hang_cong_ty`, `id_nha_cung_cap`, `id_
 --
 -- Table structure for table `hoa_don_xuat`
 --
--- Creation: Nov 11, 2016 at 03:06 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `hoa_don_xuat`;
@@ -256,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `hoa_don_xuat` (
   `tinh_chat` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Trả dần / Trả liền',
   `da_xoa` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Sai ; 1: Đúng',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `hoa_don_xuat`
@@ -272,7 +276,7 @@ INSERT INTO `hoa_don_xuat` (`id`, `id_don_hang_khach_hang`, `id_khach_hang`, `id
 --
 -- Table structure for table `khach_hang`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `khach_hang`;
@@ -290,7 +294,7 @@ CREATE TABLE IF NOT EXISTS `khach_hang` (
   UNIQUE KEY `ten_dang_nhap` (`ten_dang_nhap`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `so_dien_thoai` (`so_dien_thoai`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `khach_hang`
@@ -302,14 +306,17 @@ INSERT INTO `khach_hang` (`id`, `ho_ten`, `ten_dang_nhap`, `mat_khau`, `dia_chi`
 (3, 'Phúc', 'phuc', 'e10adc3949ba59abbe56e057f20f883e', '267 Tô Hiến Thành, Q.10', 'phuc@gmail.com', '0934698571', 3200000, 0),
 (4, 'Nhân', 'nhan', 'e10adc3949ba59abbe56e057f20f883e', '167 Nguyễn Kiệm, Q.Gò Vấp', 'nhan@gmail.com', '0937468134', 0, 0),
 (5, 'Long', 'long', 'e10adc3949ba59abbe56e057f20f883e', '369 Phạm Hữu Lầu, P.6, TP.Cao Lãnh, Đồng Tháp', 'long@gmail.com', '0904687231', 0, 0),
-(6, 'Công', 'cong', 'e10adc3949ba59abbe56e057f20f883e', '267 Bạch Đằng, Q.Hải Châu, Đà Nẵng', 'cong@gmail.com', '0916487265', 0, 0);
+(6, 'Công', 'cong', 'e10adc3949ba59abbe56e057f20f883e', '267 Bạch Đằng, Q.Hải Châu, Đà Nẵng', 'cong@gmail.com', '0916487265', 0, 0),
+(7, 'Toàn', 'toan', 'e10adc3949ba59abbe56e057f20f883e', '24 Nguyễn Tri Phương, Q.5', 'toan@gmail.com', '0924876213', 0, 0),
+(8, 'Quân', 'quan', 'e10adc3949ba59abbe56e057f20f883e', '45 Lê Đại Hành, Q.11', 'quan@gmail.com', '0934687167', 0, 0),
+(9, 'Hùng', 'hung', 'e10adc3949ba59abbe56e057f20f883e', '199 Lý Thường Kiệt, Q.10', 'hung@gmail.com', '0913487562', 0, 0);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `kho`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `kho`;
@@ -343,7 +350,7 @@ INSERT INTO `kho` (`id`, `ten`, `id_nhan_vien_quan_ly`, `dien_tich`, `dia_chi`, 
 --
 -- Table structure for table `loai_soi`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `loai_soi`;
@@ -375,7 +382,7 @@ INSERT INTO `loai_soi` (`id`, `ten`, `thong_tin_ky_thuat`, `khoi_luong_ton`, `so
 --
 -- Table structure for table `loai_vai`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `loai_vai`;
@@ -406,7 +413,7 @@ INSERT INTO `loai_vai` (`id`, `ten`, `don_gia`, `da_xoa`) VALUES
 --
 -- Table structure for table `loai_vai_loai_soi`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `loai_vai_loai_soi`;
@@ -428,6 +435,7 @@ INSERT INTO `loai_vai_loai_soi` (`id_loai_vai`, `id_loai_soi`, `dinh_muc`, `da_x
 (1, 5, NULL, 0),
 (1, 6, NULL, 0),
 (2, 3, NULL, 0),
+(3, 4, NULL, 0),
 (4, 6, NULL, 0),
 (5, 5, NULL, 0),
 (6, 2, NULL, 0);
@@ -437,7 +445,7 @@ INSERT INTO `loai_vai_loai_soi` (`id_loai_vai`, `id_loai_soi`, `dinh_muc`, `da_x
 --
 -- Table structure for table `lo_nhuom`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `lo_nhuom`;
@@ -448,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `lo_nhuom` (
   `ngay_gio_nhuom` datetime DEFAULT NULL,
   `da_xoa` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Sai ; 1: Đúng',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `lo_nhuom`
@@ -459,14 +467,15 @@ INSERT INTO `lo_nhuom` (`id`, `id_mau`, `id_nhan_vien_nhuom`, `ngay_gio_nhuom`, 
 (2, 6, 5, '2016-03-30 09:50:03', 0),
 (3, 8, 5, '2016-03-30 11:00:26', 0),
 (4, 9, 5, '2016-03-31 09:07:33', 0),
-(5, 3, 5, '2016-03-31 10:02:45', 0);
+(5, 3, 5, '2016-03-31 10:02:45', 0),
+(6, 1, 5, '2016-11-25 15:01:51', 0);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `mau`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `mau`;
@@ -501,7 +510,7 @@ INSERT INTO `mau` (`id`, `ten`, `cong_thuc`, `id_nhan_vien_pha_che`, `ngay_gio_t
 --
 -- Table structure for table `nhan_vien`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `nhan_vien`;
@@ -524,7 +533,7 @@ CREATE TABLE IF NOT EXISTS `nhan_vien` (
   UNIQUE KEY `ten_dang_nhap` (`ten_dang_nhap`),
   UNIQUE KEY `so_dien_thoai` (`so_dien_thoai`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=22 ;
 
 --
 -- Dumping data for table `nhan_vien`
@@ -540,14 +549,24 @@ INSERT INTO `nhan_vien` (`id`, `ho_ten`, `ten_dang_nhap`, `mat_khau`, `chuc_vu`,
 (7, 'Sơn', 'son', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên kho sợi', 3, 8000000, NULL, '1989-12-05', 1, '567 Tôn Đức Thắng, Q.1', 'son@gmail.com', '0913647953', 0),
 (8, 'Huy', 'huy', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên kho mộc', 3, 8000000, NULL, '1988-06-09', 1, '97 Lạc Long Quân, Q.Tân Bình', 'huy@gmail.com', '0934978264', 0),
 (9, 'Đào', 'dao', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên kho thành phẩm', 3, 8000000, NULL, '1993-11-30', 0, '19 Âu Cơ, Q.Tân Bình', 'dao@gmail.com', '0927943168', 0),
-(10, 'Trúc', 'truc', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên Bán hàng', 4, 8000000, NULL, '1994-03-28', 0, '678 Lê Thánh Tôn, Q.1', 'truc@gmail.com', '0926479543', 0);
+(10, 'Trúc', 'truc', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên bán hàng', 4, 8000000, NULL, '1994-03-28', 0, '678 Lê Thánh Tôn, Q.1', 'truc@gmail.com', '0926479543', 0),
+(11, 'Cúc', 'cuc', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên bán hàng', 4, 8000000, NULL, '1990-03-17', 0, '198 Hoàng Văn Thụ, Q.Phú Nhuận', 'cuc@gmail.com', '0913478562', 0),
+(12, 'Vy', 'vy', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên bán hàng', 4, 8000000, NULL, '1991-04-05', 0, '75 Phan Đăng Lưu, Q.Phú Nhuận', 'vy@gmail.com', '0934526987', 0),
+(13, 'Phong', 'phong', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên dệt', 2, 8000000, NULL, '1980-07-15', 1, '168 Phan Xích Long, Q.Phú Nhuận', 'phong@gmail.com', '0916354762', 0),
+(14, 'Hải', 'hai', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên dệt', 2, 8000000, NULL, '1975-09-26', 1, '48 Âu Cơ, Q.Tân Bình', 'hai@gmail.com', '0937942657', 0),
+(15, 'Thắng', 'thang', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên nhuộm', 2, 8000000, NULL, '1992-12-03', 1, '145 Lạc Long Quân, Q.Tân Bình', 'thang@gmail.com', '0924657913', 0),
+(16, 'Nguyên', 'nguyen', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên nhuộm', 2, 8000000, NULL, '1988-10-31', 1, '68 Lê Minh Xuân, Q.Tân Bình', 'nguyen@gmail.com', '0904687316', 0),
+(17, 'Yến', 'yen', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên pha chế màu', 2, 8000000, NULL, '1993-02-14', 0, '279 Bàu Cát, Q.Tân Bình', 'yen@gmail.com', '0906431687', 0),
+(18, 'Bảo', 'bao', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên kho sợi', 3, 8000000, NULL, '1989-01-25', 1, '321 Đồng Đen, Q.Tân Bình', 'bao@gmail.com', '0926478513', 0),
+(19, 'Nhật', 'nhat', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên kho mộc', 3, 8000000, NULL, '1982-06-13', 1, '432 Lý Thường Kiệt, Q.Tân Bình', 'nhat@gmail.com', '0934621368', 0),
+(20, 'Tiên', 'tien', 'e10adc3949ba59abbe56e057f20f883e', 'Nhân viên kho thành phẩm', 3, 8000000, NULL, '1994-05-05', 0, '29 Trường Chinh, Q.Tân Bình', 'tien@gmail.com', '0914685731', 0);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `nha_cung_cap`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `nha_cung_cap`;
@@ -583,7 +602,7 @@ INSERT INTO `nha_cung_cap` (`id`, `ten`, `dia_chi`, `email`, `so_dien_thoai`, `f
 --
 -- Table structure for table `phieu_xuat_moc`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `phieu_xuat_moc`;
@@ -596,7 +615,7 @@ CREATE TABLE IF NOT EXISTS `phieu_xuat_moc` (
   `ngay_gio_xuat_kho` datetime NOT NULL,
   `da_xoa` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0: Sai ; 1: Đúng',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `phieu_xuat_moc`
@@ -612,7 +631,7 @@ INSERT INTO `phieu_xuat_moc` (`id`, `tong_so_cay_moc`, `tong_so_met`, `id_kho`, 
 --
 -- Table structure for table `phieu_xuat_soi`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `phieu_xuat_soi`;
@@ -647,7 +666,7 @@ INSERT INTO `phieu_xuat_soi` (`id`, `id_loai_soi`, `so_thung`, `khoi_luong_thung
 --
 -- Table structure for table `thu_chi`
 --
--- Creation: Nov 11, 2016 at 03:04 PM
+-- Creation: Nov 19, 2016 at 06:50 PM
 --
 
 DROP TABLE IF EXISTS `thu_chi`;

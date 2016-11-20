@@ -87,7 +87,7 @@ class NhanVienRepository
     {
         $list_nhan_vien_xuat_hoa_don = DB::table('nhan_vien')
                                          ->where('da_xoa', '=', 0)
-                                         ->where('chuc_vu', 'like', '%Nhân viên Bán hàng%')
+                                         ->where('chuc_vu', 'like', '%Nhân viên bán hàng%')
                                          ->get();
         return $list_nhan_vien_xuat_hoa_don;
     }

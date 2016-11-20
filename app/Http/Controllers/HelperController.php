@@ -27,7 +27,7 @@ class HelperController extends Controller
 
     public $chuc_vu = array(
         'Quản lý', 'Nhân viên dệt', 'Nhân viên nhuộm', 'Nhân viên pha chế màu',
-        'Nhân viên kho sợi', 'Nhân viên kho mộc', 'Nhân viên kho thành phẩm', 'Nhân viên Bán hàng'
+        'Nhân viên kho sợi', 'Nhân viên kho mộc', 'Nhân viên kho thành phẩm', 'Nhân viên bán hàng'
         );
 
     public $tinh_chat = array('Trả dần', 'Trả liền');

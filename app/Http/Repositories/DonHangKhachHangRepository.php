@@ -160,7 +160,7 @@ class DonHangKhachHangRepository
                              ->first();
             $tong_so_met = $tong_so_met->tong_so_met;
 
-            if ($tong_so_met_da_giao == $tong_so_met)
+            if ($tong_so_met_da_giao >= $tong_so_met)
             {
                 $sql = 'UPDATE don_hang_khach_hang
                         SET tinh_trang = "Hoàn thành"
