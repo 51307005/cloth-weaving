@@ -46,6 +46,24 @@ class DonHangKhachHang
         });
     }
 
+    public function update()
+    {
+        return DB::transaction(function() {
+            DB::table('don_hang_khach_hang')
+              ->where('da_xoa', '=', 0)
+              ->where('id', '=', $this->id)
+              ->update([
+                  'id_khach_hang' => $this->id_khach_hang,
+                  'id_loai_vai' => $this->id_loai_vai,
+                  'id_mau' => $this->id_mau,
+                  'kho' => $this->kho,
+                  'tong_so_met' => $this->tong_so_met,
+                  'han_chot' => $this->han_chot,
+                  'ngay_gio_dat_hang' => $this->ngay_gio_dat_hang
+                ]);
+        });
+    }
+
     function getId()
     {
         return $this->id;

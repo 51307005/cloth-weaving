@@ -336,4 +336,19 @@ class HoaDonXuatRepository
 
         $hoa_don_xuat->update();
     }
+
+    public function updateKhachHang_LoaiVai_Mau_KhoChoCacHoaDonXuatThuocDonHangKhachHang($id_don_hang_khach_hang, $id_khach_hang, $id_loai_vai, $id_mau, $kho)
+    {
+        return DB::transaction(function() use ($id_don_hang_khach_hang, $id_khach_hang, $id_loai_vai, $id_mau, $kho) {
+            DB::table('hoa_don_xuat')
+              ->where('da_xoa', '=', 0)
+              ->where('id_don_hang_khach_hang', '=', $id_don_hang_khach_hang)
+              ->update([
+                  'id_khach_hang' => $id_khach_hang,
+                  'id_loai_vai' => $id_loai_vai,
+                  'id_mau' => $id_mau,
+                  'kho' => $kho
+                ]);
+        });
+    }
 }

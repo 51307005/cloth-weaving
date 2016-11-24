@@ -147,6 +147,15 @@ class DonHangKhachHangRepository
         return $listIdDonHangKhachHangChuaHoanThanh_Moi;
     }
 
+    public function getDanhSachIdDonHangKhachHang()
+    {
+        $list_id_don_hang_khach_hang = DB::table('don_hang_khach_hang')
+                                         ->select('id')
+                                         ->where('da_xoa', '=', 0)
+                                         ->get();
+        return $list_id_don_hang_khach_hang;
+    }
+
     public function updateTinhTrangDonHangKhachHang($id_don_hang_khach_hang, $tong_so_met_da_giao)
     {
         if ($tong_so_met_da_giao == 0)
@@ -233,5 +242,36 @@ class DonHangKhachHangRepository
         $don_hang_khach_hang->ngay_gio_dat_hang = $ngay_gio_dat_hang;
 
         $don_hang_khach_hang->insert();
+    }
+
+    public function capNhatDonHangKhachHang(Request $request)
+    {
+        // Format lại cho "ngay_gio_dat_hang"
+        $ngay_gio_dat_hang = $request->get('ngay_gio_dat_hang');
+        $ngay_gio_dat_hang = date('Y-m-d H:i:s', strtotime($ngay_gio_dat_hang));
+
+        // Format lại cho "han_chot"
+        $han_chot = $request->get('han_chot');
+        if ($han_chot == '')
+        {
+            $han_chot = null;
+        }
+        else
+        {
+            $han_chot = date('Y-m-d', strtotime($han_chot));
+        }
+
+        // Cập nhật đơn hàng khách hàng
+        $don_hang_khach_hang = new DonHangKhachHang();
+        $don_hang_khach_hang->id = (int)($request->get('idDonHangKhachHang'));
+        $don_hang_khach_hang->id_khach_hang = (int)($request->get('id_khach_hang'));
+        $don_hang_khach_hang->id_loai_vai = (int)($request->get('id_loai_vai'));
+        $don_hang_khach_hang->id_mau = (int)($request->get('id_mau'));
+        $don_hang_khach_hang->kho = (float)($request->get('kho'));
+        $don_hang_khach_hang->tong_so_met = (int)($request->get('tong_so_met'));
+        $don_hang_khach_hang->han_chot = $han_chot;
+        $don_hang_khach_hang->ngay_gio_dat_hang = $ngay_gio_dat_hang;
+
+        $don_hang_khach_hang->update();
     }
 }

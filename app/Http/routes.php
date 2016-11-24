@@ -284,3 +284,67 @@ Route::post('/he_thong_quan_ly/ban_hang/cap_nhat_don_hang_khach_hang/{id_don_han
     'uses' => 'DonHangKhachHangController@postCapNhatDonHangKhachHang'
     ]);
 ////////// END ĐƠN HÀNG KHÁCH HÀNG //////////
+
+////////// KHÁCH HÀNG //////////
+Route::get('/he_thong_quan_ly/ban_hang/khach_hang', [
+    'as' => 'route_get_khach_hang',
+    'uses' => 'KhachHangController@getKhachHang'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/khach_hang', [
+    'as' => 'route_post_khach_hang',
+    'uses' => 'KhachHangController@postKhachHang'
+    ]);
+
+Route::get('/he_thong_quan_ly/ban_hang/them_khach_hang', [
+    'as' => 'route_get_them_khach_hang',
+    'uses' => 'KhachHangController@getThemKhachHang'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/them_khach_hang', [
+    'as' => 'route_post_them_khach_hang',
+    'uses' => 'KhachHangController@postThemKhachHang'
+    ]);
+
+Route::get('/he_thong_quan_ly/ban_hang/cap_nhat_khach_hang/{id_khach_hang?}', [
+    'as' => 'route_get_cap_nhat_khach_hang',
+    'uses' => 'KhachHangController@getCapNhatKhachHang'
+    ]);
+
+Route::post('/he_thong_quan_ly/ban_hang/cap_nhat_khach_hang/{id_khach_hang}', [
+    'as' => 'route_post_cap_nhat_khach_hang',
+    'uses' => 'KhachHangController@postCapNhatKhachHang'
+    ]);
+////////// END KHÁCH HÀNG //////////
+
+////////// LÔ NHUỘM //////////
+Route::get('/he_thong_quan_ly/san_xuat/lo_nhuom', [
+    'as' => 'route_get_lo_nhuom',
+    'uses' => 'LoNhuomController@getLoNhuom'
+    ]);
+
+Route::post('/he_thong_quan_ly/san_xuat/lo_nhuom', [
+    'as' => 'route_post_lo_nhuom',
+    'uses' => 'LoNhuomController@postLoNhuom'
+    ]);
+
+Route::get('/he_thong_quan_ly/san_xuat/them_lo_nhuom', [
+    'as' => 'route_get_them_lo_nhuom',
+    'uses' => 'LoNhuomController@getThemLoNhuom'
+    ]);
+
+Route::post('/he_thong_quan_ly/san_xuat/them_lo_nhuom', [
+    'as' => 'route_post_them_lo_nhuom',
+    'uses' => 'LoNhuomController@postThemLoNhuom'
+    ]);
+
+Route::get('/he_thong_quan_ly/san_xuat/cap_nhat_lo_nhuom/{id_lo_nhuom?}', [
+    'as' => 'route_get_cap_nhat_lo_nhuom',
+    'uses' => 'LoNhuomController@getCapNhatLoNhuom'
+    ]);
+
+Route::post('/he_thong_quan_ly/san_xuat/cap_nhat_lo_nhuom/{id_lo_nhuom}', [
+    'as' => 'route_post_cap_nhat_lo_nhuom',
+    'uses' => 'LoNhuomController@postCapNhatLoNhuom'
+    ]);
+////////// END LÔ NHUỘM //////////

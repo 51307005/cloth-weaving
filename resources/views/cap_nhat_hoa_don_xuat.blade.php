@@ -82,7 +82,7 @@
                             <!-- END FORM CHỌN MÃ HÓA ĐƠN XUẤT -->
                             @if (isset($errorMessage))
                                 <!-- ERROR MESSAGES -->
-                                <div id="error_messages" class="alert alert-info" style="text-align:center;color:red;margin-top:12px;margin-left:12px;">
+                                <div id="error_messages" class="alert alert-info" style="text-align:center;color:red;margin-top:12px;margin-left:12px;margin-right:12px;">
                                     {{ $errorMessage }}
                                 </div>
                                 <!-- END ERROR MESSAGES -->
