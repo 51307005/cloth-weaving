@@ -58,68 +58,72 @@
                                 <input type="button" value="Thêm hóa đơn" onclick="themHoaDon()">&nbsp;
                                 <input type="button" value="Cập nhật hóa đơn" onclick="capNhatHoaDon()">
                             </div>
-                            <!-- FORM XÓA HÓA ĐƠN XUẤT -->
-                            {!! Form::open(array('route' => 'route_post_hoa_don_xuat', 'method' => 'post', 'id' => 'frm_xoa_hoa_don_xuat')) !!}
-                                <input type="hidden" id="list_id_hoa_don_xuat_muon_xoa" name="list_id_hoa_don_xuat_muon_xoa" value="">
-                            {!! Form::close() !!}
-                            <!-- END FORM XÓA HÓA ĐƠN XUẤT -->
-                            <!-- PHÂN TRANG -->
-                            <div id="phan_trang" style="margin-top:8px;margin-left:10px;">
-                                {!! $list_hoa_don_xuat->render() !!}
-                            </div>
-                            <!-- END PHÂN TRANG -->
-                            <!-- LIST HÓA ĐƠN XUẤT -->
-                            <div id="list_hoa_don_xuat" style="margin-top:5px;margin-bottom:15px;margin-left:10px;">
-                                <table id="tbl_list_hoa_don_xuat" border="1px solid black" style="border-collapse:collapse;">
-                                    <tr style="text-align:center;font-weight:bold;">
-                                        <td style="width:55px;">Mã hóa đơn xuất</td>
-                                        <td style="width:55px;">Mã đơn hàng khách hàng</td>
-                                        <td style="width:125px;">Khách hàng</td>
-                                        <td style="width:115px;">Loại vải</td>
-                                        <td style="width:50px;">Màu</td>
-                                        <td style="width:0px;">Khổ (m)</td>
-                                        <td style="width:50px;">Tổng số cây vải</td>
-                                        <td style="width:55px;">Tổng số mét</td>
-                                        <td style="width:92px;">Tổng tiền (VNĐ)</td>
-                                        <td style="width:60px;">Kho</td>
-                                        <td style="width:{{ ($showButtonXoa == true)?83:118 }}px;">Nhân viên xuất hóa đơn</td>
-                                        <td style="width:0px;">Ngày giờ xuất hóa đơn</td>
-                                        <td style="width:{{ ($showButtonXoa == true)?0:61 }}px;">Tính chất</td>
-                                        @if ($showButtonXoa == true)
-                                            <td style="width:0px;">
-                                                <input type="button" value="Xóa" onclick="xoa()">
-                                            </td>
-                                        @endif
-                                    </tr>
-                                    @foreach ($list_hoa_don_xuat as $hoa_don_xuat)
-                                        <tr>
-                                            <td style="text-align:right;">
-                                                <a href="{{ route('route_get_cap_nhat_hoa_don_xuat', ['id_hoa_don_xuat' => $hoa_don_xuat->id]) }}">
-                                                    {{ $hoa_don_xuat->id }}
-                                                </a>
-                                            </td>
-                                            <td style="text-align:right;">{{ $hoa_don_xuat->id_don_hang_khach_hang }}</td>
-                                            <td style="text-align:left;">{{ $hoa_don_xuat->ten_khach_hang }}</td>
-                                            <td style="text-align:left;">{{ $hoa_don_xuat->ten_loai_vai }}</td>
-                                            <td style="text-align:left;">{{ $hoa_don_xuat->ten_mau }}</td>
-                                            <td style="text-align:right;">{{ number_format($hoa_don_xuat->kho, 1, ',', '.') }}</td>
-                                            <td style="text-align:right;">{{ number_format($hoa_don_xuat->tong_so_cay_vai, 0, ',', '.') }}</td>
-                                            <td style="text-align:right;">{{ number_format($hoa_don_xuat->tong_so_met, 0, ',', '.') }}</td>
-                                            <td style="text-align:right;">{{ number_format($hoa_don_xuat->tong_tien, 0, ',', '.') }}</td>
-                                            <td style="text-align:left;">{{ $hoa_don_xuat->ten_kho }}</td>
-                                            <td style="text-align:left;">{{ $hoa_don_xuat->ten_nhan_vien_xuat }}</td>
-                                            <td style="text-align:center;">{{ $hoa_don_xuat->ngay_gio_xuat_hoa_don }}</td>
-                                            <td style="text-align:center;">{{ $hoa_don_xuat->tinh_chat }}</td>
+                            @if (isset($message))
+                                <div style="text-align:center;color:red;margin-top:25px;margin-bottom:25px;">{{ $message }}</div>
+                            @else
+                                <!-- FORM XÓA HÓA ĐƠN XUẤT -->
+                                {!! Form::open(array('route' => 'route_post_hoa_don_xuat', 'method' => 'post', 'id' => 'frm_xoa_hoa_don_xuat')) !!}
+                                    <input type="hidden" id="list_id_hoa_don_xuat_muon_xoa" name="list_id_hoa_don_xuat_muon_xoa" value="">
+                                {!! Form::close() !!}
+                                <!-- END FORM XÓA HÓA ĐƠN XUẤT -->
+                                <!-- PHÂN TRANG -->
+                                <div id="phan_trang" style="margin-top:8px;margin-left:10px;">
+                                    {!! $list_hoa_don_xuat->render() !!}
+                                </div>
+                                <!-- END PHÂN TRANG -->
+                                <!-- LIST HÓA ĐƠN XUẤT -->
+                                <div id="list_hoa_don_xuat" style="margin-top:5px;margin-bottom:15px;margin-left:10px;">
+                                    <table id="tbl_list_hoa_don_xuat" border="1px solid black" style="border-collapse:collapse;">
+                                        <tr style="text-align:center;font-weight:bold;">
+                                            <td style="width:55px;">Mã hóa đơn xuất</td>
+                                            <td style="width:55px;">Mã đơn hàng khách hàng</td>
+                                            <td style="width:125px;">Khách hàng</td>
+                                            <td style="width:115px;">Loại vải</td>
+                                            <td style="width:50px;">Màu</td>
+                                            <td style="width:0px;">Khổ (m)</td>
+                                            <td style="width:50px;">Tổng số cây vải</td>
+                                            <td style="width:55px;">Tổng số mét</td>
+                                            <td style="width:92px;">Tổng tiền (VNĐ)</td>
+                                            <td style="width:60px;">Kho</td>
+                                            <td style="width:{{ ($showButtonXoa == true)?83:118 }}px;">Nhân viên xuất hóa đơn</td>
+                                            <td style="width:0px;">Ngày giờ xuất hóa đơn</td>
+                                            <td style="width:{{ ($showButtonXoa == true)?0:61 }}px;">Tính chất</td>
                                             @if ($showButtonXoa == true)
-                                                <td style="text-align:center;">
-                                                    <input type="checkbox" value="{{ $hoa_don_xuat->id }}">
+                                                <td style="width:0px;">
+                                                    <input type="button" value="Xóa" onclick="xoa()">
                                                 </td>
                                             @endif
                                         </tr>
-                                    @endforeach
-                                </table>
-                            </div>
-                            <!-- END LIST HÓA ĐƠN XUẤT -->
+                                        @foreach ($list_hoa_don_xuat as $hoa_don_xuat)
+                                            <tr>
+                                                <td style="text-align:right;">
+                                                    <a href="{{ route('route_get_cap_nhat_hoa_don_xuat', ['id_hoa_don_xuat' => $hoa_don_xuat->id]) }}">
+                                                        {{ $hoa_don_xuat->id }}
+                                                    </a>
+                                                </td>
+                                                <td style="text-align:right;">{{ $hoa_don_xuat->id_don_hang_khach_hang }}</td>
+                                                <td style="text-align:left;">{{ $hoa_don_xuat->ten_khach_hang }}</td>
+                                                <td style="text-align:left;">{{ $hoa_don_xuat->ten_loai_vai }}</td>
+                                                <td style="text-align:left;">{{ $hoa_don_xuat->ten_mau }}</td>
+                                                <td style="text-align:right;">{{ number_format($hoa_don_xuat->kho, 1, ',', '.') }}</td>
+                                                <td style="text-align:right;">{{ number_format($hoa_don_xuat->tong_so_cay_vai, 0, ',', '.') }}</td>
+                                                <td style="text-align:right;">{{ number_format($hoa_don_xuat->tong_so_met, 0, ',', '.') }}</td>
+                                                <td style="text-align:right;">{{ number_format($hoa_don_xuat->tong_tien, 0, ',', '.') }}</td>
+                                                <td style="text-align:left;">{{ $hoa_don_xuat->ten_kho }}</td>
+                                                <td style="text-align:left;">{{ $hoa_don_xuat->ten_nhan_vien_xuat }}</td>
+                                                <td style="text-align:center;">{{ $hoa_don_xuat->ngay_gio_xuat_hoa_don }}</td>
+                                                <td style="text-align:center;">{{ $hoa_don_xuat->tinh_chat }}</td>
+                                                @if ($showButtonXoa == true)
+                                                    <td style="text-align:center;">
+                                                        <input type="checkbox" value="{{ $hoa_don_xuat->id }}">
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                </div>
+                                <!-- END LIST HÓA ĐƠN XUẤT -->
+                            @endif
                         </div>
                         <!-- END MAIN CONTENT -->
                     </div>

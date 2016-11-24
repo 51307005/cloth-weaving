@@ -10,8 +10,10 @@ class KhoRepository
     public function getDanhSachKhoMoc()
     {
         $list_kho_moc = DB::table('kho')
-                          ->where('da_xoa', '=', 0)
-                          ->where('ten', 'like', '%Kho mộc%')
+                          ->leftJoin('nhan_vien', 'kho.id_nhan_vien_quan_ly', '=', 'nhan_vien.id')
+                          ->select('kho.*', 'nhan_vien.ho_ten as ten_nhan_vien_quan_ly')
+                          ->where('kho.da_xoa', '=', 0)
+                          ->where('kho.ten', 'like', '%Kho mộc%')
                           ->get();
         return $list_kho_moc;
     }
@@ -42,8 +44,10 @@ class KhoRepository
     public function getDanhSachKhoThanhPham()
     {
         $list_kho_thanh_pham = DB::table('kho')
-                                 ->where('da_xoa', '=', 0)
-                                 ->where('ten', 'like', '%Kho thành phẩm%')
+                                 ->leftJoin('nhan_vien', 'kho.id_nhan_vien_quan_ly', '=', 'nhan_vien.id')
+                                 ->select('kho.*', 'nhan_vien.ho_ten as ten_nhan_vien_quan_ly')
+                                 ->where('kho.da_xoa', '=', 0)
+                                 ->where('kho.ten', 'like', '%Kho thành phẩm%')
                                  ->get();
         return $list_kho_thanh_pham;
     }

@@ -15,13 +15,17 @@
                 margin: 0px;
             }
 
-            #tbl_thong_ke_don_hang_khach_hang td {
-                padding-left: 5px;
+            #tbl_thong_ke_don_hang_khach_hang{
+                width: 200px;
             }
 
             #tbl_list_don_hang_khach_hang td {
                 padding-left: 5px;
                 padding-right: 5px;
+            }
+
+            .display_none {
+                display: none;
             }
         </style>
     </head>
@@ -58,119 +62,115 @@
                         <!-- MAIN CONTENT -->
                         <div id="main_content">
                             <div style="margin-left:20px;margin-top:18px;">
-                                <h2 style="text-align:center;margin-bottom:0px;">Danh sách đơn hàng khách hàng</h2>
-                                <div id="button_group" style="float:left;width:40%;">
+                                <h2 style="text-align:center;margin-bottom:20px;">Danh sách đơn hàng khách hàng</h2>
+                                <div id="button_group" style="float:left;width:45%;">
                                     <input type="button" value="Xem tất cả đơn hàng" onclick="xemTatCaDonHang()">
                                     <input type="button" value="Thêm đơn hàng" onclick="themDonHang()" style="margin-left:5px;margin-right:5px;">
                                     <input type="button" value="Cập nhật đơn hàng" onclick="capNhatDonHang()">
                                 </div>
-                                <div id="loc_don_hang_theo_khach_hang" style="float:right;width:58%;">
-                                    Lọc các đơn hàng mới hoặc chưa hoàn thành của khách hàng: 
-                                    <select id="idKhachHang" name="idKhachHang">
-                                        @foreach ($list_khach_hang as $khach_hang)
-                                            <option value="{{ $khach_hang->id }}" {{ (isset($khach_hang_duoc_chon) && ($khach_hang->id == $khach_hang_duoc_chon->id))?'selected':'' }}>
-                                                {{ $khach_hang->ho_ten }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <input type="button" value="Lọc" onclick="loc()">
+                                <!-- FORM SUBMIT -->
+                                <div id="loc_don_hang_theo_khach_hang" style="float:right;width:53%;">
+                                    {!! Form::open(array('route' => 'route_post_don_hang_khach_hang', 'method' => 'post', 'id' => 'frm_chon_khach_hang')) !!}
+                                        <div style="float:left;width:58%;">
+                                            Lọc các đơn hàng mới hoặc chưa hoàn thành của khách hàng:
+                                        </div>
+                                        <div style="float:left;">
+                                            <select id="idKhachHang" name="idKhachHang" style="width:150px;margin-left:2px;">
+                                                @foreach ($list_khach_hang as $khach_hang)
+                                                    <option value="{{ $khach_hang->id }}" {{ (isset($khach_hang_duoc_chon) && ($khach_hang->id == $khach_hang_duoc_chon->id))?'selected':'' }}>
+                                                        {{ $khach_hang->ho_ten }}
+                                                    </option>
+                                                @endforeach
+                                            </select>&nbsp;
+                                            <input type="button" value="Lọc" onclick="loc()">
+                                        </div>
+                                        <div style="clear:both;"></div>
+                                        <input type="hidden" id="xem_tat_ca_don_hang" name="xem_tat_ca_don_hang" value="false">
+                                        <input type="hidden" id="loc_theo_khach_hang" name="loc_theo_khach_hang" value="false">
+                                        <input type="hidden" id="xoa" name="xoa" value="false">
+                                        <input type="hidden" id="list_id_don_hang_khach_hang_muon_xoa" name="list_id_don_hang_khach_hang_muon_xoa" value="">
+                                    {!! Form::close() !!}
                                 </div>
+                                <!-- END FORM SUBMIT -->
                                 <div style="clear:both;"></div>
                                 <div id="thong_ke_don_hang_khach_hang">
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    <h3 style="margin-top:0px;margin-bottom:5px;">{{ $kho_moc_duoc_chon->ten }}</h3>
+                                    @if (isset($khach_hang_duoc_chon))
+                                        <h3 style="margin-top:5px;margin-bottom:10px;">Khách hàng: {{ $khach_hang_duoc_chon->ho_ten }}</h3>
+                                    @endif
                                     @if (isset($message))
-                                        <div style="text-align:center;color:red;margin-top:25px;">{{ $message }}</div>
+                                        <div style="text-align:center;color:red;margin-top:25px;margin-bottom:25px;">{{ $message }}</div>
                                     @else
-                                        <table id="tbl_thong_ke_kho_moc">
-                                            <tr>
-                                                <td style="padding-left:0px;">
-                                                    Tổng số cây mộc{{ isset($loai_vai_duoc_chon)?' '.$loai_vai_duoc_chon->ten:'' }}{{ isset($tong_so_cay_moc)?'':' tồn kho' }}:
-                                                </td>
-                                                <td>
-                                                    {{ isset($tong_so_cay_moc)?$tong_so_cay_moc:$tong_so_cay_moc_ton_kho }} cây
-                                                </td>
-                                            </tr>
-                                            @if (!isset($loai_vai_duoc_chon))
-                                                @foreach ($soCayMocTheoLoaiVai as $element)
-                                                    <tr>
-                                                        <td style="padding-left:0px;">Loại vải {{ $element->ten_loai_vai }}:</td>
-                                                        <td>{{ $element->so_cay_moc }} cây</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                        <table id="tbl_thong_ke_don_hang_khach_hang">
+                                            @foreach ($tong_so_don_hang_khach_hang_theo_tinh_trang as $tinh_trang => $tong_so_don_hang_khach_hang)
+                                                <tr>
+                                                    <td>Đơn hàng {{ ($tinh_trang == 'Hoàn thành')?'đã ':'' }}{{ $tinh_trang }}:</td>
+                                                    <td>{{ number_format($tong_so_don_hang_khach_hang, 0, ',', '.') }}</td>
+                                                </tr>
+                                            @endforeach
                                         </table>
                                     @endif
                                 </div>
+                                <script>
+                                    @if (!isset($xem_tat_ca_don_hang))
+                                        $('#tbl_thong_ke_don_hang_khach_hang tr:last').addClass('display_none');
+                                    @endif
+                                </script>
                                 @if (!isset($message))
                                     <!-- PHÂN TRANG -->
                                     <div id="phan_trang" style="margin-top:5px;">
-                                        {!! $list_cay_moc->render() !!}
+                                        {!! $listDonHangKhachHang->render() !!}
                                     </div>
                                     <!-- END PHÂN TRANG -->
-                                    <!-- LIST CÂY MỘC -->
-                                    <div id="list_cay_moc" style="margin-top:5px;margin-bottom:15px;">
-                                        <table id="tbl_list_cay_moc" border="1px solid black" style="border-collapse:collapse;">
+                                    <!-- LIST ĐƠN HÀNG KHÁCH HÀNG -->
+                                    <div id="list_don_hang_khach_hang" style="margin-top:5px;margin-bottom:15px;">
+                                        <table id="tbl_list_don_hang_khach_hang" border="1px solid black" style="border-collapse:collapse;">
                                             <tr style="text-align:center;font-weight:bold;">
-                                                <td style="width:59px;">Mã cây mộc</td>
-                                                @if (!isset($loai_vai_duoc_chon))
-                                                    <td style="width:111px;">Loại vải</td>
+                                                <td style="width:105px;">Mã đơn hàng khách hàng</td>
+                                                @if (!isset($khach_hang_duoc_chon))
+                                                    <td style="width:150px;">Khách hàng</td>
                                                 @endif
-                                                <td style="width:0px;">Số mét</td>
-                                                <td style="width:110px;">Nhân viên dệt</td>
-                                                <td style="width:63px;">Mã máy dệt</td>
-                                                <td style="width:143px;">Ngày giờ dệt</td>
-                                                <td style="width:143px;">Ngày giờ nhập kho</td>
-                                                @if (isset($tong_so_cay_moc))
-                                                    <td style="width:76px;">Mã phiếu xuất mộc</td>
-                                                    <td style="width:76px;">Tình trạng</td>
-                                                    <td style="width:0px;">Mã lô nhuộm</td>
-                                                @endif
+                                                <td style="width:125px;">Loại vải</td>
+                                                <td style="width:0px;">Màu</td>
+                                                <td style="width:0px;">Khổ (m)</td>
+                                                <td style="width:60px;">Tổng số mét</td>
+                                                <td style="width:85px;">Hạn chót</td>
+                                                <td style="width:0px;">Ngày giờ đặt hàng</td>
+                                                <td style="width:65px;">Đã giao (m)</td>
+                                                <td style="width:125px;">Tình trạng</td>
                                                 @if ($showButtonXoa == true)
                                                     <td>
                                                         <input type="button" value="Xóa" onclick="xoa()">
                                                     </td>
                                                 @endif
                                             </tr>
-                                            @foreach ($list_cay_moc as $cay_moc)
+                                            @foreach ($listDonHangKhachHang as $don_hang_khach_hang)
                                                 <tr style="text-align:center;">
                                                     <td style="text-align:right;">
-                                                        <a href="{{ route('route_get_cap_nhat_cay_moc', ['id_cay_moc' => $cay_moc->id]) }}">
-                                                            {{ $cay_moc->id }}
+                                                        <a href="{{ route('route_get_cap_nhat_don_hang_khach_hang', ['id_don_hang_khach_hang' => $don_hang_khach_hang->id]) }}">
+                                                            {{ $don_hang_khach_hang->id }}
                                                         </a>
                                                     </td>
-                                                    @if (!isset($loai_vai_duoc_chon))
-                                                        <td style="text-align:left;">{{ $cay_moc->ten_loai_vai }}</td>
+                                                    @if (!isset($khach_hang_duoc_chon))
+                                                        <td style="text-align:left;">{{ $don_hang_khach_hang->ten_khach_hang }}</td>
                                                     @endif
-                                                    <td style="text-align:right;">{{ number_format($cay_moc->so_met, 0, ',', '.') }}</td>
-                                                    <td style="text-align:left;">{{ $cay_moc->ten_nhan_vien_det }}</td>
-                                                    <td style="text-align:right;">{{ $cay_moc->ma_may_det }}</td>
-                                                    <td>{{ $cay_moc->ngay_gio_det }}</td>
-                                                    <td>{{ $cay_moc->ngay_gio_nhap_kho }}</td>
-                                                    @if (isset($tong_so_cay_moc))
-                                                        <td style="text-align:right;">{{ $cay_moc->id_phieu_xuat_moc }}</td>
-                                                        <td style="text-align:center;">{{ $cay_moc->tinh_trang }}</td>
-                                                        <td style="text-align:right;">{{ $cay_moc->id_lo_nhuom }}</td>
-                                                    @endif
+                                                    <td style="text-align:left;">{{ $don_hang_khach_hang->ten_loai_vai }}</td>
+                                                    <td style="text-align:left;">{{ $don_hang_khach_hang->ten_mau }}</td>
+                                                    <td style="text-align:right;">{{ number_format($don_hang_khach_hang->kho, 1, ',', '.') }}</td>
+                                                    <td style="text-align:right;">{{ number_format($don_hang_khach_hang->tong_so_met, 0, ',', '.') }}</td>
+                                                    <td>{{ $don_hang_khach_hang->han_chot }}</td>
+                                                    <td>{{ $don_hang_khach_hang->ngay_gio_dat_hang }}</td>
+                                                    <td style="text-align:right;">{{ number_format($don_hang_khach_hang->tong_so_met_da_giao, 0, ',', '.') }}</td>
+                                                    <td style="text-align:left;">{{ $don_hang_khach_hang->tinh_trang }}</td>
                                                     @if ($showButtonXoa == true)
                                                         <td>
-                                                            <input type="checkbox" value="{{ $cay_moc->id }}">
+                                                            <input type="checkbox" value="{{ $don_hang_khach_hang->id }}">
                                                         </td>
                                                     @endif
                                                 </tr>
                                             @endforeach
                                         </table>
                                     </div>
-                                    <!-- END LIST CÂY MỘC -->
+                                    <!-- END LIST ĐƠN HÀNG KHÁCH HÀNG -->
                                 @endif
                             </div>
                         </div>
@@ -188,71 +188,69 @@
             $('ul.pagination > li:last > span').text('Next');
             $('ul.pagination > li:last > a').text('Next');
 
-            function xemTatCaCayMoc()
+            function xemTatCaDonHang()
             {
-                $('#xem_tat_ca_cay_moc').val('true');
+                $('#xem_tat_ca_don_hang').val('true');
 
                 // Submit
-                //var url = "{{ route('route_post_kho_moc') }}";
-                //$('#frm_chon_kho_moc').attr('action', url);
-                $('#frm_chon_kho_moc').submit();
+                //var url = "{{ route('route_post_don_hang_khach_hang') }}";
+                //$('#frm_chon_khach_hang').attr('action', url);
+                $('#frm_chon_khach_hang').submit();
             }
 
-            function nhapMoc()
+            function themDonHang()
             {
-                // Chuyển tới trang Nhập mộc
-                var url = "{{ route('route_get_nhap_moc') }}";
+                // Chuyển tới trang Thêm đơn hàng khách hàng
+                var url = "{{ route('route_get_them_don_hang_khach_hang') }}";
                 window.location.href = url;
             }
 
-            function capNhatCayMoc()
+            function capNhatDonHang()
             {
-                // Chuyển tới trang Cập nhật cây mộc
-                var url = "{{ route('route_get_cap_nhat_cay_moc') }}";
+                // Chuyển tới trang Cập nhật đơn hàng khách hàng
+                var url = "{{ route('route_get_cap_nhat_don_hang_khach_hang') }}";
                 window.location.href = url;
             }
 
             function loc()
             {
-                $('#loc_theo_loai_vai').val('true');
-                var id_loai_vai = $('#idLoaiVai').val();
-                $('#id_loai_vai').val(id_loai_vai);
+                $('#loc_theo_khach_hang').val('true');
 
                 // Submit
-                //var url = "{{ route('route_post_kho_moc') }}";
-                //$('#frm_chon_kho_moc').attr('action', url);
-                $('#frm_chon_kho_moc').submit();
+                //var url = "{{ route('route_post_don_hang_khach_hang') }}";
+                //$('#frm_chon_khach_hang').attr('action', url);
+                $('#frm_chon_khach_hang').submit();
             }
 
             function xoa()
             {
-                // Không có cây mộc nào được chọn
+                // Không có đơn hàng khách hàng nào được chọn
                 if ($('input[type=checkbox]:checked').length == 0)
                 {
-                    alert('Bạn chưa chọn cây mộc nào để xóa !');
+                    alert('Bạn chưa chọn đơn hàng khách hàng nào để xóa !');
                     return false;
                 }
-                else    // Có ít nhất 1 cây mộc được chọn
+                else    // Có ít nhất 1 đơn hàng khách hàng được chọn
                 {
                     var answer = confirm('Bạn chắc chắn muốn xóa ?');
                     if (answer == true)
                     {
-                        var id_cay_moc_muon_xoa;
-                        var list_id_cay_moc_muon_xoa = '';
+                        var id_don_hang_khach_hang_muon_xoa;
+                        var list_id_don_hang_khach_hang_muon_xoa = '';
 
-                        // Thiết lập chuỗi danh sách id cây mộc muốn xóa
+                        // Thiết lập chuỗi danh sách id đơn hàng khách hàng muốn xóa
                         $('input[type=checkbox]:checked').each(function() {
-                            id_cay_moc_muon_xoa = $(this).val();
-                            list_id_cay_moc_muon_xoa += id_cay_moc_muon_xoa + ',';
+                            id_don_hang_khach_hang_muon_xoa = $(this).val();
+                            list_id_don_hang_khach_hang_muon_xoa += id_don_hang_khach_hang_muon_xoa + ',';
                         });
-                        list_id_cay_moc_muon_xoa = list_id_cay_moc_muon_xoa.substring(0, list_id_cay_moc_muon_xoa.length - 1);
+                        list_id_don_hang_khach_hang_muon_xoa = list_id_don_hang_khach_hang_muon_xoa.substring(0, list_id_don_hang_khach_hang_muon_xoa.length - 1);
 
                         // Submit
                         $('#xoa').val('true');
-                        $('#list_id_cay_moc_muon_xoa').val(list_id_cay_moc_muon_xoa);
-                        //var url = "{{ route('route_post_kho_moc') }}";
-                        //$('#frm_chon_kho_moc').attr('action', url);
-                        $('#frm_chon_kho_moc').submit();
+                        $('#list_id_don_hang_khach_hang_muon_xoa').val(list_id_don_hang_khach_hang_muon_xoa);
+                        //var url = "{{ route('route_post_don_hang_khach_hang') }}";
+                        //$('#frm_chon_khach_hang').attr('action', url);
+                        $('#frm_chon_khach_hang').submit();
                     }
                     else
                     {

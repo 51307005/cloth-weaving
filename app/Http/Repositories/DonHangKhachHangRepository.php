@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use DB;
+use Illuminate\Http\Request;
 use App\Http\Entities\DonHangKhachHang;
 
 class DonHangKhachHangRepository
@@ -117,18 +118,21 @@ class DonHangKhachHangRepository
                       ->get();
         }
 
-        foreach ($temp as $tinhTrang)
+        if (count($temp) != 0)
         {
-            foreach ($tong_so_don_hang_khach_hang_theo_tinh_trang as $tinh_trang => &$tong_so_don_hang_khach_hang)
+            foreach ($temp as $tinhTrang)
             {
-                if ($tinh_trang == $tinhTrang->ten_tinh_trang)
+                foreach ($tong_so_don_hang_khach_hang_theo_tinh_trang as $tinh_trang => &$tong_so_don_hang_khach_hang)
                 {
-                    $tong_so_don_hang_khach_hang = $tinhTrang->tong_so_don_hang_khach_hang;
-                    break;
+                    if ($tinh_trang == $tinhTrang->ten_tinh_trang)
+                    {
+                        $tong_so_don_hang_khach_hang = $tinhTrang->tong_so_don_hang_khach_hang;
+                        break;
+                    }
                 }
             }
+            unset($tong_so_don_hang_khach_hang);
         }
-        unset($tong_so_don_hang_khach_hang);
 
         return $tong_so_don_hang_khach_hang_theo_tinh_trang;
     }
@@ -177,5 +181,57 @@ class DonHangKhachHangRepository
         return DB::transaction(function() use ($sql) {
             DB::update($sql);
         });
+    }
+
+    public function deleteCacDonHangKhachHang($list_id_don_hang_khach_hang_muon_xoa)
+    {
+        return DB::transaction(function() use ($list_id_don_hang_khach_hang_muon_xoa) {
+            $sql = 'UPDATE don_hang_khach_hang
+                    SET da_xoa = 1
+                    WHERE id IN ('.$list_id_don_hang_khach_hang_muon_xoa.')';
+
+            DB::update($sql);
+        });
+    }
+
+    public function getIdDonHangKhachHangCuoiCung()
+    {
+        $id_don_hang_khach_hang_cuoi_cung = DB::table('don_hang_khach_hang')
+                                              ->select('id')
+                                              ->orderBy('id', 'desc')
+                                              ->first();
+        $id_don_hang_khach_hang_cuoi_cung = $id_don_hang_khach_hang_cuoi_cung->id;
+
+        return $id_don_hang_khach_hang_cuoi_cung;
+    }
+
+    public function themDonHangKhachHang(Request $request)
+    {
+        // Format lại cho "ngay_gio_dat_hang"
+        $ngay_gio_dat_hang = $request->get('ngay_gio_dat_hang');
+        $ngay_gio_dat_hang = date('Y-m-d H:i:s', strtotime($ngay_gio_dat_hang));
+
+        // Format lại cho "han_chot"
+        $han_chot = $request->get('han_chot');
+        if ($han_chot == '')
+        {
+            $han_chot = null;
+        }
+        else
+        {
+            $han_chot = date('Y-m-d', strtotime($han_chot));
+        }
+
+        // Thêm đơn hàng khách hàng
+        $don_hang_khach_hang = new DonHangKhachHang();
+        $don_hang_khach_hang->id_khach_hang = (int)($request->get('id_khach_hang'));
+        $don_hang_khach_hang->id_loai_vai = (int)($request->get('id_loai_vai'));
+        $don_hang_khach_hang->id_mau = (int)($request->get('id_mau'));
+        $don_hang_khach_hang->kho = (float)($request->get('kho'));
+        $don_hang_khach_hang->tong_so_met = (int)($request->get('tong_so_met'));
+        $don_hang_khach_hang->han_chot = $han_chot;
+        $don_hang_khach_hang->ngay_gio_dat_hang = $ngay_gio_dat_hang;
+
+        $don_hang_khach_hang->insert();
     }
 }

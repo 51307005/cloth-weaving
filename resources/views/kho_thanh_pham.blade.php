@@ -164,14 +164,14 @@
                                                         Tổng số cây thành phẩm{{ isset($tong_so_cay_thanh_pham)?'':' tồn kho' }}:
                                                     </td>
                                                     <td>
-                                                        {{ isset($tong_so_cay_thanh_pham)?$tong_so_cay_thanh_pham:$tong_so_cay_thanh_pham_ton_kho }} cây
+                                                        {{ isset($tong_so_cay_thanh_pham)?number_format($tong_so_cay_thanh_pham, 0, ',', '.'):number_format($tong_so_cay_thanh_pham_ton_kho, 0, ',', '.') }} cây
                                                     </td>
                                                 </tr>
                                                 @if (!isset($loai_vai_duoc_chon))
                                                     @foreach ($soCayThanhPhamTheoLoaiVai as $element)
                                                         <tr>
                                                             <td style="padding-left:0px;">Loại vải {{ $element->ten_loai_vai }}:</td>
-                                                            <td>{{ $element->so_cay_thanh_pham }} cây</td>
+                                                            <td>{{ number_format($element->so_cay_thanh_pham, 0, ',', '.') }} cây</td>
                                                         </tr>
                                                     @endforeach
                                                 @endif

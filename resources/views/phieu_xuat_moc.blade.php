@@ -58,54 +58,58 @@
                                 <input type="button" value="Thêm phiếu" onclick="themPhieu()">&nbsp;
                                 <input type="button" value="Cập nhật phiếu" onclick="capNhatPhieu()">
                             </div>
-                            <!-- FORM XÓA PHIẾU XUẤT MỘC -->
-                            {!! Form::open(array('route' => 'route_post_phieu_xuat_moc', 'method' => 'post', 'id' => 'frm_xoa_phieu_xuat_moc')) !!}
-                                <input type="hidden" id="list_id_phieu_xuat_moc_muon_xoa" name="list_id_phieu_xuat_moc_muon_xoa" value="">
-                            {!! Form::close() !!}
-                            <!-- END FORM XÓA PHIẾU XUẤT MỘC -->
-                            <!-- PHÂN TRANG -->
-                            <div id="phan_trang" style="margin-top:8px;margin-left:20px;">
-                                {!! $list_phieu_xuat_moc->render() !!}
-                            </div>
-                            <!-- END PHÂN TRANG -->
-                            <!-- LIST PHIẾU XUẤT MỘC -->
-                            <div id="list_phieu_xuat_moc" style="margin-top:5px;margin-bottom:15px;margin-left:20px;">
-                                <table id="tbl_list_phieu_xuat_moc" border="1px solid black" style="border-collapse:collapse;">
-                                    <tr style="text-align:center;font-weight:bold;">
-                                        <td>Mã phiếu xuất mộc</td>
-                                        <td>Tổng số cây mộc</td>
-                                        <td>Tổng số mét</td>
-                                        <td>Kho</td>
-                                        <td>Nhân viên xuất</td>
-                                        <td>Ngày giờ xuất kho</td>
-                                        @if ($showButtonXoa == true)
-                                            <td>
-                                                <input type="button" value="Xóa" onclick="xoa()">
-                                            </td>
-                                        @endif
-                                    </tr>
-                                    @foreach ($list_phieu_xuat_moc as $phieu_xuat_moc)
-                                        <tr>
-                                            <td style="text-align:right;">
-                                                <a href="{{ route('route_get_cap_nhat_phieu_xuat_moc', ['id_phieu_xuat_moc' => $phieu_xuat_moc->id]) }}">
-                                                    {{ $phieu_xuat_moc->id }}
-                                                </a>
-                                            </td>
-                                            <td style="text-align:right;">{{ number_format($phieu_xuat_moc->tong_so_cay_moc, 0, ',', '.') }}</td>
-                                            <td style="text-align:right;">{{ number_format($phieu_xuat_moc->tong_so_met, 0, ',', '.') }}</td>
-                                            <td style="text-align:left;">{{ $phieu_xuat_moc->ten_kho }}</td>
-                                            <td style="text-align:left;">{{ $phieu_xuat_moc->ten_nhan_vien_xuat }}</td>
-                                            <td style="text-align:center;">{{ $phieu_xuat_moc->ngay_gio_xuat_kho }}</td>
+                            @if (isset($message))
+                                <div style="text-align:center;color:red;margin-top:25px;">{{ $message }}</div>
+                            @else
+                                <!-- FORM XÓA PHIẾU XUẤT MỘC -->
+                                {!! Form::open(array('route' => 'route_post_phieu_xuat_moc', 'method' => 'post', 'id' => 'frm_xoa_phieu_xuat_moc')) !!}
+                                    <input type="hidden" id="list_id_phieu_xuat_moc_muon_xoa" name="list_id_phieu_xuat_moc_muon_xoa" value="">
+                                {!! Form::close() !!}
+                                <!-- END FORM XÓA PHIẾU XUẤT MỘC -->
+                                <!-- PHÂN TRANG -->
+                                <div id="phan_trang" style="margin-top:8px;margin-left:20px;">
+                                    {!! $list_phieu_xuat_moc->render() !!}
+                                </div>
+                                <!-- END PHÂN TRANG -->
+                                <!-- LIST PHIẾU XUẤT MỘC -->
+                                <div id="list_phieu_xuat_moc" style="margin-top:5px;margin-bottom:15px;margin-left:20px;">
+                                    <table id="tbl_list_phieu_xuat_moc" border="1px solid black" style="border-collapse:collapse;">
+                                        <tr style="text-align:center;font-weight:bold;">
+                                            <td>Mã phiếu xuất mộc</td>
+                                            <td>Tổng số cây mộc</td>
+                                            <td>Tổng số mét</td>
+                                            <td>Kho</td>
+                                            <td>Nhân viên xuất</td>
+                                            <td>Ngày giờ xuất kho</td>
                                             @if ($showButtonXoa == true)
-                                                <td style="text-align:center;">
-                                                    <input type="checkbox" value="{{ $phieu_xuat_moc->id }}">
+                                                <td>
+                                                    <input type="button" value="Xóa" onclick="xoa()">
                                                 </td>
                                             @endif
                                         </tr>
-                                    @endforeach
-                                </table>
-                            </div>
-                            <!-- END LIST PHIẾU XUẤT MỘC -->
+                                        @foreach ($list_phieu_xuat_moc as $phieu_xuat_moc)
+                                            <tr>
+                                                <td style="text-align:right;">
+                                                    <a href="{{ route('route_get_cap_nhat_phieu_xuat_moc', ['id_phieu_xuat_moc' => $phieu_xuat_moc->id]) }}">
+                                                        {{ $phieu_xuat_moc->id }}
+                                                    </a>
+                                                </td>
+                                                <td style="text-align:right;">{{ number_format($phieu_xuat_moc->tong_so_cay_moc, 0, ',', '.') }}</td>
+                                                <td style="text-align:right;">{{ number_format($phieu_xuat_moc->tong_so_met, 0, ',', '.') }}</td>
+                                                <td style="text-align:left;">{{ $phieu_xuat_moc->ten_kho }}</td>
+                                                <td style="text-align:left;">{{ $phieu_xuat_moc->ten_nhan_vien_xuat }}</td>
+                                                <td style="text-align:center;">{{ $phieu_xuat_moc->ngay_gio_xuat_kho }}</td>
+                                                @if ($showButtonXoa == true)
+                                                    <td style="text-align:center;">
+                                                        <input type="checkbox" value="{{ $phieu_xuat_moc->id }}">
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                </div>
+                                <!-- END LIST PHIẾU XUẤT MỘC -->
+                            @endif
                         </div>
                         <!-- END MAIN CONTENT -->
                     </div>

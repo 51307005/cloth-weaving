@@ -10,7 +10,9 @@ class MauRepository
     public function getDanhSachMau()
     {
         $list_mau = DB::table('mau')
-                      ->where('da_xoa', '=', 0)
+                      ->leftJoin('nhan_vien', 'mau.id_nhan_vien_pha_che', '=', 'nhan_vien.id')
+                      ->select('mau.*', 'nhan_vien.ho_ten as ten_nhan_vien_pha_che')
+                      ->where('mau.da_xoa', '=', 0)
                       ->get();
         return $list_mau;
     }

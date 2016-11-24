@@ -55,7 +55,7 @@ class KhoMocController extends HelperController
                                 $cay_moc->ten_nhan_vien_det = $temp[count($temp) - 1];
                             }*/
 
-                            return view('kho_moc')->with('list_chuc_nang', Session::get('list_chuc_nang'))
+                            return view('kho_moc')->with('list_chuc_nang', Session::get('list_chuc_nang_kho'))
                                                   ->with('list_kho_moc', Session::get('list_kho_moc'))
                                                   ->with('list_loai_vai', Session::get('list_loai_vai'))
                                                   ->with('kho_moc_duoc_chon', Session::get('kho_moc_duoc_chon'))
@@ -81,7 +81,7 @@ class KhoMocController extends HelperController
                                 $cay_moc->ten_nhan_vien_det = $temp[count($temp) - 1];
                             }*/
 
-                            return view('kho_moc')->with('list_chuc_nang', Session::get('list_chuc_nang'))
+                            return view('kho_moc')->with('list_chuc_nang', Session::get('list_chuc_nang_kho'))
                                                   ->with('list_kho_moc', Session::get('list_kho_moc'))
                                                   ->with('list_loai_vai', Session::get('list_loai_vai'))
                                                   ->with('kho_moc_duoc_chon', Session::get('kho_moc_duoc_chon'))
@@ -107,7 +107,7 @@ class KhoMocController extends HelperController
                                 $cay_moc->ten_nhan_vien_det = $temp[count($temp) - 1];
                             }*/
 
-                            return view('kho_moc')->with('list_chuc_nang', Session::get('list_chuc_nang'))
+                            return view('kho_moc')->with('list_chuc_nang', Session::get('list_chuc_nang_kho'))
                                                   ->with('list_kho_moc', Session::get('list_kho_moc'))
                                                   ->with('list_loai_vai', Session::get('list_loai_vai'))
                                                   ->with('kho_moc_duoc_chon', Session::get('kho_moc_duoc_chon'))
@@ -184,6 +184,32 @@ class KhoMocController extends HelperController
             // Đếm tổng số cây mộc tồn kho, trong kho mộc mà user đã chọn
             $tong_so_cay_moc_ton_kho = $mocRepository->demTongSoCayMocTonKho($id_kho_moc);
 
+            if ($tong_so_cay_moc_ton_kho == 0)
+            {
+                // Xóa tất cả các Session do trường hợp button "Xem tất cả cây mộc" hoặc button "Lọc" thiết lập ra
+                Session::forget('list_chuc_nang_kho');
+                Session::forget('list_kho_moc');
+                Session::forget('list_loai_vai');
+                Session::forget('kho_moc_duoc_chon');
+                Session::forget('showButtonXoa');
+                Session::forget('tong_so_cay_moc');
+                Session::forget('soCayMocTheoLoaiVai');
+                Session::forget('truong_hop_button_xem_tat_ca_cay_moc');
+                Session::forget('tong_so_cay_moc_ton_kho');
+                Session::forget('loai_vai_duoc_chon_kho_moc');
+                Session::forget('truong_hop_button_loc_kho_moc');
+                Session::forget('truong_hop_button_xem_kho_moc');
+
+                $message = $kho_moc_duoc_chon->ten.' không có cây mộc tồn kho nào !';
+
+                return view('kho_moc')->with('list_chuc_nang', $list_chuc_nang)
+                                      ->with('list_kho_moc', $list_kho_moc)
+                                      ->with('list_loai_vai', $list_loai_vai)
+                                      ->with('kho_moc_duoc_chon', $kho_moc_duoc_chon)
+                                      ->with('message', $message)
+                                      ->with('list_cay_moc', '');
+            }
+
             // Lấy số cây mộc tồn kho theo loại vải, trong kho mộc mà user đã chọn
             $soCayMocTheoLoaiVai = $mocRepository->getSoCayMocTonKhoTheoLoaiVai($id_kho_moc);
             // Lấy các loại vải có trong kho mộc mà user đã chọn, nhưng không còn cây mộc tồn kho nào
@@ -214,7 +240,7 @@ class KhoMocController extends HelperController
             }*/
 
             // Xóa tất cả các Session do trường hợp button "Xem tất cả cây mộc" hoặc button "Lọc" thiết lập ra
-            Session::forget('list_chuc_nang');
+            Session::forget('list_chuc_nang_kho');
             Session::forget('list_kho_moc');
             Session::forget('list_loai_vai');
             Session::forget('kho_moc_duoc_chon');
@@ -227,7 +253,7 @@ class KhoMocController extends HelperController
             Session::forget('truong_hop_button_loc_kho_moc');
 
             // Thiết lập Session để hỗ trợ cho việc phân trang
-            Session::put('list_chuc_nang', $list_chuc_nang);
+            Session::put('list_chuc_nang_kho', $list_chuc_nang);
             Session::put('list_kho_moc', $list_kho_moc);
             Session::put('list_loai_vai', $list_loai_vai);
             Session::put('kho_moc_duoc_chon', $kho_moc_duoc_chon);
@@ -269,7 +295,7 @@ class KhoMocController extends HelperController
             }*/
 
             // Xóa tất cả các Session do trường hợp button "Xem" hoặc button "Lọc" thiết lập ra
-            Session::forget('list_chuc_nang');
+            Session::forget('list_chuc_nang_kho');
             Session::forget('list_kho_moc');
             Session::forget('list_loai_vai');
             Session::forget('kho_moc_duoc_chon');
@@ -281,7 +307,7 @@ class KhoMocController extends HelperController
             Session::forget('truong_hop_button_loc_kho_moc');
 
             // Thiết lập Session để hỗ trợ cho việc phân trang
-            Session::put('list_chuc_nang', $list_chuc_nang);
+            Session::put('list_chuc_nang_kho', $list_chuc_nang);
             Session::put('list_kho_moc', $list_kho_moc);
             Session::put('list_loai_vai', $list_loai_vai);
             Session::put('kho_moc_duoc_chon', $kho_moc_duoc_chon);
@@ -328,7 +354,7 @@ class KhoMocController extends HelperController
                 }*/
 
                 // Xóa tất cả các Session do trường hợp button "Xem" hoặc button "Xem tất cả cây mộc" thiết lập ra
-                Session::forget('list_chuc_nang');
+                Session::forget('list_chuc_nang_kho');
                 Session::forget('list_kho_moc');
                 Session::forget('list_loai_vai');
                 Session::forget('kho_moc_duoc_chon');
@@ -340,7 +366,7 @@ class KhoMocController extends HelperController
                 Session::forget('truong_hop_button_xem_tat_ca_cay_moc');
 
                 // Thiết lập Session để hỗ trợ cho việc phân trang
-                Session::put('list_chuc_nang', $list_chuc_nang);
+                Session::put('list_chuc_nang_kho', $list_chuc_nang);
                 Session::put('list_kho_moc', $list_kho_moc);
                 Session::put('list_loai_vai', $list_loai_vai);
                 Session::put('kho_moc_duoc_chon', $kho_moc_duoc_chon);
@@ -360,6 +386,20 @@ class KhoMocController extends HelperController
             }
             else    // Loại vải mà user đã chọn không có trong kho mà user đã chọn, hoặc có trong kho mà user đã chọn nhưng không còn cây mộc tồn kho nào
             {
+                // Xóa tất cả các Session do trường hợp button "Xem" hoặc button "Xem tất cả cây mộc" thiết lập ra
+                Session::forget('list_chuc_nang_kho');
+                Session::forget('list_kho_moc');
+                Session::forget('list_loai_vai');
+                Session::forget('kho_moc_duoc_chon');
+                Session::forget('showButtonXoa');
+                Session::forget('tong_so_cay_moc_ton_kho');
+                Session::forget('soCayMocTheoLoaiVai');
+                Session::forget('truong_hop_button_xem_kho_moc');
+                Session::forget('tong_so_cay_moc');
+                Session::forget('truong_hop_button_xem_tat_ca_cay_moc');
+                Session::forget('loai_vai_duoc_chon_kho_moc');
+                Session::forget('truong_hop_button_loc_kho_moc');
+
                 $message = 'Loại vải '.$loai_vai_duoc_chon->ten.' không có trong '.$kho_moc_duoc_chon->ten.' hoặc loại vải này có trong '.$kho_moc_duoc_chon->ten.' nhưng không còn cây mộc tồn kho nào !';
 
                 return view('kho_moc')->with('list_chuc_nang', $list_chuc_nang)
@@ -768,6 +808,14 @@ class KhoMocController extends HelperController
                     $phieuXuatMocRepository = new PhieuXuatMocRepository();
                     $list_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachPhieuXuatMoc();
 
+                    if (count($list_phieu_xuat_moc) == 0)
+                    {
+                        $message = 'Không có phiếu xuất mộc nào để hiển thị !';
+
+                        return view('phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
+                                                     ->with('message', $message);
+                    }
+
                     // Format lại cho "ngay_gio_xuat_kho"
                     foreach ($list_phieu_xuat_moc as $phieu_xuat_moc)
                     {
@@ -811,6 +859,14 @@ class KhoMocController extends HelperController
 
         // Lấy danh sách phiếu xuất mộc
         $list_phieu_xuat_moc = $phieuXuatMocRepository->getDanhSachPhieuXuatMoc();
+
+        if (count($list_phieu_xuat_moc) == 0)
+        {
+            $message = 'Không có phiếu xuất mộc nào để hiển thị !';
+
+            return view('phieu_xuat_moc')->with('list_chuc_nang', $list_chuc_nang)
+                                         ->with('message', $message);
+        }
 
         // Format lại cho "ngay_gio_xuat_kho"
         foreach ($list_phieu_xuat_moc as $phieu_xuat_moc)

@@ -35,7 +35,7 @@ class PhieuXuatMoc
                   'tong_so_met' => $this->tong_so_met,
                   'id_kho' => $this->id_kho,
                   'id_nhan_vien_xuat' => $this->id_nhan_vien_xuat,
-                  'ngay_gio_xuat_kho' => $this->ngay_gio_xuat_kho,
+                  'ngay_gio_xuat_kho' => $this->ngay_gio_xuat_kho
                 ]);
         });
     }

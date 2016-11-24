@@ -86,8 +86,10 @@ class MocRepository
         {
             $list_cay_moc_ton_kho = DB::table('cay_vai_moc')
                                       ->join('loai_vai', 'cay_vai_moc.id_loai_vai', '=', 'loai_vai.id')
+                                      ->join('loai_soi', 'cay_vai_moc.id_loai_soi', '=', 'loai_soi.id')
                                       ->join('nhan_vien', 'cay_vai_moc.id_nhan_vien_det', '=', 'nhan_vien.id')
-                                      ->select('cay_vai_moc.*', 'loai_vai.ten as ten_loai_vai', 'nhan_vien.ho_ten as ten_nhan_vien_det')
+                                      ->join('kho', 'cay_vai_moc.id_kho', '=', 'kho.id')
+                                      ->select('cay_vai_moc.*', 'loai_vai.ten as ten_loai_vai', 'loai_soi.ten as ten_loai_soi', 'nhan_vien.ho_ten as ten_nhan_vien_det', 'kho.ten as ten_kho')
                                       ->where('cay_vai_moc.da_xoa', '=', 0)
                                       ->where('cay_vai_moc.tinh_trang', '=', 'Chưa xuất')
                                       ->where('cay_vai_moc.id_kho', '=', $id_kho)
@@ -97,8 +99,10 @@ class MocRepository
         {
             $list_cay_moc_ton_kho = DB::table('cay_vai_moc')
                                       ->join('loai_vai', 'cay_vai_moc.id_loai_vai', '=', 'loai_vai.id')
+                                      ->join('loai_soi', 'cay_vai_moc.id_loai_soi', '=', 'loai_soi.id')
                                       ->join('nhan_vien', 'cay_vai_moc.id_nhan_vien_det', '=', 'nhan_vien.id')
-                                      ->select('cay_vai_moc.*', 'loai_vai.ten as ten_loai_vai', 'nhan_vien.ho_ten as ten_nhan_vien_det')
+                                      ->join('kho', 'cay_vai_moc.id_kho', '=', 'kho.id')
+                                      ->select('cay_vai_moc.*', 'loai_vai.ten as ten_loai_vai', 'loai_soi.ten as ten_loai_soi', 'nhan_vien.ho_ten as ten_nhan_vien_det', 'kho.ten as ten_kho')
                                       ->where('cay_vai_moc.da_xoa', '=', 0)
                                       ->where('cay_vai_moc.tinh_trang', '=', 'Chưa xuất')
                                       ->where('cay_vai_moc.id_kho', '=', $id_kho)
@@ -113,8 +117,10 @@ class MocRepository
     {
         $list_cay_moc = DB::table('cay_vai_moc')
                           ->join('loai_vai', 'cay_vai_moc.id_loai_vai', '=', 'loai_vai.id')
+                          ->join('loai_soi', 'cay_vai_moc.id_loai_soi', '=', 'loai_soi.id')
                           ->join('nhan_vien', 'cay_vai_moc.id_nhan_vien_det', '=', 'nhan_vien.id')
-                          ->select('cay_vai_moc.*', 'loai_vai.ten as ten_loai_vai', 'nhan_vien.ho_ten as ten_nhan_vien_det')
+                          ->join('kho', 'cay_vai_moc.id_kho', '=', 'kho.id')
+                          ->select('cay_vai_moc.*', 'loai_vai.ten as ten_loai_vai', 'loai_soi.ten as ten_loai_soi', 'nhan_vien.ho_ten as ten_nhan_vien_det', 'kho.ten as ten_kho')
                           ->where('cay_vai_moc.da_xoa', '=', 0)
                           ->where('cay_vai_moc.id_kho', '=', $id_kho)
                           ->paginate(10);

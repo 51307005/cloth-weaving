@@ -108,14 +108,14 @@
                                                         Tổng số cây mộc{{ isset($loai_vai_duoc_chon)?' '.$loai_vai_duoc_chon->ten:'' }}{{ isset($tong_so_cay_moc)?'':' tồn kho' }}:
                                                     </td>
                                                     <td>
-                                                        {{ isset($tong_so_cay_moc)?$tong_so_cay_moc:$tong_so_cay_moc_ton_kho }} cây
+                                                        {{ isset($tong_so_cay_moc)?number_format($tong_so_cay_moc, 0, ',', '.'):number_format($tong_so_cay_moc_ton_kho, 0, ',', '.') }} cây
                                                     </td>
                                                 </tr>
                                                 @if (!isset($loai_vai_duoc_chon))
                                                     @foreach ($soCayMocTheoLoaiVai as $element)
                                                         <tr>
                                                             <td style="padding-left:0px;">Loại vải {{ $element->ten_loai_vai }}:</td>
-                                                            <td>{{ $element->so_cay_moc }} cây</td>
+                                                            <td>{{ number_format($element->so_cay_moc, 0, ',', '.') }} cây</td>
                                                         </tr>
                                                     @endforeach
                                                 @endif

@@ -52,7 +52,7 @@ class KhoThanhPhamController extends HelperController
                                 $cay_thanh_pham->ngay_gio_nhap_kho = date('d/m/Y H:i:s', strtotime($cay_thanh_pham->ngay_gio_nhap_kho));
                             }
 
-                            return view('kho_thanh_pham')->with('list_chuc_nang', Session::get('list_chuc_nang'))
+                            return view('kho_thanh_pham')->with('list_chuc_nang', Session::get('list_chuc_nang_kho'))
                                                          ->with('list_kho_thanh_pham', Session::get('list_kho_thanh_pham'))
                                                          ->with('list_loai_vai', Session::get('list_loai_vai'))
                                                          ->with('list_mau', Session::get('list_mau'))
@@ -73,7 +73,7 @@ class KhoThanhPhamController extends HelperController
                                 $cay_thanh_pham->ngay_gio_nhap_kho = date('d/m/Y H:i:s', strtotime($cay_thanh_pham->ngay_gio_nhap_kho));
                             }
 
-                            return view('kho_thanh_pham')->with('list_chuc_nang', Session::get('list_chuc_nang'))
+                            return view('kho_thanh_pham')->with('list_chuc_nang', Session::get('list_chuc_nang_kho'))
                                                          ->with('list_kho_thanh_pham', Session::get('list_kho_thanh_pham'))
                                                          ->with('list_loai_vai', Session::get('list_loai_vai'))
                                                          ->with('list_mau', Session::get('list_mau'))
@@ -87,21 +87,21 @@ class KhoThanhPhamController extends HelperController
                         else if (Session::has('truong_hop_button_loc_kho_thanh_pham'))  // Trường hợp: đã click trên chuỗi button phân trang, của button "Lọc"
                         {
                             // Lấy danh sách cây thành phẩm tồn kho, theo loại vải, màu, khổ và trong kho thành phẩm mà user đã chọn
-                            $list_cay_thanh_pham = $thanhPhamRepository->getDanhSachCayThanhPhamTonKho(Session::get('kho_thanh_pham_duoc_chon')->id, Session::get('loai_vai_duoc_chon')->id, Session::get('mau_duoc_chon')->id, Session::get('kho_duoc_chon'));
+                            $list_cay_thanh_pham = $thanhPhamRepository->getDanhSachCayThanhPhamTonKho(Session::get('kho_thanh_pham_duoc_chon')->id, Session::get('loai_vai_duoc_chon_kho_thanh_pham')->id, Session::get('mau_duoc_chon')->id, Session::get('kho_duoc_chon'));
                             // Format lại cho "ngay_gio_nhap_kho"
                             foreach ($list_cay_thanh_pham as $cay_thanh_pham)
                             {
                                 $cay_thanh_pham->ngay_gio_nhap_kho = date('d/m/Y H:i:s', strtotime($cay_thanh_pham->ngay_gio_nhap_kho));
                             }
 
-                            return view('kho_thanh_pham')->with('list_chuc_nang', Session::get('list_chuc_nang'))
+                            return view('kho_thanh_pham')->with('list_chuc_nang', Session::get('list_chuc_nang_kho'))
                                                          ->with('list_kho_thanh_pham', Session::get('list_kho_thanh_pham'))
                                                          ->with('list_loai_vai', Session::get('list_loai_vai'))
                                                          ->with('list_mau', Session::get('list_mau'))
                                                          ->with('list_kho', Session::get('list_kho'))
                                                          ->with('kho_thanh_pham_duoc_chon', Session::get('kho_thanh_pham_duoc_chon'))
                                                          ->with('showButtonXoa', Session::get('showButtonXoa'))
-                                                         ->with('loai_vai_duoc_chon', Session::get('loai_vai_duoc_chon'))
+                                                         ->with('loai_vai_duoc_chon', Session::get('loai_vai_duoc_chon_kho_thanh_pham'))
                                                          ->with('mau_duoc_chon', Session::get('mau_duoc_chon'))
                                                          ->with('kho_duoc_chon', Session::get('kho_duoc_chon'))
                                                          ->with('tong_so_cay_thanh_pham_ton_kho', Session::get('tong_so_cay_thanh_pham_ton_kho'))
@@ -182,6 +182,38 @@ class KhoThanhPhamController extends HelperController
             // Đếm tổng số cây thành phẩm tồn kho, trong kho thành phẩm mà user đã chọn
             $tong_so_cay_thanh_pham_ton_kho = $thanhPhamRepository->demTongSoCayThanhPhamTonKho($id_kho_thanh_pham);
 
+            if ($tong_so_cay_thanh_pham_ton_kho == 0)
+            {
+                // Xóa tất cả các Session do trường hợp button "Xem tất cả cây thành phẩm" hoặc button "Lọc" thiết lập ra
+                Session::forget('list_chuc_nang_kho');
+                Session::forget('list_kho_thanh_pham');
+                Session::forget('list_loai_vai');
+                Session::forget('list_mau');
+                Session::forget('list_kho');
+                Session::forget('kho_thanh_pham_duoc_chon');
+                Session::forget('showButtonXoa');
+                Session::forget('tong_so_cay_thanh_pham');
+                Session::forget('soCayThanhPhamTheoLoaiVai');
+                Session::forget('truong_hop_button_xem_tat_ca_cay_thanh_pham');
+                Session::forget('loai_vai_duoc_chon_kho_thanh_pham');
+                Session::forget('mau_duoc_chon');
+                Session::forget('kho_duoc_chon');
+                Session::forget('tong_so_cay_thanh_pham_ton_kho');
+                Session::forget('truong_hop_button_loc_kho_thanh_pham');
+                Session::forget('truong_hop_button_xem_kho_thanh_pham');
+
+                $message = $kho_thanh_pham_duoc_chon->ten.' không có cây vải thành phẩm tồn kho nào !';
+
+                return view('kho_thanh_pham')->with('list_chuc_nang', $list_chuc_nang)
+                                             ->with('list_kho_thanh_pham', $list_kho_thanh_pham)
+                                             ->with('list_loai_vai', $list_loai_vai)
+                                             ->with('list_mau', $list_mau)
+                                             ->with('list_kho', $list_kho)
+                                             ->with('kho_thanh_pham_duoc_chon', $kho_thanh_pham_duoc_chon)
+                                             ->with('message', $message)
+                                             ->with('list_cay_thanh_pham', '');
+            }
+
             // Lấy số cây thành phẩm tồn kho theo loại vải, trong kho thành phẩm mà user đã chọn
             $soCayThanhPhamTheoLoaiVai = $thanhPhamRepository->getSoCayThanhPhamTonKhoTheoLoaiVai($id_kho_thanh_pham);
             // Lấy các loại vải có trong kho thành phẩm mà user đã chọn, nhưng không còn cây thành phẩm tồn kho nào
@@ -205,7 +237,7 @@ class KhoThanhPhamController extends HelperController
             }
 
             // Xóa tất cả các Session do trường hợp button "Xem tất cả cây thành phẩm" hoặc button "Lọc" thiết lập ra
-            Session::forget('list_chuc_nang');
+            Session::forget('list_chuc_nang_kho');
             Session::forget('list_kho_thanh_pham');
             Session::forget('list_loai_vai');
             Session::forget('list_mau');
@@ -215,14 +247,14 @@ class KhoThanhPhamController extends HelperController
             Session::forget('tong_so_cay_thanh_pham');
             Session::forget('soCayThanhPhamTheoLoaiVai');
             Session::forget('truong_hop_button_xem_tat_ca_cay_thanh_pham');
-            Session::forget('loai_vai_duoc_chon');
+            Session::forget('loai_vai_duoc_chon_kho_thanh_pham');
             Session::forget('mau_duoc_chon');
             Session::forget('kho_duoc_chon');
             Session::forget('tong_so_cay_thanh_pham_ton_kho');
             Session::forget('truong_hop_button_loc_kho_thanh_pham');
 
             // Thiết lập Session để hỗ trợ cho việc phân trang
-            Session::put('list_chuc_nang', $list_chuc_nang);
+            Session::put('list_chuc_nang_kho', $list_chuc_nang);
             Session::put('list_kho_thanh_pham', $list_kho_thanh_pham);
             Session::put('list_loai_vai', $list_loai_vai);
             Session::put('list_mau', $list_mau);
@@ -261,7 +293,7 @@ class KhoThanhPhamController extends HelperController
             }
 
             // Xóa tất cả các Session do trường hợp button "Xem" hoặc button "Lọc" thiết lập ra
-            Session::forget('list_chuc_nang');
+            Session::forget('list_chuc_nang_kho');
             Session::forget('list_kho_thanh_pham');
             Session::forget('list_loai_vai');
             Session::forget('list_mau');
@@ -271,13 +303,13 @@ class KhoThanhPhamController extends HelperController
             Session::forget('tong_so_cay_thanh_pham_ton_kho');
             Session::forget('soCayThanhPhamTheoLoaiVai');
             Session::forget('truong_hop_button_xem_kho_thanh_pham');
-            Session::forget('loai_vai_duoc_chon');
+            Session::forget('loai_vai_duoc_chon_kho_thanh_pham');
             Session::forget('mau_duoc_chon');
             Session::forget('kho_duoc_chon');
             Session::forget('truong_hop_button_loc_kho_thanh_pham');
 
             // Thiết lập Session để hỗ trợ cho việc phân trang
-            Session::put('list_chuc_nang', $list_chuc_nang);
+            Session::put('list_chuc_nang_kho', $list_chuc_nang);
             Session::put('list_kho_thanh_pham', $list_kho_thanh_pham);
             Session::put('list_loai_vai', $list_loai_vai);
             Session::put('list_mau', $list_mau);
@@ -326,7 +358,7 @@ class KhoThanhPhamController extends HelperController
                 }
 
                 // Xóa tất cả các Session do trường hợp button "Xem" hoặc button "Xem tất cả cây thành phẩm" thiết lập ra
-                Session::forget('list_chuc_nang');
+                Session::forget('list_chuc_nang_kho');
                 Session::forget('list_kho_thanh_pham');
                 Session::forget('list_loai_vai');
                 Session::forget('list_mau');
@@ -340,14 +372,14 @@ class KhoThanhPhamController extends HelperController
                 Session::forget('truong_hop_button_xem_tat_ca_cay_thanh_pham');
 
                 // Thiết lập Session để hỗ trợ cho việc phân trang
-                Session::put('list_chuc_nang', $list_chuc_nang);
+                Session::put('list_chuc_nang_kho', $list_chuc_nang);
                 Session::put('list_kho_thanh_pham', $list_kho_thanh_pham);
                 Session::put('list_loai_vai', $list_loai_vai);
                 Session::put('list_mau', $list_mau);
                 Session::put('list_kho', $list_kho);
                 Session::put('kho_thanh_pham_duoc_chon', $kho_thanh_pham_duoc_chon);
                 Session::put('showButtonXoa', $showButtonXoa);
-                Session::put('loai_vai_duoc_chon', $loai_vai_duoc_chon);
+                Session::put('loai_vai_duoc_chon_kho_thanh_pham', $loai_vai_duoc_chon);
                 Session::put('mau_duoc_chon', $mau_duoc_chon);
                 Session::put('kho_duoc_chon', $kho_duoc_chon);
                 Session::put('tong_so_cay_thanh_pham_ton_kho', $tong_so_cay_thanh_pham_ton_kho);
@@ -368,6 +400,24 @@ class KhoThanhPhamController extends HelperController
             }
             else    // Loại vải, Màu, Khổ mà user đã chọn không có trong kho mà user đã chọn, hoặc có trong kho mà user đã chọn nhưng không còn cây thành phẩm tồn kho nào
             {
+                // Xóa tất cả các Session do trường hợp button "Xem" hoặc button "Xem tất cả cây thành phẩm" thiết lập ra
+                Session::forget('list_chuc_nang_kho');
+                Session::forget('list_kho_thanh_pham');
+                Session::forget('list_loai_vai');
+                Session::forget('list_mau');
+                Session::forget('list_kho');
+                Session::forget('kho_thanh_pham_duoc_chon');
+                Session::forget('showButtonXoa');
+                Session::forget('tong_so_cay_thanh_pham_ton_kho');
+                Session::forget('soCayThanhPhamTheoLoaiVai');
+                Session::forget('truong_hop_button_xem_kho_thanh_pham');
+                Session::forget('tong_so_cay_thanh_pham');
+                Session::forget('truong_hop_button_xem_tat_ca_cay_thanh_pham');
+                Session::forget('loai_vai_duoc_chon_kho_thanh_pham');
+                Session::forget('mau_duoc_chon');
+                Session::forget('kho_duoc_chon');
+                Session::forget('truong_hop_button_loc_kho_thanh_pham');
+
                 $message = 'Loại vải '.$loai_vai_duoc_chon->ten.' màu '.$mau_duoc_chon->ten.' khổ '.number_format($kho_duoc_chon, 1, ',', '.').' m không có trong '.$kho_thanh_pham_duoc_chon->ten.' hoặc có nhưng không còn cây thành phẩm tồn kho nào !';
 
                 return view('kho_thanh_pham')->with('list_chuc_nang', $list_chuc_nang)
@@ -979,6 +1029,14 @@ class KhoThanhPhamController extends HelperController
                     $hoaDonXuatRepository = new HoaDonXuatRepository();
                     $list_hoa_don_xuat = $hoaDonXuatRepository->getDanhSachHoaDonXuat();
 
+                    if (count($list_hoa_don_xuat) == 0)
+                    {
+                        $message = 'Không có hóa đơn xuất nào để hiển thị !';
+
+                        return view('hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
+                                                   ->with('message', $message);
+                    }
+
                     // Format lại cho "ngay_gio_xuat_hoa_don"
                     foreach ($list_hoa_don_xuat as $hoa_don_xuat)
                     {
@@ -1027,6 +1085,14 @@ class KhoThanhPhamController extends HelperController
 
         // Lấy danh sách hóa đơn xuất
         $list_hoa_don_xuat = $hoaDonXuatRepository->getDanhSachHoaDonXuat();
+
+        if (count($list_hoa_don_xuat) == 0)
+        {
+            $message = 'Không có hóa đơn xuất nào để hiển thị !';
+
+            return view('hoa_don_xuat')->with('list_chuc_nang', $list_chuc_nang)
+                                       ->with('message', $message);
+        }
 
         // Format lại cho "ngay_gio_xuat_hoa_don"
         foreach ($list_hoa_don_xuat as $hoa_don_xuat)
